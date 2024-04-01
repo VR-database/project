@@ -53,7 +53,34 @@ def login_user(pas):
     else: return_data = "Неверный пароль!"
     return return_data
 
-        
+def add_string(info):
+    try: 
+        pg = psycopg2.connect("""
+            host=localhost
+            dbname=postgres
+            user=postgres
+            password=kos120675
+            port=5432
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        cursor.execute(f' INSERT INTO patient $${info}$$')
+        pg.commit()
+
+        return_data = 'Иформация добавлена'
+
+    except (Exception, Error) as error:
+        print(f'DB ERROR: ', error)
+        return_data = f"Ошибка обращения к базе данных: {error}" 
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            print("Соединение с PostgreSQL закрыто")
+            return return_data
+    
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -66,6 +93,16 @@ def login():
     else:
         response_object['message'] = db_get()
         return jsonify(response_object)
+
+
+@app.route('/new-string', methods=['POST'])
+def new_string():
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+
+    add_string(post_data.get().values())
+
+    return jsonify(response_object)
 
 if __name__ == '__main__':
     app.run()
