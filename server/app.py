@@ -111,6 +111,155 @@ def update_string(info, id):
             print("Соединение с PostgreSQL закрыто")
             return return_data
 
+def delete_string(id): 
+    try:
+        pg = psycopg2.connect("""
+            host=localhost
+            dbname=postgres
+            user=postgres
+            password=kos120675
+            port=5432
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        cursor.execute('''DELETE ???
+
+                        ''')
+        
+        pg.commit()
+
+    except (Exception, Error) as error:
+        print(f'DB ERROR: ', error)
+        return_data = f"Ошибка обращения к базе данных: {error}" 
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            print("Соединение с PostgreSQL закрыто")
+            return return_data
+
+def pass_check(pas, Admin): 
+    if Admin:
+        try: 
+            pg = psycopg2.connect("""
+                host=localhost
+                dbname=postgres
+                user=postgres
+                password=kos120675
+                port=5432
+            """)
+
+            cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+            isTrue = cursor.execute(f'''SELECT COUNT FROM password_admin 
+                                        WHERE password=$${pas}$$
+                                        ''')
+            if isTrue == 1:
+                return_data = True
+
+
+        except (Exception, Error) as error:
+            print(f'DB ERROR: ', error)
+            return_data = f"Ошибка обращения к базе данных: {error}" 
+
+        finally:
+            if pg:
+                cursor.close
+                pg.close
+                print("Соединение с PostgreSQL закрыто")
+                return return_data
+    
+    else:
+        try: 
+            pg = psycopg2.connect("""
+                host=localhost
+                dbname=postgres
+                user=postgres
+                password=kos120675
+                port=5432
+            """)
+
+            cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+            isTrue = cursor.execute(f'''SELECT COUNT FROM password 
+                                        WHERE password=$${pas}$$
+                                        ''')
+            if isTrue == 1:
+                return_data = True
+
+
+        except (Exception, Error) as error:
+            print(f'DB ERROR: ', error)
+            return_data = f"Ошибка обращения к базе данных: {error}" 
+
+        finally:
+            if pg:
+                cursor.close
+                pg.close
+                print("Соединение с PostgreSQL закрыто")
+                return return_data
+
+def new_pass(pas, Admin):
+    if Admin:
+        try: 
+            pg = psycopg2.connect("""
+                host=localhost
+                dbname=postgres
+                user=postgres
+                password=kos120675
+                port=5432
+            """)
+
+            cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+            cursor.execute(f'''UPDATE password_admin 
+                                    SET password =$${pas}$$''')
+            return_data = 'Пароль обновлен'
+
+
+        except (Exception, Error) as error:
+            print(f'DB ERROR: ', error)
+            return_data = f"Ошибка обращения к базе данных: {error}" 
+
+        finally:
+            if pg:
+                cursor.close
+                pg.close
+                print("Соединение с PostgreSQL закрыто")
+                return return_data
+    
+    else:
+        try: 
+            pg = psycopg2.connect("""
+                host=localhost
+                dbname=postgres
+                user=postgres
+                password=kos120675
+                port=5432
+            """)
+
+            cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+            cursor.execute(f'''SELECT COUNT FROM password 
+                                        SET password =$${pas}$$''')
+
+            return_data = 'Пароль обновлен'
+
+
+        except (Exception, Error) as error:
+            print(f'DB ERROR: ', error)
+            return_data = f"Ошибка обращения к базе данных: {error}" 
+
+        finally:
+            if pg:
+                cursor.close
+                pg.close
+                print("Соединение с PostgreSQL закрыто")
+                return return_data
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     response_object = {'status': 'success'}
@@ -139,9 +288,34 @@ def new_string():
     response_object = {'status': 'success'}
     post_data = request.get_json()
 
-    update_string(post_data.get().values(), post_data.get('id'))
+    response_object['res'] = update_string(post_data.get().values(), post_data.get('id'))
 
     return jsonify(response_object)
+
+
+@app.route('/delete-string', methods = ['DELETE'])
+def del_srt():
+    responce_object = {'status' : 'success'}
+    post_data = request.get_json()
+
+    responce_object['res'] = delete_string(post_data.get('id'))
+
+    return jsonify(responce_object)
+
+@app.route('/change_pass', methods=['UPDATE'])
+def change():
+    responce_object = {'status' : 'success'}
+    post_data = request.get_json()
+    if post_data.get('Admin') and pass_check(post_data.get('old_pass'), True):
+        responce_object['res'] = new_pass(post_data.get('old_pass'), True)
+        
+    elif pass_check(post_data.get('old_pass'), False):
+        responce_object['res'] = new_pass(post_data.get('old_pass'), False)
+    else: responce_object['res'] = 'Неверный пороль'
+    
+    print(responce_object['res'])
+
+    return jsonify(responce_object)
 
 
 if __name__ == '__main__':
