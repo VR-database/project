@@ -81,6 +81,35 @@ def add_string(info):
             print("Соединение с PostgreSQL закрыто")
             return return_data
     
+def update_string(info, id):
+    try: 
+        pg = psycopg2.connect("""
+            host=localhost
+            dbname=postgres
+            user=postgres
+            password=kos120675
+            port=5432
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        cursor.execute(f''' UPDATE patient 
+                       SET $${info}$$
+                       WHERE id==$${id}$$''')
+        pg.commit()
+
+        return_data = 'Иформация обновлена'
+
+    except (Exception, Error) as error:
+        print(f'DB ERROR: ', error)
+        return_data = f"Ошибка обращения к базе данных: {error}" 
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            print("Соединение с PostgreSQL закрыто")
+            return return_data
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -103,6 +132,17 @@ def new_string():
     add_string(post_data.get().values())
 
     return jsonify(response_object)
+
+
+@app.route('/update-string', methods=['UPDATE'])
+def new_string():
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+
+    update_string(post_data.get().values(), post_data.get('id'))
+
+    return jsonify(response_object)
+
 
 if __name__ == '__main__':
     app.run()
