@@ -6,7 +6,7 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
       <img src="../assets/database.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
-      <span class="title">VS Database</span>
+      <span class="title">VR Database</span>
     </a>
    <img src="../assets/stats.png" alt="" class="table">
     <a href="#/login" class="link">Войти</a>

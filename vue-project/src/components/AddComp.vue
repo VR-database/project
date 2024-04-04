@@ -5,7 +5,7 @@
 <template>
     <div class="big-container d-flex">
         <div class="input-group">
-    <h1 class="head">Добавить в таблицу.</h1>
+    <h1 class="head">Добавить в таблицу</h1>
     <form>
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Код диагноза</label>
