@@ -1,5 +1,5 @@
 <script>
-import HeaderComp from './components/headerComp.vue'
+import HeaderComp from './components/HeaderComp.vue'
 
 
 

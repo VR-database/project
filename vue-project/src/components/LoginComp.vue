@@ -14,11 +14,7 @@ export default {
     methods: {
         check() {
             if (this.email === '' && this.password === '') {
-                this.error = '*Заполните поля*'
-            } else if (this.email === '') {
-                this.error = '*Вы не ввели Email*'
-            } else if (this.password === '') {
-                this.error = '*Вы не ввели пароль*'
+                this.error = '*Заполните поле ввода*'
             } else {
                 this.error = ''
             }
@@ -90,7 +86,6 @@ form {
     border-radius: 10px;
     width: 320px;
     height: 50px;
-
     margin-bottom: 25px;
     padding-left: 10px;
     padding-right: 10px;
@@ -157,7 +152,7 @@ div a {
 .password-show {
     position: absolute;
     cursor: pointer;
-    top: 5px;
+    top: 10px;
     right: 12px;
     width: 30px;
 
