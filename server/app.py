@@ -95,7 +95,7 @@ def update_string(info, id):
 
         cursor.execute(f''' UPDATE patient 
                        SET $${info}$$
-                       WHERE id==$${id}$$''')
+                       WHERE id=$${id}$$''')
         pg.commit()
 
         return_data = 'Иформация обновлена'
