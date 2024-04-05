@@ -123,9 +123,8 @@ def delete_string(id):
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-        cursor.execute('''DELETE ???
-
-                        ''')
+        cursor.execute(f'''DELETE patients
+                        WHERE id=$${id}$$''')
         
         pg.commit()
 
