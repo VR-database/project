@@ -1,4 +1,86 @@
 <script>
+import axios from 'axios'; 
+axios.defaults.baseURL = 'http://127.0.0.1:5000';
+// иди нах с точками и запятимыи так это не импорт
+
+export default {
+
+
+
+  data() {
+    return{
+      form:{
+        Code: '', 
+        Fio: '',
+        Floor: '',
+        Age: '',
+        NumberHistory: '',
+        Date1: '',
+        Date2: '',
+        Result: '',
+        Diagnosis: '',
+        Fgds: '',
+        Fks: '',
+        Ckt: '',
+        Mrt: '',
+        Research: '',
+        Date3: '',
+        NameOperation: '',
+        Protocol: '',
+        DrugVideo: '',
+        GistolСonclusion: '',
+        CktDisk: '',
+        MrtDisk: '',
+        CtkModel: '',
+        MrtModel: '',
+        OperationVideo: '',
+        EffectOfUse: '',
+        Notes: ''
+      },
+      
+  
+      status: '',
+
+
+    }
+  },
+  methods: {
+    check() {
+      if (this.form.Code.length == 0 && this.form.Fio.length == 0 && this.form.Floor.length == 0 && this.form.Age.length == 0 &&
+        this.form.NumberHistory.length == 0 && this.form.Date1.length == 0 && this.form.Date2.length == 0 && this.form.Result.length == 0 &&
+        this.form.Diagnosis.length == 0 && this.form.Fgds.length == 0 && this.form.Fks.length == 0 && this.form.Ckt.length == 0 &&
+        this.form.Mrt.length == 0 && this.form.Research.length == 0 &&
+
+        this.form.Date3.length == 0 && this.form.NameOperation.length == 0 && this.form.Protocol.length == 0 && this.form.DrugVideo.length == 0 &&
+        this.form.GistolСonclusion.length == 0 && this.form.CktDisk.length == 0 && this.form.MrtDisk.length == 0 &&
+
+        this.form.CtkModel.length == 0 && this.form.MrtModel.length == 0 && this.form.OperationVideo.length == 0 && this.form.EffectOfUse.length == 0 &&
+        this.form.Notes.length == 0) {
+        return false
+        
+
+      } else {
+        return true
+      }
+    },
+    async postData() {
+      if (check()) {
+        let responce = await axios.post(`/`, {
+          form: this.form
+        })
+        this.status = 'Данные занесены в таблицу.'
+      } else {
+        this.status = 'Заполните все поля.'
+      }
+
+    },
+    
+
+  
+
+  },
+ 
+} 
 
 </script>
 
@@ -9,47 +91,48 @@
     <form>
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Код диагноза</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="1/2/3/4/5/6/7/8/9">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="1/2/3/4/5/6/7/8/9" v-model="form.Code">
+  <p></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">ФИО</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="ФИО">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ФИО" v-model="form.Fio">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Пол</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="М/Ж">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="М/Ж" v-model="form.Floor">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Возраст</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Возраст">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Возраст" v-model="form.Age">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Номер истории болезни</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Номер истории болезни">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Номер истории болезни" v-model="form.NumberHistory">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Дата госпитализации</label>
-  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" v-model="form.Date1">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Дата выписки (смерти)</label>
-  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата выписки (смерти)">
+  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата выписки (смерти)" v-model="form.Date2">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Исход (1 - выписан / 0 - умер)</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Исход">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Исход" v-model="form.Result">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Диагноз окончательный</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Диагноз">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Диагноз" v-model="form.Diagnosis">
     </div>
 
         <div class="mb-3">
@@ -59,32 +142,32 @@
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">ФГДС</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="ФГДС">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ФГДС" v-model="form.Fgds">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">ФКС</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="ФКС">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ФКС" v-model="form.Fks">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Протокол СКТ</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Протокол">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" v-model="form.Ckt">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Протокол МРТ</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Протокол">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" v-model="form.Mrt">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Прочие исследования</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Исследования">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Исследования" v-model="form.Research">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Дата операции</label>
-  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата операции">
+  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата операции" v-model="form.Date3">
     </div>
 
 
@@ -96,66 +179,61 @@
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Название операции</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Название">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Название" v-model="form.NameOperation">
     </div>
 
     <div class="mb-3">
-  <label for="exampleFormControlInput1" class="form-label">Протокл операции</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Протокол">
+  <label for="exampleFormControlInput1" class="form-label">Протокол операции</label>
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" v-model= "form.Protocol">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Фото (видео) препарата</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Фото, видео">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Фото, видео" v-model="form.DrugVideo">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Гистологическое заключение</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Заключение">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Заключение" v-model="form.GistolСonclusion">
     </div>
 
     <h4 class="mt-5 mb-3">Ссылки</h4>
     <div class="mb-3 mt-4">
   <label for="exampleFormControlInput1" class="form-label">Диск СКТ</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.CktDisk">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Диск МРТ</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка">
+  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.MrtDisk">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Построенная модель СТК</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.CtkModel">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Построенная модель МРТ</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.MrtModel">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Видео(фото) операции с ДР</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.OperationVideo">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Эффект предоперационного применения ДР(0/1)</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка">
-    </div>
-
-    <div class="mb-3">
-  <label for="exampleFormControlInput1" class="form-label">Эффект интраоперационного применения ДР(0/1)</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.EffectOfUse">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlTextarea1" class="form-label">Примечания.</label>
-  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="form.Notes"></textarea>
     </div>
 </form>
-    
+   <p class="p">{{ status }}</p> 
 </div>
 
 </div>
@@ -165,6 +243,9 @@
 </template>
 
 <style scoped>
+.p{
+  color: red;
+}
 .big-container{
     display: flex;
     margin-left: 40;
