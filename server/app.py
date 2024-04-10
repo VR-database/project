@@ -257,7 +257,7 @@ def new_pass(pas, Admin):
                 pg.close
                 print("Соединение с PostgreSQL закрыто")
                 return return_data
-
+ 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
