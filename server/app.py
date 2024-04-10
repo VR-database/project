@@ -4,7 +4,7 @@ from psycopg2 import extras, Error
 from flask import Flask, jsonify, request, session, make_response
 from flask_cors import CORS
 
-
+# SetUp
 app = Flask(__name__)
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -14,6 +14,8 @@ app.config["SESSION_COOKIE_SECURE"] = "None"
 
 CORS(app, resources={r"*": {"origins": "http://localhost:5173", 'supports_credentials': True}})
 
+
+# BaZa
 def db_get():
     try:
         pg = psycopg2.connect("""
@@ -45,14 +47,14 @@ def db_get():
             print("Соединение с PostgreSQL закрыто")
             return return_data
         
-
 def login_user(pas):
-        
+      # НАдо бы поменять, тк будем брать из дб  
     if pas=='kodvfwdse': return_data = 'Добро пожаловать!'
     elif pas=='fdwji': return_data = 'Добро пожаловать, админ!'
     else: return_data = "Неверный пароль!"
     return return_data
 
+# Добавление строчки
 def add_string(info):
     try: 
         pg = psycopg2.connect("""
@@ -80,7 +82,8 @@ def add_string(info):
             pg.close
             print("Соединение с PostgreSQL закрыто")
             return return_data
-    
+
+# Обновление строчки
 def update_string(info, id):
     try: 
         pg = psycopg2.connect("""
@@ -95,7 +98,7 @@ def update_string(info, id):
 
         cursor.execute(f''' UPDATE patient 
                        SET $${info}$$
-                       WHERE id==$${id}$$''')
+                       WHERE id=$${id}$$''')
         pg.commit()
 
         return_data = 'Иформация обновлена'
@@ -111,8 +114,9 @@ def update_string(info, id):
             print("Соединение с PostgreSQL закрыто")
             return return_data
 
-def delete_string(id): 
-    try:
+# удаление строчки
+def delete_string(id):
+    try: 
         pg = psycopg2.connect("""
             host=localhost
             dbname=postgres
@@ -123,9 +127,8 @@ def delete_string(id):
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-        cursor.execute('''DELETE ???
-
-                        ''')
+        cursor.execute(f'''DELETE patients
+                        WHERE id=$${id}$$''')
         
         pg.commit()
 
@@ -140,6 +143,7 @@ def delete_string(id):
             print("Соединение с PostgreSQL закрыто")
             return return_data
 
+# Проверка пароля
 def pass_check(pas, Admin): 
     if Admin:
         try: 
@@ -201,6 +205,7 @@ def pass_check(pas, Admin):
                 print("Соединение с PostgreSQL закрыто")
                 return return_data
 
+# Смена пароля
 def new_pass(pas, Admin):
     if Admin:
         try: 
@@ -258,8 +263,9 @@ def new_pass(pas, Admin):
                 pg.close
                 print("Соединение с PostgreSQL закрыто")
                 return return_data
+ 
 
-
+# Декоратор для логина
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     response_object = {'status': 'success'}
@@ -273,6 +279,7 @@ def login():
         return jsonify(response_object)
 
 
+# Декоратор для создания нововй строки
 @app.route('/new-string', methods=['POST'])
 def new_string():
     response_object = {'status': 'success'}
@@ -283,6 +290,7 @@ def new_string():
     return jsonify(response_object)
 
 
+# Декоратор для обновления строки
 @app.route('/update-string', methods=['UPDATE'])
 def new_string():
     response_object = {'status': 'success'}
@@ -293,6 +301,7 @@ def new_string():
     return jsonify(response_object)
 
 
+# Декоратор для удаления строки
 @app.route('/delete-string', methods = ['DELETE'])
 def del_srt():
     responce_object = {'status' : 'success'}
@@ -302,15 +311,22 @@ def del_srt():
 
     return jsonify(responce_object)
 
+
+# Декоратор для семены пароля
 @app.route('/change_pass', methods=['UPDATE'])
 def change():
     responce_object = {'status' : 'success'}
     post_data = request.get_json()
+
+    # Проверка на то, админ ли это и проходит лит он проверку (pass_check возращает True/False в зависимости от совпадаемости паролей)
     if post_data.get('Admin') and pass_check(post_data.get('old_pass'), True):
         responce_object['res'] = new_pass(post_data.get('old_pass'), True)
-        
+    
+    # Проверка на то проходит ли он проверку (pass_check возращает True/False в зависимости от совпадаемости паролей)
     elif pass_check(post_data.get('old_pass'), False):
         responce_object['res'] = new_pass(post_data.get('old_pass'), False)
+    
+    # Иначе возращаем, что пароль неверный
     else: responce_object['res'] = 'Неверный пороль'
     
     print(responce_object['res'])
@@ -318,5 +334,6 @@ def change():
     return jsonify(responce_object)
 
 
+#БаZа
 if __name__ == '__main__':
     app.run()
