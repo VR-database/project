@@ -1,14 +1,18 @@
+import os
 import uuid
 import psycopg2
 from psycopg2 import extras, Error
 from flask import Flask, jsonify, request, session, make_response
 from flask_cors import CORS
 import base64
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # SetUp
 app = Flask(__name__)
 
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.secret_key = os.getenv('SECERET_KEY')
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = "None"
@@ -19,12 +23,12 @@ CORS(app, resources={r"*": {"origins": "http://localhost:5173", 'supports_creden
 # BaZa
 def db_get():
     try:
-        pg = psycopg2.connect("""
+        pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
             user=postgres
-            password=kos120675
-            port=5432
+            password={os.getenv('SECERET_KEY')}
+            port={os.getenv('PASSWORD_PG')}
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -63,12 +67,12 @@ def login_user(pas):
 # Добавление строчки
 def add_string(info):
     try: 
-        pg = psycopg2.connect("""
+        pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
             user=postgres
-            password=kos120675
-            port=5432
+            password={os.getenv('SECERET_KEY')}
+            port={os.getenv('PASSWORD_PG')}
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -92,12 +96,12 @@ def add_string(info):
 # Обновление строчки
 def update_string(info, id):
     try: 
-        pg = psycopg2.connect("""
+        pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
             user=postgres
-            password=kos120675
-            port=5432
+            password={os.getenv('SECERET_KEY')}
+            port={os.getenv('PASSWORD_PG')}
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -123,12 +127,12 @@ def update_string(info, id):
 # удаление строчки
 def delete_string(id):
     try: 
-        pg = psycopg2.connect("""
+        pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
             user=postgres
-            password=kos120675
-            port=5432
+            password={os.getenv('SECERET_KEY')}
+            port={os.getenv('PASSWORD_PG')}
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -154,11 +158,10 @@ def pass_check(pas, Admin):
     if Admin:
         try: 
             pg = psycopg2.connect("""
-                host=localhost
+f                host=localhost
                 dbname=postgres
                 user=postgres
-                password=kos120675
-                port=5432
+                password=ko{os.getenv('SECERET_KEY')}               port={os.getenv('PASSWORD_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -184,11 +187,10 @@ def pass_check(pas, Admin):
     else:
         try: 
             pg = psycopg2.connect("""
-                host=localhost
+f                host=localhost
                 dbname=postgres
                 user=postgres
-                password=kos120675
-                port=5432
+                password=ko{os.getenv('SECERET_KEY')}               port={os.getenv('PASSWORD_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -216,11 +218,10 @@ def new_pass(pas, Admin):
     if Admin:
         try: 
             pg = psycopg2.connect("""
-                host=localhost
+f                host=localhost
                 dbname=postgres
                 user=postgres
-                password=kos120675
-                port=5432
+                password=ko{os.getenv('SECERET_KEY')}               port={os.getenv('PASSWORD_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -244,11 +245,10 @@ def new_pass(pas, Admin):
     else:
         try: 
             pg = psycopg2.connect("""
-                host=localhost
+f                host=localhost
                 dbname=postgres
                 user=postgres
-                password=kos120675
-                port=5432
+                password=ko{os.getenv('SECERET_KEY')}               port={os.getenv('PASSWORD_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -273,12 +273,12 @@ def new_pass(pas, Admin):
 # Добовление файла в дб
 def file_to_db(base: str):
     try: 
-        pg = psycopg2.connect("""
+        pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
             user=postgres
-            password=8533
-            port=5432
+            pass{os.getenv('SECERET_KEY')}
+            port={os.getenv('PASSWORD_PG')}
         """)
 
 
@@ -301,12 +301,12 @@ def file_to_db(base: str):
 # Получение файла из дб
 def file_from_db():
     try:
-        pg = psycopg2.connect("""
+        pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
             user=postgres
-            password=8533
-            port=5432
+            pass{os.getenv('SECERET_KEY')}
+            port={os.getenv('PASSWORD_PG')}
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
