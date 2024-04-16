@@ -50,9 +50,14 @@ def db_get():
         
 def login_user(pas):
       # НАдо бы поменять, тк будем брать из дб  
-    if pas=='kodvfwdse': return_data = 'Добро пожаловать!'
-    elif pas=='fdwji': return_data = 'Добро пожаловать, админ!'
-    else: return_data = "Неверный пароль!"
+    if pas=='kodvfwdse': 
+        return_data = 'Добро пожаловать!'
+        session['isAdmin'] = True
+    elif pas=='fdwji': 
+        return_data = 'Добро пожаловать, админ!'
+        session['isAdmin'] = False
+    else: 
+        return_data = "Неверный пароль!"
     return return_data
 
 # Добавление строчки
@@ -391,7 +396,21 @@ def change():
 
     return jsonify(responce_object)
 
+
+# Декоратор для проверки юзера
+@app.route('/check', methods=['GET'])
+def checking():
+    responce_object = {'status': 'success'}
+
+    if session.get('isAdmin') == True:
+        responce_object['isAdmin'] = True
+    elif not session.get('isAdmin'):
+        responce_object['isAdmin'] = False
+    else: 
+        responce_object['isAdmin'] = 'Он никто'
     
+    return jsonify(responce_object)
+
 
 #БаZа
 if __name__ == '__main__':
