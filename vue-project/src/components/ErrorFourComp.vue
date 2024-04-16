@@ -4,8 +4,7 @@
 
 <template>
     <div class="background">
-        <h1>Ошибка</h1>
-        
+        <h1>404</h1>
         <a href="#/Add"><button>На главную</button></a>
     </div>
 </template>
@@ -25,7 +24,7 @@
 }
 
 h1 {
-    font-size: 70px;
+    font-size: 150px;
     font-weight: 500;
     color: #161616;
 }
