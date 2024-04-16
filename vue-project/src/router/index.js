@@ -15,6 +15,10 @@ export default createRouter({
       component: () => import("../components/AddComp.vue"),
     },
     {
+      path: "/test",
+      component: () => import("../components/ModalComp.vue"),
+    },
+    {
       path: "/:pathMatch(.*)*",
       component: () => import("../components/ErrorComp.vue"),
     },
