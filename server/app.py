@@ -3,6 +3,7 @@ import psycopg2
 from psycopg2 import extras, Error
 from flask import Flask, jsonify, request, session, make_response
 from flask_cors import CORS
+import base64
 
 # SetUp
 app = Flask(__name__)
@@ -263,7 +264,64 @@ def new_pass(pas, Admin):
                 pg.close
                 print("Соединение с PostgreSQL закрыто")
                 return return_data
- 
+
+# Добовление файла в дб
+def file_to_db(base: str):
+    try: 
+        pg = psycopg2.connect("""
+            host=localhost
+            dbname=postgres
+            user=postgres
+            password=8533
+            port=5432
+        """)
+
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute(f"INSERT INTO ggg VALUES('{base}', decode('{base}', 'base64'))")
+        pg.commit()
+        cursor.close
+        pg.close
+    except (Exception, Error) as error:
+        print(f'DB ERROR: ', error)
+        return_data = f"Ошибка обращения к базе данных: {error}" 
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            print("Соединение с PostgreSQL закрыто")
+            return return_data
+
+# Получение файла из дб
+def file_from_db():
+    try:
+        pg = psycopg2.connect("""
+            host=localhost
+            dbname=postgres
+            user=postgres
+            password=8533
+            port=5432
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute("SELECT * from ggg")
+        to_encode = bytes(cursor.fetchall()[1][1])
+        base64_bytes = base64.b64encode(to_encode)
+        return_data = base64_bytes
+        with open("bb.txt", "w") as f:
+            f.write(base64_bytes.decode())
+
+    except (Exception, Error) as error:
+        print(f'DB ERROR: ', error)
+        return_data = f"Ошибка обращения к базе данных: {error}" 
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            print("Соединение с PostgreSQL закрыто")
+            return return_data
 
 # Декоратор для логина
 @app.route('/login', methods=['GET', 'POST'])
@@ -333,6 +391,7 @@ def change():
 
     return jsonify(responce_object)
 
+    
 
 #БаZа
 if __name__ == '__main__':
