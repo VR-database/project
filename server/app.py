@@ -187,11 +187,12 @@ def pass_check(pas, Admin):
     
     else:
         try: 
-            pg = psycopg2.connect("""
-f                host=localhost
+            pg = psycopg2.connect(f"""
+                host=localhost
                 dbname=postgres
                 user=postgres
-                password=ko{os.getenv('SECERET_KEY')}               port={os.getenv('PASSWORD_PG')}
+                password=ko{os.getenv('SECERET_KEY')}               
+                port={os.getenv('PASSWORD_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -218,7 +219,7 @@ f                host=localhost
 def new_pass(pas, Admin):
     if Admin:
         try: 
-            pg = psycopg2.connect("""
+            pg = psycopg2.connect(f"""
                 host=localhost
                 dbname=postgres
                 user=postgres
