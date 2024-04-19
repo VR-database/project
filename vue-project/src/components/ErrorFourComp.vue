@@ -5,7 +5,7 @@
 <template>
     <div class="background">
         <h1>404</h1>
-        <a href="#/Add"><button>На главную</button></a>
+        <a href="/Add"><button>На главную</button></a>
     </div>
 </template>
 

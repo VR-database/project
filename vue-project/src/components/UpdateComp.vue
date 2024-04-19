@@ -24,10 +24,10 @@ return {
   
 
     async renderData() {
-          let responce = await axios.post(`/update-string`, {
+          let response = await axios.post(`/update-string`, {
             id: this.id
-          });Уверен?
-          this.form = responce.data;
+          });
+          this.form = response.data;
     },
 
     // вы со своей красотой кода заебали

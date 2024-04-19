@@ -1,6 +1,6 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 export default createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     {
       path: "/Login",
@@ -22,5 +22,15 @@ export default createRouter({
       path: "/:pathMatch(.*)*",
       component: () => import("../components/ErrorComp.vue"),
     },
+
   ],
+  scrollBehavior: function(to, from, savedPosition) {
+    if (to.hash) {
+
+        //Or for Vue 3:
+      return {el: to.hash}
+    } else {
+        return { x: 0, y: 0 }
+    }
+},
 });

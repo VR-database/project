@@ -6,7 +6,7 @@
     <div class="background">
         <h1>Ошибка</h1>
         
-        <a href="#/Add"><button>На главную</button></a>
+        <a href="/Add"><button>На главную</button></a>
     </div>
 </template>
 

@@ -4,12 +4,12 @@
 <template>
 <nav class="navbar ">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="/">
       <img src="../assets/database.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
       <span class="title">VR Database</span>
     </a>
-   <a href="#/Table"><img src="../assets/stats.png" alt="" class="table"></a>
-    <a href="#/login" class="link">Войти</a>
+   <a href="/Table"><img src="../assets/stats.png" alt="" class="table"></a>
+    <a href="/login" class="link">Войти</a>
   </div>
 </nav>
 
