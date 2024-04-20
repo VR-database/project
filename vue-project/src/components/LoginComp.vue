@@ -2,7 +2,6 @@
 export default {
     data() {
         return {
-            email: '',
             password: '',
             isShowPassword: false,
             showPassword: 'password',
@@ -31,7 +30,11 @@ export default {
                 this.eyeImg = '/src/assets/eye.svg'
             }
         },
-        
+        async login() {
+            let response = await axios.get(`/login`, {
+                
+            })
+        },
     }
 }
 
@@ -43,7 +46,7 @@ export default {
         <form action="#!">
            
             <div class="password">
-                <input class="form-item" v-model="password" :type="showPassword" placeholder="Введите ключ доступа" type="password" name="" id="">
+                <input class="form-item" v-model="password" :type="showPassword" placeholder="Введите ключ доступа" name="" id="">
                 <img @click="toggleVisibility" class="password-show" :src="eyeImg" alt="">
             </div>
         </form>

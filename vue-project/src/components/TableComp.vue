@@ -1,22 +1,47 @@
 <script>
 import ErrorComp from "./ErrorComp.vue";
-
+import ModalComp from "./ModalComp.vue";
 export default {
   data() {
     return {
       none: false,
+      ShowMod: false,
+      item: '',
+      users: [
+         {diagnosis: 'Гандон', urr: 'werwe' },
+         {diagnosis: 'Гандонище' },
+         {diagnosis: 'Вью чмо' },
+         {diagnosis: 'Гандон' },
+         {diagnosis: 'Гандон' },
+         {diagnosis: 'Гандон' },
+
+      ]
+
     };
   },
 
   methods: {
     Show() {
       this.none = !this.none;
-      console.log(0);
+      
     },
+    ShowModal(diagnosis) {
+      this.ShowMod = !this.ShowMod
+      this.item = diagnosis;
+      
+    },
+    ShowModal(urr) {
+      this.ShowMod = !this.ShowMod
+      this.item = urr;
+      
+    }
+
+
   },
   mounted() {},
   components: {
     ErrorComp,
+    ModalComp,
   },
 };
 </script>
@@ -47,857 +72,111 @@ export default {
               </button>
             </th>
             <th id="1">ПП</th>
-            <th>234123</th>
-            <th>П3413ол</th>
-            <th>14</th>
-            <th>13424123</th>
-            <th>14234</th>
-            <th>142423</th>
-            <th>14312412</th>
-            <th>341</th>
-            <th>.43324/.134124</th>
-            <th>1234123</th>
-            <th>134</th>
-            <th>41313Т</th>
-            <th>1234124</th>
-            <th>124124123</th>
-            <th>1234124</th>
-            <th>14124124</th>
-            <th>143124123</th>
-            <th>1242412341</th>
-            <th>Г124</th>
-            <th>Д42124123</th>
-            <th>Д42124123</th>
-            <th>Пqertregtwegte</th>
-            <th>Пqertregtwegte</th>
-            <th>Виqqertregtwegte</th>
-            <th>twret wteert нцн45г3</th>
-            <th>wter.</th>
+            <th>Код диагноза</th>
+            <th>ФИО</th>
+            <th>Пол</th>
+            <th>Возраст</th>
+            <th>№ истории болезни</th>
+            <th>Дата госпитализации</th>
+            <th>Дата выписки (смерти)</th>
+            <th>Исход (1 - выписан / 0 - умер)</th>
+            <th>Диагноз окончательный</th>
+            <th>.docx/.doc</th>
+            <th>ФГДС</th>
+            <th>ФКС</th>
+            <th>Протокол СКТ</th>
+            <th>Протокол МРТ</th>
+            <th>Прочие исследования</th>
+            <th>Дата операции</th>
+            <th>Файлы docx/doc</th>
+            <th>Название операции</th>
+            <th>Протокол операции</th>
+            <th>Фото (видео) препарата</th>
+            <th>Гистологическое заключение</th>
+            <th>Диск СКТ</th>
+            <th>Диск МРТ</th>
+            <th>Построенная модель СТК</th>
+            <th>Построенная модель МРТ</th>
+            <th>Видео(фото) операции с ДР</th>
+            <th>Эффект предоперационного применения ДР(0/1)</th>
+            <th>Видео(фото) операции с ДР</th>
+            <th>Примечания</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td v-if="none"><input type="checkbox" /></td>
-            <td>1</td>
-            <td>wertertwert</td>
-            <td>ertwerМ</td>
-            <td>rtwer</td>
-            <td>327rtwertw983</td>
-            <td>wtrwetwe</td>
+            <tr v-for="user in users">
+            <td v-if="none"><input type="checkbox" /></td> 
+            <td><a><div class="div">1</div></a></td>
+            <td>3234</td>
+            <td>Абдулбек Максим Петрович</td>
+            <td>М</td>
+            <td>30</td>
+            <td>6537457</td>
+            <td>06.04.24</td>
             <td>-</td>
             <td>1</td>
-            <td>-</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>17.01.24</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>Ппшпащащгпашгвашгвашшгвагшваппв</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td v-if="none"><input type="checkbox" /></td>
-            <td>2</td>
-            <td>terwertwe</td>
-            <td>Мwtre</td>
-            <td>3erwter0</td>
-            <td>32twertwert7983</td>
-            <td>1wertwert.01.24</td>
-            <td>-</td>
-            <td>1</td>
-            <td>-</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>17.01.24</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>Ппшпащащгпашгвашгвашшгвагшваппв</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td v-if="none"><input type="checkbox" /></td>
-            <td>3</td>
-            <td>ere</td>
-            <td>erewМ</td>
-            <td>3retwret0</td>
-            <td>327rtewter983</td>
-            <td>17.wertwertwer.24</td>
-            <td>-</td>
-            <td>1</td>
-            <td>-</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>17.01.24</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>Ппшпащащгпашгвашгвашшгвагшваппв</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td v-if="none"><input type="checkbox" /></td>
-            <td>3</td>
-            <td>ere</td>
-            <td>erewМ</td>
-            <td>3retwret0</td>
-            <td>327rtewter983</td>
-            <td>17.wertwertwer.24</td>
-            <td>-</td>
-            <td>1</td>
-            <td>-</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>17.01.24</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>Ппшпащащгпашгвашгвашшгвагшваппв</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td v-if="none"><input type="checkbox" /></td>
-            <td>3</td>
-            <td>ere</td>
-            <td>erewМ</td>
-            <td>3retwret0</td>
-            <td>327rtewter983</td>
-            <td>17.wertwertwer.24</td>
-            <td>-</td>
-            <td>1</td>
-            <td>-</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>17.01.24</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>Ппшпащащгпашгвашгвашшгвагшваппв</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td v-if="none"><input type="checkbox" /></td>
-            <td>3</td>
-            <td>ere</td>
-            <td>erewМ</td>
-            <td>3retwret0</td>
-            <td>327rtewter983</td>
-            <td>17.wertwertwer.24</td>
-            <td>-</td>
-            <td>1</td>
-            <td>-</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>17.01.24</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>Ппшпащащгпашгвашгвашшгвагшваппв</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td v-if="none"><input type="checkbox" /></td>
-            <td>3</td>
-            <td>ere</td>
-            <td>erewМ</td>
-            <td>3retwret0</td>
-            <td>327rtewter983</td>
-            <td>17.wertwertwer.24</td>
-            <td>-</td>
-            <td>1</td>
-            <td>-</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>17.01.24</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>Ппшпащащгпашгвашгвашшгвагшваппв</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td v-if="none"><input type="checkbox" /></td>
-            <td>3</td>
-            <td>ere</td>
-            <td>erewМ</td>
-            <td>3retwret0</td>
-            <td>327rtewter983</td>
-            <td>17.wertwertwer.24</td>
-            <td>-</td>
-            <td>1</td>
-            <td>-</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>17.01.24</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>Ппшпащащгпашгвашгвашшгвагшваппв</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td v-if="none"><input type="checkbox" /></td>
-            <td>3</td>
-            <td>ere</td>
-            <td>erewМ</td>
-            <td>3retwret0</td>
-            <td>327rtewter983</td>
-            <td>17.wertwertwer.24</td>
-            <td>-</td>
-            <td>1</td>
-            <td>-</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>17.01.24</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>Ппшпащащгпашгвашгвашшгвагшваппв</td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>
-              <a href=""
-                ><img src="../assets/folder.png" alt="" class="folder"
-              /></a>
-            </td>
-            <td>-</td>
-          </tr>
-          
+            <td @click="ShowModal(user.diagnosis)"><img src="../assets/share.png" class="share" :alt="user.diagnosis"></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder" /></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder" /></a></td>
+            
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td>07.04.24</td>
+            <td>27539</td>
+            <td><img src="../assets/share.png" class="share"></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
+            <td @click="ShowModal(user.urr)"><img src="../assets/share.png" class="share" :alt="user.urr"></td>
+            </tr>
+
+            
+
         </tbody>
       </table>
     </div>
   </div>
+  <modal-comp v-if="ShowMod" :item="item" />
 </template>
 <style scoped>
-table thead {
-  position: sticky;
-  top: 100;
+.div{
+width: 100%;
+height: 100%;
 }
 
+table tbody tr:hover{
+  background-color: rgba(128, 128, 128, 0.396);
+}
+table thead {
+  background: #f2f2f2;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  margin-top: 0px;
+  border: 0.5px solid #fe00bf;
+}
+table th {
+  border: 1px solid #fe00bf;
+  padding: 15px 15px;
+  text-align: center;
+  max-width: 600px; /* Максимальная ширина ячейки */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.share{
+  width: 30px;
+  height: 30px;
+  cursor:pointer;
+}
 /* стили скрола */
 
 .Container {
@@ -955,16 +234,7 @@ table thead {
   height: 50px;
   transition: all 0.4s;
 }
-table thead {
 
-    background: #f2f2f2;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    /* Add some space between the header and the main content */
-    margin-top: 0px;
-  
-}
 table td {
   border: 1px solid #fe00bf;
   padding: 15px 15px;
