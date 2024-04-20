@@ -157,11 +157,12 @@ def delete_string(id):
 def pass_check(pas, Admin): 
     if Admin:
         try: 
-            pg = psycopg2.connect("""
-f                host=localhost
+            pg = psycopg2.connect(f"""                
+                host=localhost
                 dbname=postgres
                 user=postgres
-                password=ko{os.getenv('SECERET_KEY')}               port={os.getenv('PASSWORD_PG')}
+                password=ko{os.getenv('SECERET_KEY')}               
+                port={os.getenv('PASSWORD_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -186,11 +187,12 @@ f                host=localhost
     
     else:
         try: 
-            pg = psycopg2.connect("""
-f                host=localhost
+            pg = psycopg2.connect(f"""
+                host=localhost
                 dbname=postgres
                 user=postgres
-                password=ko{os.getenv('SECERET_KEY')}               port={os.getenv('PASSWORD_PG')}
+                password=ko{os.getenv('SECERET_KEY')}               
+                port={os.getenv('PASSWORD_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -217,11 +219,12 @@ f                host=localhost
 def new_pass(pas, Admin):
     if Admin:
         try: 
-            pg = psycopg2.connect("""
-f                host=localhost
+            pg = psycopg2.connect(f"""
+                host=localhost
                 dbname=postgres
                 user=postgres
-                password=ko{os.getenv('SECERET_KEY')}               port={os.getenv('PASSWORD_PG')}
+                password=ko{os.getenv('SECERET_KEY')}               
+                port={os.getenv('PASSWORD_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -244,11 +247,12 @@ f                host=localhost
     
     else:
         try: 
-            pg = psycopg2.connect("""
-f                host=localhost
+            pg = psycopg2.connect(f"""
+                host=localhost
                 dbname=postgres
                 user=postgres
-                password=ko{os.getenv('SECERET_KEY')}               port={os.getenv('PASSWORD_PG')}
+                password=ko{os.getenv('SECERET_KEY')}               
+                port={os.getenv('PASSWORD_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -355,7 +359,7 @@ def new_string():
 
 # Декоратор для обновления строки
 @app.route('/update-string', methods=['UPDATE'])
-def new_string():
+def update_string():
     response_object = {'status': 'success'}
     post_data = request.get_json()
 
