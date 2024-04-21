@@ -333,17 +333,14 @@ def file_from_db():
             return return_data
 
 # Декоратор для логина
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         post_data = request.get_json()
         print(login_user(post_data.get('password')))
         return jsonify(response_object)
-        
-    else:
-        response_object['message'] = db_get()
-        return jsonify(response_object)
+    
 
 
 # Декоратор для создания нововй строки
