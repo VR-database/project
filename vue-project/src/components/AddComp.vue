@@ -65,7 +65,7 @@ export default {
     },
     async postData() {
       if (check()) {
-        let responce = await axios.post(`/`, {
+        let response = await axios.post(`/new-string`, {
           form: this.form
         })
         this.status = 'Данные занесены в таблицу.'

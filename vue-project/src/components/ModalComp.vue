@@ -2,16 +2,24 @@
 import axios from "axios";
 export default {
   props: {
-    Oleg: Number,
-    ShowModal: Boolean,
+    
+    ShowMod: Boolean,
+    item: String
   },
   data() {
     return {
       dish: "",
     };
   },
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.editInformation()
+  },
+  methods: {
+    async editInformation() {
+      
+    }
+  },
+
 };
 </script>
 
@@ -21,36 +29,10 @@ export default {
       <div class="close">
         <button class="btn" @click="CloseWindow">X</button>
       </div>
-      <h1>Информация</h1>
+      <h1>Информация <img src="../assets/edit.png" alt="" class="edit" @click="editInformation"></h1>
       <div class="scroll">
       <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum libero
-        neque quae culpa cupiditate laborum dolore veritatis corrupti facilis
-        quisquam at harum, impedit officia, ipsa laboriosam doloribus, voluptas
-        animi minima! Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Libero illum inventore, cum sed eveniet voluptates est nam, similique
-        dolore iusto error asperiores sint cumque deleniti nesciunt
-        necessitatibus natus repudiandae minima? Lorem ipsum dolor sit amet
-        consectetur adipisicing elit. Quas ipsam fuga qui iste quasi, tempora
-        doloribus nesciunt labore deleniti possimus odit doloremque obcaecati
-        voluptate sapiente. Consectetur rerum reprehenderit facilis iure? Lorem
-        ipsum dolor sit amet consectetur adipisicing elit. Dolorum libero neque
-        quae culpa cupiditate laborum dolore veritatis corrupti facilis quisquam
-        at harum, impedit officia, ipsa laboriosam doloribus, voluptas animi
-        minima! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero
-        illum inventore, cum sed eveniet voluptates est nam, similique dolore
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum libero
-        neque quae culpa cupiditate laborum dolore veritatis corrupti facilis
-        quisquam at harum, impedit officia, ipsa laboriosam doloribus, voluptas
-        animi minima! Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Libero illum inventore, cum sed eveniet voluptates est nam, similique
-        dolore iusto error asperiores sint cumque deleniti nesciunt
-        necessitatibus natus repudiandae minima? Lorem ipsum dolor sit amet
-        consectetur adipisicing elit. Quas ipsam fuga qui iste quasi, tempora
-        doloribus nesciunt labore deleniti pos
-        
-
-
+        {{ item }}
       </p>
     </div>
     </div>
@@ -58,6 +40,13 @@ export default {
 </template>
 
 <style scoped>
+.edit{
+  background: none;
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  cursor: pointer;
+}
 .scroll{
     overflow-x: scroll;
     height: 350px;
