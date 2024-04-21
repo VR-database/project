@@ -66,6 +66,7 @@ export default {
   border: 2px solid #2a2a2a;
   width: auto;
   max-width: 800px;
+  min-width: 400px;
   height: auto;
   border-radius: 30px;
   display: flex;

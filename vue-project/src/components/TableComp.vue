@@ -8,12 +8,12 @@ export default {
       ShowMod: false,
       item: '',
       users: [
-         {diagnosis: 'Гандон', urr: 'werwe' },
-         {diagnosis: 'Гандонище' },
-         {diagnosis: 'Вью чмо' },
-         {diagnosis: 'Гандон' },
-         {diagnosis: 'Гандон' },
-         {diagnosis: 'Гандон' },
+         {diagnosis: 'Плохой человек', urr: 'lflflf' },
+         {diagnosis: 'Плохой человек' },
+         {diagnosis: 'Плохой человек' },
+         {diagnosis: 'Плохой человек' },
+         {diagnosis: 'Плохой человек' },
+         {diagnosis: 'Плохой человек' },
 
       ]
 
@@ -51,7 +51,7 @@ export default {
   <div class="container" v-if="true">
     <h1 class="head">DataBase</h1>
     <div class="buttons mb-5">
-      <a class="button1" href="#/Add"
+      <a class="button1" href="/Add"
         ><img src="../assets/image.png" alt=""
       /></a>
       <a class="button1" @click="Show"
