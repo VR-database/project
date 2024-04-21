@@ -61,7 +61,7 @@ export default {
             </div>
         </form>
         <div class="error-end-btn">
-            <p class="error">{{ error }}</p>
+            <p class="error">{{ error }}</p>ht
             <button class="btn-reg" @click="check" v-if="isAdmin == false"><a href="/" class="tt">Войти</a></button>
         </div>
     </div>
