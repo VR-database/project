@@ -12,7 +12,7 @@ load_dotenv()
 # SetUp
 app = Flask(__name__)
 
-app.secret_key = os.getenv('SECERET_KEY')
+app.secret_key = os.getenv('PASSWORD_PG')
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = "None"
@@ -27,8 +27,8 @@ def db_get():
             host=localhost
             dbname=postgres
             user=postgres
-            password={os.getenv('SECERET_KEY')}
-            port={os.getenv('PASSWORD_PG')}
+            password={os.getenv('PASSWORD_PG')}
+            port={os.getenv('PORT_PG')}
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -71,8 +71,8 @@ def add_string(info):
             host=localhost
             dbname=postgres
             user=postgres
-            password={os.getenv('SECERET_KEY')}
-            port={os.getenv('PASSWORD_PG')}
+            password={os.getenv('PASSWORD_PG')}
+            port={os.getenv('PORT_PG')}
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -100,8 +100,8 @@ def update_string(info, id):
             host=localhost
             dbname=postgres
             user=postgres
-            password={os.getenv('SECERET_KEY')}
-            port={os.getenv('PASSWORD_PG')}
+            password={os.getenv('PASSWORD_PG')}
+            port={os.getenv('PORT_PG')}
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -131,8 +131,8 @@ def delete_string(id):
             host=localhost
             dbname=postgres
             user=postgres
-            password={os.getenv('SECERET_KEY')}
-            port={os.getenv('PASSWORD_PG')}
+            password={os.getenv('PASSWORD_PG')}
+            port={os.getenv('PORT_PG')}
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -161,8 +161,8 @@ def pass_check(pas, Admin):
                 host=localhost
                 dbname=postgres
                 user=postgres
-                password={os.getenv('SECERET_KEY')}               
-                port={os.getenv('PASSWORD_PG')}
+                password={os.getenv('PASSWORD_PG')}               
+                port={os.getenv('PORT_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -191,8 +191,8 @@ def pass_check(pas, Admin):
                 host=localhost
                 dbname=postgres
                 user=postgres
-                password={os.getenv('SECERET_KEY')}               
-                port={os.getenv('PASSWORD_PG')}
+                password={os.getenv('PASSWORD_PG')}               
+                port={os.getenv('PORT_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -223,8 +223,8 @@ def new_pass(pas, Admin):
                 host=localhost
                 dbname=postgres
                 user=postgres
-                password={os.getenv('SECERET_KEY')}               
-                port={os.getenv('PASSWORD_PG')}
+                password={os.getenv('PASSWORD_PG')}               
+                port={os.getenv('PORT_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -251,8 +251,8 @@ def new_pass(pas, Admin):
                 host=localhost
                 dbname=postgres
                 user=postgres
-                password={os.getenv('SECERET_KEY')}               
-                port={os.getenv('PASSWORD_PG')}
+                password={os.getenv('PASSWORD_PG')}               
+                port={os.getenv('PORT_PG')}
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -281,8 +281,8 @@ def file_to_db(base: str):
             host=localhost
             dbname=postgres
             user=postgres
-            password={os.getenv('SECERET_KEY')}
-            port={os.getenv('PASSWORD_PG')}
+            password={os.getenv('PASSWORD_PG')}
+            port={os.getenv('PORT_PG')}
         """)
 
 
@@ -309,8 +309,8 @@ def file_from_db():
             host=localhost
             dbname=postgres
             user=postgres
-            password={os.getenv('SECERET_KEY')}
-            port={os.getenv('PASSWORD_PG')}
+            password={os.getenv('PASSWORD_PG')}
+            port={os.getenv('PORT_PG')}
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -336,12 +336,14 @@ def file_from_db():
 # ФИЛЬТРЫ
 def filtration(filters):
 
-    if filters['filtr'] == 'false':
+    if not filters['filtr']:
         filtr = ''
-    elif filters["filtr"] == 'true':
+    elif filters["filtr"]:
         filtr = ' WHERE'
         for i in filters:
             if filters[i] != 'false':
+                if i == 'filtr':
+                    continue
                 if filtr == ' WHERE':
                     filtr += f' {i}=$${filters[i]}$$'
                 else:
@@ -352,15 +354,15 @@ def filtration(filters):
             host=localhost
             dbname=postgres
             user=postgres
-            password={os.getenv('SECERET_KEY')}
-            port={os.getenv('PASSWORD_PG')}
+            password={os.getenv('PASSWORD_PG')}
+            port={os.getenv('PORT_PG')}
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
         pg.commit()
 
-        cursor.execute(f"SELECT * FROM table{filtr}")
+        cursor.execute(f"SELECT * FROM vr{filtr}")
         result = cursor.fetchall()
 
         return_data = []
@@ -368,7 +370,8 @@ def filtration(filters):
             return_data.append(dict(row))
 
     except (Exception, Error) as error:
-        return_data = f"Ошибка получения данных: {error}" 
+        print(f"Ошибка получения данных: {error}")
+        return_data = 'Error'
 
     finally:
         if pg:
@@ -458,10 +461,17 @@ def checking():
     
     return jsonify(responce_object)
 
-@app.route('/filtre', methods=['GET'])
+@app.route('/filtre', methods=['POST'])
 def filtre_():
     responce_object = {'status': 'success'}
-    filtre_data = request.get_json()
+    post_data = request.get_json()
+    filtre_data = post_data.get('body').get('filters')
+
+    responce_object['all'] = filtration(filtre_data)
+
+    return jsonify(responce_object)
+
+
 #БаZа
 if __name__ == '__main__':
     app.run()

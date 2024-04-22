@@ -1,6 +1,7 @@
 <script>
 import ErrorComp from "./ErrorComp.vue";
 import ModalComp from "./ModalComp.vue";
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -49,24 +50,26 @@ export default {
       
     },// this.code == '' && this.death == '' && this.gender==''
     async filtre(){
+      
       if (false){
-        filters = {
+        this.filters = {
           'filtr': false
         }
       }
       else {
-        filters = {
-          'code': '4',
-          'gender': 'М',
-          'death': '0',
-        }
+        this.filters = {
+          filtr: true,
+          code: '4',
+          gender: 'М',
+          death: '0',
+        };
       }
-      res = await axios.get('/filtre', {
-        params: {
-          filters: filtres
-        }
+      let res = await axios.post('/filtre', {
+          body: {
+            filters: this.filters
+          }
       });
-      this.table = res.data;
+      this.table = res.data.all;
       console.log(this.table)
     }
 
@@ -84,6 +87,7 @@ export default {
   <error-comp v-if="false" />
   <div class="container" v-if="true">
     <h1 class="head">DataBase</h1>
+    <button @click='filtre'></button>
     <div class="buttons mb-5">
       <a class="button1" href="/Add"
         ><img src="../assets/image.png" alt=""
