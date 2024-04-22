@@ -37,7 +37,7 @@ export default {
             let response = await axios.post(`/login`, {
                 Login: this.password
             }); 
-            this.isAdmin = this.data.isAdmin;
+            this.isAdmin = response.data.isAdmin;
             if (this.isAdmin == 'Неверный пароль!') {
                 this.error = this.isAdmin;
             } 
@@ -61,8 +61,8 @@ export default {
             </div>
         </form>
         <div class="error-end-btn">
-            <p class="error">{{ error }}</p>ht
-            <button class="btn-reg" @click="check" v-if="isAdmin == false"><a href="/" class="tt">Войти</a></button>
+            <p class="error">{{ error }}</p>
+            <button class="btn-reg" @click="check">Войти</button>
         </div>
     </div>
 </template>
