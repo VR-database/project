@@ -55,10 +55,10 @@ def db_get():
 def login_user(pas):
       # НАдо бы поменять, тк будем брать из дб  
     if pas=='kodvfwdse': 
-        return_data = 'Добро пожаловать!'
+        return_data = False
         session['isAdmin'] = True
     elif pas=='fdwji': 
-        return_data = 'Добро пожаловать, админ!'
+        return_data = True
         session['isAdmin'] = False
     else: 
         return_data = "Неверный пароль!"
@@ -338,7 +338,7 @@ def login():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         post_data = request.get_json()
-        print(login_user(post_data.get('password')))
+        post_data['isAdmin'] = login_user(post_data.get('password'))
         return jsonify(response_object)
     
 
