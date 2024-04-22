@@ -187,7 +187,7 @@ export default {
     </div>
 
     <h4 class="mt-5 mb-3">Ссылки 
-      (с протоколом http/https)
+      (с протоколом http/httpsреуц)
     </h4>
     <div class="mb-3 mt-4">
   <label for="exampleFormControlInput1" class="form-label">Диск СКТ</label>
