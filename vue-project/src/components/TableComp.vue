@@ -15,8 +15,11 @@ export default {
          {diagnosis: 'Плохой человек' },
          {diagnosis: 'Плохой человек' },
          {diagnosis: 'Плохой человек' },
-
-      ]
+      ],
+      code: '',
+      gender: '',
+      death: '',
+      table: None
 
     };
   },
@@ -46,11 +49,25 @@ export default {
       
     },
     async filtre(){
+      if (this.code == '' && this.death == '' && this.gender==''){
+        filters =  {
+          'filtr': false
+        }
+      }
+      else {
+        filters =  {
+          'code': this.code,
+          'gender': this.gender,
+          'death': this.death,
+        }
+      }
       res = await axios.get('/filtre', {
         params: {
-          
+          filters: filtres
         }
-      })
+      });
+      this.table = res.data;
+      console.log(this.table)
     }
 
 
