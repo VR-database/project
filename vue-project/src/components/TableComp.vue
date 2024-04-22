@@ -44,6 +44,13 @@ export default {
       this.ShowMod = !this.ShowMod
       this.item = urr;
       
+    },
+    async filtre(){
+      res = await axios.get('/filtre', {
+        params: {
+          
+        }
+      })
     }
 
 

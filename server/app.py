@@ -412,7 +412,10 @@ def checking():
     
     return jsonify(responce_object)
 
-
+@app.route('/filtre', methods=['GET'])
+def filtre_():
+    responce_object = {'status': 'success'}
+    filtre_data = request.get_json()
 #БаZа
 if __name__ == '__main__':
     app.run()
