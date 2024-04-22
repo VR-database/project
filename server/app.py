@@ -161,7 +161,7 @@ def pass_check(pas, Admin):
                 host=localhost
                 dbname=postgres
                 user=postgres
-                password=ko{os.getenv('SECERET_KEY')}               
+                password={os.getenv('SECERET_KEY')}               
                 port={os.getenv('PASSWORD_PG')}
             """)
 
@@ -191,7 +191,7 @@ def pass_check(pas, Admin):
                 host=localhost
                 dbname=postgres
                 user=postgres
-                password=ko{os.getenv('SECERET_KEY')}               
+                password={os.getenv('SECERET_KEY')}               
                 port={os.getenv('PASSWORD_PG')}
             """)
 
@@ -223,7 +223,7 @@ def new_pass(pas, Admin):
                 host=localhost
                 dbname=postgres
                 user=postgres
-                password=ko{os.getenv('SECERET_KEY')}               
+                password={os.getenv('SECERET_KEY')}               
                 port={os.getenv('PASSWORD_PG')}
             """)
 
@@ -251,7 +251,7 @@ def new_pass(pas, Admin):
                 host=localhost
                 dbname=postgres
                 user=postgres
-                password=ko{os.getenv('SECERET_KEY')}               
+                password={os.getenv('SECERET_KEY')}               
                 port={os.getenv('PASSWORD_PG')}
             """)
 
@@ -281,7 +281,7 @@ def file_to_db(base: str):
             host=localhost
             dbname=postgres
             user=postgres
-            pass{os.getenv('SECERET_KEY')}
+            password={os.getenv('SECERET_KEY')}
             port={os.getenv('PASSWORD_PG')}
         """)
 
@@ -309,7 +309,7 @@ def file_from_db():
             host=localhost
             dbname=postgres
             user=postgres
-            pass{os.getenv('SECERET_KEY')}
+            password={os.getenv('SECERET_KEY')}
             port={os.getenv('PASSWORD_PG')}
         """)
 
@@ -331,6 +331,52 @@ def file_from_db():
             pg.close
             print("Соединение с PostgreSQL закрыто")
             return return_data
+
+
+# ФИЛЬТРЫ
+def filtration(filters):
+
+    if filters['filtr'] == 'false':
+        filtr = ''
+    elif filters["filtr"] == 'true':
+        filtr = ' WHERE'
+        for i in filters:
+            if filters[i] != 'false':
+                if filtr == ' WHERE':
+                    filtr += f' {i}=$${filters[i]}$$'
+                else:
+                    filtr += f' AND {i}=$${filters[i]}$$'
+
+    try:
+        pg = psycopg2.connect(f"""
+            host=localhost
+            dbname=postgres
+            user=postgres
+            password={os.getenv('SECERET_KEY')}
+            port={os.getenv('PASSWORD_PG')}
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        pg.commit()
+
+        cursor.execute(f"SELECT * FROM table{filtr}")
+        result = cursor.fetchall()
+
+        return_data = []
+        for row in result:
+            return_data.append(dict(row))
+
+    except (Exception, Error) as error:
+        return_data = f"Ошибка получения данных: {error}" 
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            print("Соединение с PostgreSQL закрыто")
+            return return_data
+
 
 # Декоратор для логина
 @app.route('/login', methods=['POST'])
