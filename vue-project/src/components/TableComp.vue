@@ -19,7 +19,7 @@ export default {
       code: '',
       gender: '',
       death: '',
-      table: None
+      table: null
 
     };
   },
@@ -47,18 +47,18 @@ export default {
       this.ShowMod = !this.ShowMod
       this.item = urr;
       
-    },
+    },// this.code == '' && this.death == '' && this.gender==''
     async filtre(){
-      if (this.code == '' && this.death == '' && this.gender==''){
-        filters =  {
+      if (false){
+        filters = {
           'filtr': false
         }
       }
       else {
-        filters =  {
-          'code': this.code,
-          'gender': this.gender,
-          'death': this.death,
+        filters = {
+          'code': '4',
+          'gender': 'М',
+          'death': '0',
         }
       }
       res = await axios.get('/filtre', {
