@@ -57,7 +57,6 @@ export default {
         this.form.CtkModel.length == 0 && this.form.MrtModel.length == 0 && this.form.OperationVideo.length == 0 && this.form.EffectOfUse.length == 0 &&
         this.form.Notes.length == 0) {
         return false
-        
 
       } else {
         return true
@@ -135,34 +134,29 @@ export default {
   <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Диагноз" v-model="form.Diagnosis">
     </div>
 
-        <div class="mb-3">
-  <label for="formFile" class="form-label">.docx/.doc</label>
-  <input class="form-control form-control" id="formFileSm" type="file">
-        </div>
-
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">ФГДС</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ФГДС" v-model="form.Fgds">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="ФГДС" >
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">ФКС</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ФКС" v-model="form.Fks">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="ФКС" >
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Протокол СКТ</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" v-model="form.Ckt">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Протокол">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Протокол МРТ</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" v-model="form.Mrt">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Протокол">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Прочие исследования</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Исследования" v-model="form.Research">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Исследования">
     </div>
 
     <div class="mb-3">
@@ -170,11 +164,6 @@ export default {
   <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата операции" v-model="form.Date3">
     </div>
 
-
-    <div class="mb-3">
-  <label for="formFile" class="form-label">Файлы docx/doc</label>
-  <input class="form-control form-control" id="formFileSm" type="file">
-        </div>
 
 
     <div class="mb-3">
@@ -184,20 +173,22 @@ export default {
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Протокол операции</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" v-model= "form.Protocol">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" >
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Фото (видео) препарата</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Фото, видео" v-model="form.DrugVideo">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Фото, видео" >
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Гистологическое заключение</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Заключение" v-model="form.GistolСonclusion">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Заключение">
     </div>
 
-    <h4 class="mt-5 mb-3">Ссылки</h4>
+    <h4 class="mt-5 mb-3">Ссылки 
+      (с протоколом http/httpsреуц)
+    </h4>
     <div class="mb-3 mt-4">
   <label for="exampleFormControlInput1" class="form-label">Диск СКТ</label>
   <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.CktDisk">
@@ -238,7 +229,7 @@ export default {
 
 </div>
 <div class="btn">
-<button class="btn-reg" @click="check">Добавить</button>
+<button class="btn-reg btn" @click="check">Добавить</button>
 </div>
 </template>
 

@@ -8,15 +8,17 @@ export default {
             eyeOpen: true,
             error: '',
             eyeImg: '/src/assets/eye.svg',
+            isAdmin: '',
         }
     },
     methods: {
         check() {
-            if (this.email === '' && this.password === '') {
+            if ( this.password === '') {
                 this.error = '*Заполните поле ввода*'
-            } else {
+            } else { 
                 this.error = ''
-            }
+                login()
+            } 
         },
         toggleVisibility() {
             this.isShowPassword = !this.isShowPassword
@@ -28,13 +30,21 @@ export default {
             } else {
                 this.showPassword = 'password'
                 this.eyeImg = '/src/assets/eye.svg'
-            }
+            } 
+
         },
         async login() {
-            let response = await axios.get(`/login`, {
-                
-            })
+            let response = await axios.post(`/login`, {
+                Login: this.password
+            }); 
+            this.isAdmin = response.data.isAdmin;
+            if (this.isAdmin == 'Неверный пароль!') {
+                this.error = this.isAdmin;
+            } 
+            
         },
+
+
     }
 }
 
@@ -58,6 +68,9 @@ export default {
 </template>
 
 <style scoped>
+.tt{
+    color: white
+}
 .container {
     background: #ffffff;
     width: 400px;

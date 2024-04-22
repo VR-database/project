@@ -7,13 +7,14 @@ export default {
       none: false,
       ShowMod: false,
       item: '',
-      users: [
-         {diagnosis: 'Гандон', urr: 'werwe' },
-         {diagnosis: 'Гандонище' },
-         {diagnosis: 'Вью чмо' },
-         {diagnosis: 'Гандон' },
-         {diagnosis: 'Гандон' },
-         {diagnosis: 'Гандон' },
+      isAdmin: '',
+      items: [
+         {diagnosis: 'Плохой человек', urr: 'lflflf' },
+         {diagnosis: 'Плохой человек' },
+         {diagnosis: 'Плохой человек' },
+         {diagnosis: 'Плохой человек' },
+         {diagnosis: 'Плохой человек' },
+         {diagnosis: 'Плохой человек' },
 
       ]
 
@@ -21,13 +22,22 @@ export default {
   },
 
   methods: {
+
+    async Check() {
+      let response = await axios.get(`/check`);
+      this.isAdmin = data.isAdmin;
+    },
+    async Content() {
+      let response = await axios.get(`/show-all`);
+      this.items = response.data.all;
+    },
     Show() {
       this.none = !this.none;
       
     },
-    ShowModal(diagnosis) {
+    ShowModal(Diagnosis) {
       this.ShowMod = !this.ShowMod
-      this.item = diagnosis;
+      this.item = Diagnosis;
       
     },
     ShowModal(urr) {
@@ -51,7 +61,7 @@ export default {
   <div class="container" v-if="true">
     <h1 class="head">DataBase</h1>
     <div class="buttons mb-5">
-      <a class="button1" href="#/Add"
+      <a class="button1" href="/Add"
         ><img src="../assets/image.png" alt=""
       /></a>
       <a class="button1" @click="Show"
@@ -71,7 +81,8 @@ export default {
                 <img src="../assets/delete.png" alt="" class="none-img" />
               </button>
             </th>
-            <th id="1">ПП</th>
+            <th id="1"></th>
+            <th>ПП</th>
             <th>Код диагноза</th>
             <th>ФИО</th>
             <th>Пол</th>
@@ -104,18 +115,19 @@ export default {
           </tr>
         </thead>
         <tbody>
-            <tr v-for="user in users">
+            <tr v-for="(item, index) in items">
             <td v-if="none"><input type="checkbox" /></td> 
-            <td><a><div class="div">1</div></a></td>
-            <td>3234</td>
-            <td>Абдулбек Максим Петрович</td>
-            <td>М</td>
-            <td>30</td>
-            <td>6537457</td>
-            <td>06.04.24</td>
-            <td>-</td>
-            <td>1</td>
-            <td @click="ShowModal(user.diagnosis)"><img src="../assets/share.png" class="share" :alt="user.diagnosis"></td>
+            <td><img src="../assets/edit.png" alt="" class="edit"></td>
+            <td><a><div class="div">{{index + 1}}</div></a></td>
+            <td>{{ item.Code }}</td>
+            <td>{{item.Fio}}</td>
+            <td>{{item.Floor}}</td>
+            <td>{{item.Age}}</td>
+            <td>{{ item.NumberHistory }}</td>
+            <td>{{item.Date1}}</td>
+            <td>{{item.Date2}}</td>
+            <td>{{ item.Result }}</td>
+            <td @click="ShowModal(item.Diagnosis)"><img src="../assets/share.png" class="share" :alt="item.Diagnosis"></td>
             <td><a href=""><img src="../assets/folder.png" alt="" class="folder" /></a></td>
             <td><a href=""><img src="../assets/folder.png" alt="" class="folder" /></a></td>
             
@@ -136,7 +148,7 @@ export default {
             <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
             <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
             <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td @click="ShowModal(user.urr)"><img src="../assets/share.png" class="share" :alt="user.urr"></td>
+            <td @click="ShowModal(item.urr)"><img src="../assets/share.png" class="share" :alt="items.urr"></td>
             </tr>
 
             
@@ -148,6 +160,13 @@ export default {
   <modal-comp v-if="ShowMod" :item="item" />
 </template>
 <style scoped>
+.edit{
+  background: none;
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  cursor: pointer;
+}
 .div{
 width: 100%;
 height: 100%;
