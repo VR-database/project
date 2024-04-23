@@ -83,11 +83,11 @@ def add_string(info):
             if key not in dang_key:
                 info_for_db.append(info[key])
             else: 
-
-                info_for_db.append(None)
+                src = add_img(key, info[key], info['Fio'])
+                info_for_db.append(src)
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-        cursor.execute(f' INSERT INTO patient $${info}$$')
+        cursor.execute(f' INSERT INTO patient $${info_for_db}$$')
         pg.commit()
 
         return_data = 'Иформация добавлена'
@@ -389,6 +389,16 @@ def filtration(filters):
             print("Соединение с PostgreSQL закрыто")
             return return_data
 
+def add_img(key, base, fio):
+    decoded_bytes = base64.b64decode(base)
+
+    name=key+fio
+
+    with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
+        # Записываем данные в файл
+        file.write(decoded_bytes)
+
+    return MEDIA_FOLDER+'/'+name
 def show_all():
     try:
         pg = psycopg2.connect(f"""
