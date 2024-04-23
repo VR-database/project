@@ -2,9 +2,10 @@ import os
 import uuid
 import psycopg2
 from psycopg2 import extras, Error
-from flask import Flask, jsonify, request, session, make_response
+from flask import Flask, jsonify, request, session, make_response, send_from_directory
 from flask_cors import CORS
 import base64
+import io
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,6 +19,7 @@ app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = "None"
 
 CORS(app, resources={r"*": {"origins": "http://localhost:5173", 'supports_credentials': True}})
+MEDIA_FOLDER = 'media'
 
 
 # BaZa
@@ -510,6 +512,12 @@ def shows():
     print(responce_object['all'])
     return jsonify(responce_object)
 
+@app.route('/media/<path:filename>')
+def serve_file(filename):
+    if not os.path.exists('{}/{}'.format(MEDIA_FOLDER, filename)):
+        return jsonify({'error': 'File not found'}), 404
+    
+    return send_from_directory(directory=MEDIA_FOLDER, path=filename)
 
 #БаZа
 if __name__ == '__main__':
