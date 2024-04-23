@@ -19,7 +19,7 @@ app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = "None"
 
 CORS(app, resources={r"*": {"origins": "http://localhost:5173", 'supports_credentials': True}})
-MEDIA_FOLDER = 'media'
+MEDIA_FOLDER = os.getenv('MEDIA')
 
 
 # BaZa
