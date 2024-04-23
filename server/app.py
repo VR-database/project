@@ -380,7 +380,38 @@ def filtration(filters):
             print("Соединение с PostgreSQL закрыто")
             return return_data
 
+def show_all():
+    try:
+        pg = psycopg2.connect(f"""
+            host=localhost
+            dbname=postgres
+            user=postgres
+            password={os.getenv('PASSWORD_PG')}
+            port={os.getenv('PORT_PG')}
+        """)
 
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        pg.commit()
+
+        cursor.execute(f"SELECT * FROM vr")
+        result = cursor.fetchall()
+
+        return_data = []
+        for row in result:
+            print(dict(row))
+            return_data.append(dict(row))
+
+    except (Exception, Error) as error:
+        print(f"Ошибка получения данных: {error}")
+        return_data = 'Error'
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            print("Соединение с PostgreSQL закрыто")
+            return return_data
 # Декоратор для логина
 @app.route('/login', methods=['POST'])
 def login():
@@ -469,6 +500,14 @@ def filtre_():
 
     responce_object['all'] = filtration(filtre_data)
 
+    return jsonify(responce_object)
+
+@app.route('/show-all', methods=['GET'])
+def shows():
+    responce_object = {'status': 'success'}
+
+    responce_object['all'] = show_all()
+    print(responce_object['all'])
     return jsonify(responce_object)
 
 

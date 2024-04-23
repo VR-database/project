@@ -11,11 +11,7 @@ export default {
       isAdmin: false,
       items: [
         
-         {Diagnosis: 'Плохой человек' },
-         {Diagnosis: 'Плохой человек' },
-         {Diagnosis: 'Плохой человек' },
-         {Diagnosis: 'Плохой человек' },
-         {Diagnosis: 'Плохой человек' },
+
       ],
       code: '',
       gender: '',
@@ -34,6 +30,7 @@ export default {
     async Content() {
       let response = await axios.get(`/show-all`);
       this.items = response.data.all;
+      console.log(this.items, 1)
     },
     Show() {
       this.none = !this.none;
