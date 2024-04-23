@@ -9,7 +9,14 @@ export default {
       ShowMod: false,
       item: '',
       isAdmin: false,
-      items: [],
+      items: [
+        
+         {Diagnosis: 'Плохой человек' },
+         {Diagnosis: 'Плохой человек' },
+         {Diagnosis: 'Плохой человек' },
+         {Diagnosis: 'Плохой человек' },
+         {Diagnosis: 'Плохой человек' },
+      ],
       code: '',
       gender: '',
       death: '',
