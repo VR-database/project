@@ -79,6 +79,7 @@ def add_string(info):
         
         dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'NameOperation', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
         info_for_db = []
+
         for key in info:
             if key not in dang_key:
                 info_for_db.append(info[key])
@@ -389,6 +390,7 @@ def filtration(filters):
             print("Соединение с PostgreSQL закрыто")
             return return_data
 
+# Добовление файла в папку
 def add_img(key, base, fio):
     decoded_bytes = base64.b64decode(base)
 
@@ -399,6 +401,7 @@ def add_img(key, base, fio):
         file.write(decoded_bytes)
 
     return MEDIA_FOLDER+'/'+name
+
 def show_all():
     try:
         pg = psycopg2.connect(f"""
@@ -431,6 +434,8 @@ def show_all():
             pg.close
             print("Соединение с PostgreSQL закрыто")
             return return_data
+        
+
 # Декоратор для логина
 @app.route('/login', methods=['POST'])
 def login():
@@ -534,7 +539,7 @@ def serve_file(filename):
     if not os.path.exists('{}/{}'.format(MEDIA_FOLDER, filename)):
         return jsonify({'error': 'File not found'}), 404
     
-    return send_from_directory(directory=MEDIA_FOLDER, path=filename)
+    return send_from_directory(directory=MEDIA_FOLDER, path='/'+filename)
 
 
 #БаZа
