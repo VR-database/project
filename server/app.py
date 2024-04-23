@@ -402,6 +402,7 @@ def add_img(key, base, fio):
 
     return MEDIA_FOLDER+'/'+name
 
+# Показ всего
 def show_all():
     try:
         pg = psycopg2.connect(f"""
@@ -445,7 +446,6 @@ def login():
         post_data['isAdmin'] = login_user(post_data.get('password'))
         return jsonify(response_object)
     
-
 
 # Декоратор для создания нововй строки
 @app.route('/new-string', methods=['POST'])
