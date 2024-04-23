@@ -76,7 +76,15 @@ def add_string(info):
             password={os.getenv('PASSWORD_PG')}
             port={os.getenv('PORT_PG')}
         """)
+        
+        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'NameOperation', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
+        info_for_db = []
+        for key in info:
+            if key not in dang_key:
+                info_for_db.append(info[key])
+            else: 
 
+                info_for_db.append(None)
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         cursor.execute(f' INSERT INTO patient $${info}$$')
@@ -334,7 +342,6 @@ def file_from_db():
             print("Соединение с PostgreSQL закрыто")
             return return_data
 
-
 # ФИЛЬТРЫ
 def filtration(filters):
 
@@ -518,6 +525,7 @@ def serve_file(filename):
         return jsonify({'error': 'File not found'}), 404
     
     return send_from_directory(directory=MEDIA_FOLDER, path=filename)
+
 
 #БаZа
 if __name__ == '__main__':
