@@ -17,7 +17,10 @@ export default {
   methods: {
     async editInformation() {
       
-    }
+    },
+    CloseModal() {
+            this.$emit('CloseModal', this.ShowMod)
+        }
   },
 
 };
@@ -27,7 +30,7 @@ export default {
   <div class="modal-backdrop">
     <div class="window">
       <div class="close">
-        <button class="btn" @click="CloseWindow">X</button>
+        <button class="btn" @click="CloseModal">X</button>
       </div>
       <h1>Информация <img src="../assets/edit.png" alt="" class="edit" @click="editInformation"></h1>
       <div class="scroll">
@@ -63,7 +66,7 @@ export default {
 
 .window {
   background-color: #ffffff;
-  border: 2px solid #2a2a2a;
+  border: 3px solid #2a2a2a;
   width: auto;
   max-width: 800px;
   min-width: 400px;

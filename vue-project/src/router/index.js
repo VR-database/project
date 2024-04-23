@@ -19,18 +19,13 @@ export default createRouter({
       component: () => import("../components/testcomp.vue"),
     },
     {
+      path: "/Edit",
+      component: () => import("../components/EditComp.vue"),
+    },
+    {
       path: "/:pathMatch(.*)*",
       component: () => import("../components/ErrorComp.vue"),
     },
 
   ],
-  scrollBehavior: function(to, from, savedPosition) {
-    if (to.hash) {
-
-        //Or for Vue 3:
-      return {el: to.hash}
-    } else {
-        return { x: 0, y: 0 }
-    }
-},
 });

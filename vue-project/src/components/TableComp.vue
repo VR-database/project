@@ -8,15 +8,8 @@ export default {
       none: false,
       ShowMod: false,
       item: '',
-      isAdmin: '',
-      items: [
-         {diagnosis: 'Плохой человек', urr: 'lflflf' },
-         {diagnosis: 'Плохой человек' },
-         {diagnosis: 'Плохой человек' },
-         {diagnosis: 'Плохой человек' },
-         {diagnosis: 'Плохой человек' },
-         {diagnosis: 'Плохой человек' },
-      ],
+      isAdmin: false,
+      items: [],
       code: '',
       gender: '',
       death: '',
@@ -44,9 +37,9 @@ export default {
       this.item = Diagnosis;
       
     },
-    ShowModal(urr) {
+    ShowModal(Notes) {
       this.ShowMod = !this.ShowMod
-      this.item = urr;
+      this.item = Notes;
       
     },// this.code == '' && this.death == '' && this.gender==''
     async filtre(){
@@ -71,11 +64,14 @@ export default {
       });
       this.table = res.data.all;
       console.log(this.table)
-    }
+    },
+    CloseModal(Show) {
+            this.ShowMod = false
+        }
 
 
   },
-  mounted() {},
+  mounted() {this.Content()},
   components: {
     ErrorComp,
     ModalComp,
@@ -120,14 +116,12 @@ export default {
             <th>Дата выписки (смерти)</th>
             <th>Исход (1 - выписан / 0 - умер)</th>
             <th>Диагноз окончательный</th>
-            <th>.docx/.doc</th>
             <th>ФГДС</th>
             <th>ФКС</th>
             <th>Протокол СКТ</th>
             <th>Протокол МРТ</th>
             <th>Прочие исследования</th>
             <th>Дата операции</th>
-            <th>Файлы docx/doc</th>
             <th>Название операции</th>
             <th>Протокол операции</th>
             <th>Фото (видео) препарата</th>
@@ -145,7 +139,7 @@ export default {
         <tbody>
             <tr v-for="(item, index) in items">
             <td v-if="none"><input type="checkbox" /></td> 
-            <td><img src="../assets/edit.png" alt="" class="edit"></td>
+            <td><a href="/Edit"><img src="../assets/edit.png" alt="" class="edit"></a></td>
             <td><a><div class="div">{{index + 1}}</div></a></td>
             <td>{{ item.Code }}</td>
             <td>{{item.Fio}}</td>
@@ -156,27 +150,26 @@ export default {
             <td>{{item.Date2}}</td>
             <td>{{ item.Result }}</td>
             <td @click="ShowModal(item.Diagnosis)"><img src="../assets/share.png" class="share" :alt="item.Diagnosis"></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder" /></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder" /></a></td>
+            <td><a :href="item.Fgds"><img src="../assets/folder.png" :alt="item.Fgds" class="folder" /></a></td>
+            <td><a :href="item.Fks"><img src="../assets/folder.png" :alt="item.Fks" class="folder" /></a></td>
             
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td>07.04.24</td>
-            <td>27539</td>
-            <td><img src="../assets/share.png" class="share"></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td><a href=""><img src="../assets/folder.png" alt="" class="folder"/></a></td>
-            <td @click="ShowModal(item.urr)"><img src="../assets/share.png" class="share" :alt="items.urr"></td>
+            <td><a :href="item.Ckt"><img src="../assets/folder.png" :alt="item.Ckt" class="folder"/></a></td>
+            <td><a :href="item.Mrt"><img src="../assets/folder.png" :alt="item.Mrt" class="folder"/></a></td>
+            
+            <td><a :href="item.Research"><img src="../assets/folder.png" :alt="item.Research" class="folder"/></a></td>
+            <td>{{ item.Date3 }}</td>
+           <td @click="ShowModal(item.NameOperation)"><img src="../assets/share.png" class="share" :alt="item.NameOperation"></td>
+            <td><a :href="item.Protocol"><img src="../assets/folder.png" :alt="item.Protocol" class="folder"/></a></td>
+            <td><a :href="item.DrugVideo"><img src="../assets/folder.png" :alt="item.DrugVideo"  class="folder"/></a></td>
+            <td><a :href="item.GistolСonclusion"><img src="../assets/folder.png" :alt="item.GistolСonclusion" class="folder"/></a></td>
+            <td><a :href="item.CktDisk"><img src="../assets/Link.png" :alt="item.CktDisk" class="folder"/></a></td>
+            <td><a :href="item.MrtDisk"><img src="../assets/Link.png" :alt="item.MrtDisk" class="folder"/></a></td>
+            <td><a :href="item.CtkModel"><img src="../assets/Link.png" :alt="item.CtkModel" class="folder"/></a></td>
+            <td><a :href="item.MrtModel"><img src="../assets/Link.png" :alt="item.MrtModel" class="folder"/></a></td>
+            <td><a :href="item.OperationVideo"><img src="../assets/Link.png" :alt="item.OperationVideo" class="folder"/></a></td>
+            <td>{{ item.EffectOfUse }}</td>
+            <td><a :href="item.OperationVideo"><img src="../assets/folder.png" :alt="item.OperationVideo" class="folder"/></a></td>
+            <td @click="ShowModal(item.Notes)"><img src="../assets/share.png" class="share" :alt="items.Notes"></td>
             </tr>
 
             
@@ -185,7 +178,7 @@ export default {
       </table>
     </div>
   </div>
-  <modal-comp v-if="ShowMod" :item="item" />
+  <modal-comp v-if="ShowMod" :item="item" @CloseModal="CloseModal" />
 </template>
 <style scoped>
 .edit{
@@ -275,13 +268,6 @@ table th {
   text-align: center;
   cursor: pointer;
 }
-
-.button1 img:hover {
-  width: 55px;
-  height: 50px;
-  transition: all 0.4s;
-}
-
 table td {
   border: 1px solid #fe00bf;
   padding: 15px 15px;
@@ -299,5 +285,15 @@ table td {
   width: 20px;
   height: 20px;
   cursor: pointer;
+}
+@media (max-width: 900px) {
+  .button1 img{
+    width: 40px;
+    height: 37px;
+  }
+  .buttons {
+  margin-top: 20px;
+  gap: 10px;
+}
 }
 </style>

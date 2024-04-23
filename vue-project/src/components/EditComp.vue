@@ -165,24 +165,7 @@ export default {
         };
         reader.readAsDataURL(file);
     },
-    convertFileResearch(event) {
-     const file = event.target.files[0];
-        const reader = new FileReader();
-  
-        reader.onload = () => {
-          this.Research = reader.result;
-            console.log(reader.result);
-          
-        };
-        reader.readAsDataURL(file);
-    },
-    test() {
-      this.$router.push('/Table');
-    }
   },
-  mounted() {
-    this.postData( )
-  }
  
 } 
 
@@ -191,7 +174,7 @@ export default {
 <template>
     <div class="big-container d-flex">
         <div class="input-group">
-    <h1 class="head">Добавить в таблицу</h1>
+    <h1 class="head">Внести изменения</h1>
     <form>
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Код диагноза</label>
@@ -261,7 +244,7 @@ export default {
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Прочие исследования</label>
-  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Исследования" @change="convertFileResearch">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Исследования" v-model="form.Research">
     </div>
 
     <div class="mb-3">
@@ -334,7 +317,7 @@ export default {
 
 </div>
 <div class="btn">
-<button class="btn-reg btn" @click="check">Добавить</button>
+<button class="btn-reg btn" @click="check">Изменить</button>
 </div>
 </template>
 
