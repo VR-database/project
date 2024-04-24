@@ -47,7 +47,7 @@ export default {
 
         Protocol: '',
         DrugVideo: '',
-        GistolСonclusion: '',
+        GistolConclusion: '',
       },
       
       
