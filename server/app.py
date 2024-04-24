@@ -65,7 +65,6 @@ def login_user(pas):
             print("Соединение с PostgreSQL закрыто")
             return return_data
 
-
 # Добавление строчки
 def add_string(info):
     try: 
@@ -78,17 +77,18 @@ def add_string(info):
         """)
         
         dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'NameOperation', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
-        info_for_db = [uuid.uuid4.hex]
+        info_for_db = f"'{uuid.uuid4().hex}'"
 
         for key in info:
             if key not in dang_key:
-                info_for_db.append(info[key])
+                info_for_db+=f", '{info[key]}'"
             else: 
                 src = add_img(key, info[key], info['Fio'])
-                info_for_db.append(src)
+                info_for_db+=f", '{src}'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-        cursor.execute(f' INSERT INTO VR VALUES({info_for_db})')
+
+        cursor.execute(f'INSERT INTO VR VALUES({info_for_db})')
         pg.commit()
 
         return_data = 'Иформация добавлена'
@@ -393,9 +393,9 @@ def filtration(filters):
 # Добовление файла в папку
 def add_img(key, base, fio):
     decoded_bytes = base64.b64decode(base)
-
-    name=key+fio
-
+    print(base)
+    name=key+'_'+fio
+    print(name)
     with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
         # Записываем данные в файл
         file.write(decoded_bytes)
@@ -491,7 +491,7 @@ def new_string():
     response_object = {'status': 'success'}
     post_data = request.get_json()
 
-    add_string(post_data.get().values())
+    add_string(post_data.get('form'))
 
     return jsonify(response_object)
 
@@ -574,10 +574,12 @@ def shows():
 
 @app.route('/media/<path:filename>')
 def serve_file(filename):
-    if not os.path.exists('{}/{}'.format(MEDIA_FOLDER, filename)):
+    path = filename
+    print(MEDIA_FOLDER+path)
+    if not os.path.exists('{}/{}'.format(MEDIA_FOLDER, '/'+filename)):
         return jsonify({'error': 'File not found'}), 404
-    
-    return send_from_directory(directory=MEDIA_FOLDER, path='/'+filename)
+
+    return send_from_directory(directory=MEDIA_FOLDER, path=path)
 
 @app.route('/show-one', methods=['GET'])
 def one():

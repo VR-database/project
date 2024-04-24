@@ -59,17 +59,17 @@ export default {
   },
   methods: {
     check() {
-      if (this.form.Code == '' || this.form.Fio == '' || this.form.Floor == '' || this.form.Age == '' ||
-        this.form.NumberHistory == '' || this.form.Date1 == '' || this.form.Date2 == '' && this.form.Result == '' ||
-        this.form.Diagnosis == '' ||
-        this.form.Date3 == '' || this.form.NameOperation == '' || 
-        this.form.Notes == ''){
-        this.status = 'Заполните все поля!'
+      // if (this.form.Code == '' || this.form.Fio == '' || this.form.Floor == '' || this.form.Age == '' ||
+      //   this.form.NumberHistory == '' || this.form.Date1 == '' || this.form.Date2 == '' && this.form.Result == '' ||
+      //   this.form.Diagnosis == '' ||
+      //   this.form.Date3 == '' || this.form.NameOperation == '' || 
+      //   this.form.Notes == ''){
+      //   this.status = 'Заполните все поля!'
 
-      } else {
+      // } else {
         this.status = 'Данные занесены в таблицу.'
         this.postData()
-      }
+      // }
     },
     async postData() {
         let response = await axios.post(`/new-string`, {
@@ -234,9 +234,6 @@ export default {
     },
 
   },
-  mounted() {
-    this.postData( )
-  }
  
 } 
 
