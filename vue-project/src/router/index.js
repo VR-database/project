@@ -7,6 +7,10 @@ export default createRouter({
       component: () => import("../components/LoginComp.vue"),
     },
     {
+      path: "/",
+      component: () => import("../components/LoginComp.vue"),
+    },
+    {
       path: "/Table",
       component: () => import("../components/TableComp.vue"),
     },

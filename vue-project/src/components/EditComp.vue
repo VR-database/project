@@ -63,11 +63,11 @@ export default {
        this.id = this.$route.query.id 
     },
     check() {
-      if (this.form.Code.length == 0 && this.form.Fio.length == 0 && this.form.Floor.length == 0 && this.form.Age.length == 0 &&
-        this.form.NumberHistory.length == 0 && this.form.Date1.length == 0 && this.form.Date2.length == 0 && this.form.Result.length == 0 &&
-        this.form.Diagnosis.length == 0 &&
-        this.form.Date3.length == 0 && this.form.NameOperation.length == 0 && this.form.Protocol.length == 0 && this.form.DrugVideo.length == 0 &&
-        this.form.Notes.length == 0) {
+      if (this.form.Code == '' || this.form.Fio == '' || this.form.Floor == '' || this.form.Age == '' ||
+        this.form.NumberHistory == '' || this.form.Date1 == '' || this.form.Date2 == '' && this.form.Result == '' ||
+        this.form.Diagnosis == '' ||
+        this.form.Date3 == '' || this.form.NameOperation == '' || 
+        this.form.Notes == '') {
         this.status = 'Заполните все поля!'
 
       } else {

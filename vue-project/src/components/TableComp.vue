@@ -102,8 +102,9 @@ export default {
       
       
 
-   ],
-      
+      ],
+   ritems:[],
+   checkedId: '',
       code: '',
       gender: '',
       death: '',
@@ -123,10 +124,25 @@ export default {
       this.items = response.data.all;
       console.log(this.items, 1)
     },
+    async deleteItem() {
+      await axios.delete(`/delete-string`,{
+        body: {
+          id: this.ritems
+        }
+      });
+
+    },
     Show() {
       this.none = !this.none;
       
     },
+    tog(id){
+  let i = this.ritems.indexOf(id);
+          if (i===-1){this.ritems.push(id);}
+      else { this.ritems.splice(i, 1); }
+  
+    },
+
     ShowModal(Diagnosis) {
       this.ShowMod = !this.ShowMod
       this.item = Diagnosis;
@@ -137,9 +153,6 @@ export default {
       this.ShowMod = !this.ShowMod
       this.item = Notes;
       
-    },
-    Edit(item) {
-      this.edit = item;
     },
     async filtre(){
       
@@ -166,7 +179,7 @@ export default {
     },
     CloseModal(Show) {
             this.ShowMod = false
-        }
+        },
 
 
   },
@@ -200,7 +213,7 @@ export default {
         <thead>
           <tr>
             <th v-if="none">
-              <button class="none-btn">
+              <button class="none-btn" @click="deleteItem">
                 <img src="../assets/delete.png" alt="" class="none-img" />
               </button>
             </th>
@@ -237,7 +250,7 @@ export default {
         </thead>
         <tbody>
             <tr v-for="(item, index) in items">
-            <td v-if="none"><input type="checkbox" /></td> 
+            <td v-if="none"><input type="checkbox" :value="item.id" @change="tog(item.id)" /></td> 
             <td><a :href="'/edit?id=' + item.id"><img src="../assets/edit.png" :alt="item" class="edit"></a></td>
             <td><a><div class="div">{{index + 1}}</div></a></td>
             <td>{{ item.Code }}</td>
