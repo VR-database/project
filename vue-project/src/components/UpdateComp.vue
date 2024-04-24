@@ -4,43 +4,31 @@ axios.defaults.baseURL = 'http://127.0.0.1:5000';
 // иди нах с точками и запятимыи так это не импорт
 
 export default {
-
-
-
   data() {
-return {
-      id: '', 
-      form:{
-        
-           },
-      
-  
-      status: '',
-
-
-    }
-  },
-  methods: {
-  
-
-    async renderData() {
-          let response = await axios.post(`/update-string`, {
-            id: this.id
-          });
-          this.form = response.data;
+    return {
+          id: '', 
+          form:{ },
+          status: '',
+        }
+      },
+    methods: {
+      async renderData() {
+            let response = await axios.post(`/update-string`, {
+              id: this.id
+            });
+            this.form = response.data;
+      },
+      async updateData(){
+        await axios.update('/update-string', {
+          form: this.form
+        });
+      }
+      // вы со своей красотой кода заебали
     },
-    async updateData(){
-      await axios.update('/update-string', {
-        form: this.form
-      });
+    mounted() {
+      this.renderData();
+      setInterval( () => { this.renderData(); }, 1000);
     }
-    // вы со своей красотой кода заебали
-
-  },
-  mounted() {
-    this.renderData();
-    setInterval( () => { this.renderData(); }, 1000);
-  }
 } 
 
 </script>
