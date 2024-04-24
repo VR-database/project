@@ -570,7 +570,9 @@ def serve_file(filename):
     
     return send_from_directory(directory=MEDIA_FOLDER, path='/'+filename)
 
-
+@app.route('/show-one', methods=['GET'])
+def one():
+    pass
 #БаZа
 if __name__ == '__main__':
     app.run()
