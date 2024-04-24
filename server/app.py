@@ -117,7 +117,7 @@ def add_string(info):
                 info_for_db.append(src)
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-        cursor.execute(f' INSERT INTO patient $${info_for_db}$$')
+        cursor.execute(f' INSERT INTO VR VALUES({info_for_db})')
         pg.commit()
 
         return_data = 'Иформация добавлена'
