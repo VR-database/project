@@ -133,7 +133,7 @@ def update_string(info, id):
             return return_data
 
 # удаление строчки
-def delete_string(id):
+def delete_string(ids):
     try: 
         pg = psycopg2.connect(f"""
             host=localhost
@@ -144,8 +144,8 @@ def delete_string(id):
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-        cursor.execute(f'''DELETE patients
+        for id in ids:
+            cursor.execute(f'''DELETE patients
                         WHERE id=$${id}$$''')
         
         pg.commit()
@@ -508,9 +508,8 @@ def update_string():
 @app.route('/delete-string', methods = ['DELETE'])
 def del_srt():
     responce_object = {'status' : 'success'}
-    post_data = request.get_json()
-
-    responce_object['res'] = delete_string(post_data.get('id'))
+    post_data = request.args.get('id')
+    responce_object['res'] = delete_string(post_data)
 
     return jsonify(responce_object)
 
@@ -584,6 +583,7 @@ def one():
     responce_object['all'] = show_one(id)
 
     return jsonify(responce_object)
+
 #БаZа
 if __name__ == '__main__':
     app.run()
