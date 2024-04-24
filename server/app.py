@@ -55,12 +55,41 @@ def db_get():
             return return_data
         
 def login_user(pas):
-      # НАдо бы поменять, тк будем брать из дб  
-    if pas=='kodvfwdse': 
-        return_data = False
-        session['isAdmin'] = True
-    elif pas=='fdwji': 
+    try:
+        pg = psycopg2.connect(f"""
+            host=localhost
+            dbname=postgres
+            user=postgres
+            password={os.getenv('PASSWORD_PG')}
+            port={os.getenv('PORT_PG')}
+        """)
+         
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        cursor.execute(f'SELECT * FROM admins')
+
+        password = cursor.fetchone()
+        passwords = []
+        for row in password:
+            passwords.append(dict(row))
+        pg.commit()
+    except (Exception, Error) as error:
+        print(f'DB ERROR: ', error)
+        return_data = 'ошибка дб'
+
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            print("Соединение с PostgreSQL закрыто")
+            return return_data
+        
+    if pas==passwords['admin']: 
         return_data = True
+        session['isAdmin'] = True
+    elif pas==passwords['person']: 
+        return_data = False
         session['isAdmin'] = False
     else: 
         return_data = "Неверный пароль!"
