@@ -10,7 +10,7 @@ export default {
   data() {
     return{
       form:{
-        Code: '754952749570', 
+        Code: '', 
         Fio: '',
         Floor: '',
         Age: '',
