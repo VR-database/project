@@ -53,7 +53,8 @@ def db_get():
             pg.close
             print("Соединение с PostgreSQL закрыто")
             return return_data
-        
+
+# Логин  
 def login_user(pas):
     try:
         pg = psycopg2.connect(f"""
@@ -107,7 +108,7 @@ def add_string(info):
         """)
         
         dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'NameOperation', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
-        info_for_db = []
+        info_for_db = [uuid.uuid4.hex]
 
         for key in info:
             if key not in dang_key:
@@ -465,6 +466,44 @@ def show_all():
             print("Соединение с PostgreSQL закрыто")
             return return_data
         
+# показ одной строки
+def show_one(id):
+    try:
+        pg = psycopg2.connect(f"""
+            host=localhost
+            dbname=postgres
+            user=postgres
+            password={os.getenv('PASSWORD_PG')}
+            port={os.getenv('PORT_PG')}
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        pg.commit()
+
+        cursor.execute(f"SELECT * FROM vr 
+                       WHERE id=$${id}$$")
+        result = cursor.fetchall()
+
+        return_data = []
+        for row in result:
+            print(dict(row))
+            return_data.append(dict(row))
+
+    except (Exception, Error) as error:
+        print(f"Ошибка получения данных: {error}")
+        return_data = 'Error'
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            print("Соединение с PostgreSQL закрыто")
+            return return_data
+        
+
+# ========================================================================================
+
 
 # Декоратор для логина
 @app.route('/login', methods=['POST'])
@@ -572,7 +611,12 @@ def serve_file(filename):
 
 @app.route('/show-one', methods=['GET'])
 def one():
-    pass
+    responce_object = {'status': 'success'}
+
+    id = request.args.get('id')
+    responce_object['all'] = show_one(id)
+
+    return jsonify(responce_object)
 #БаZа
 if __name__ == '__main__':
     app.run()
