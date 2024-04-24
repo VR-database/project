@@ -145,11 +145,11 @@ def delete_string(ids):
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         for id in ids:
-            cursor.execute(f'''DELETE patients
+            cursor.execute(f'''DELETE FROM vr
                         WHERE id=$${id}$$''')
         
         pg.commit()
-
+        return_data = 'Success'
     except (Exception, Error) as error:
         print(f'DB ERROR: ', error)
         return_data = f"Ошибка обращения к базе данных: {error}" 
@@ -448,8 +448,8 @@ def show_one(id):
         
         pg.commit()
 
-        cursor.execute(f"SELECT * FROM vr 
-                       WHERE id=$${id}$$")
+        cursor.execute(f'''SELECT * FROM vr 
+                       WHERE id=$${id}$$''')
         result = cursor.fetchall()
 
         return_data = []
@@ -508,8 +508,9 @@ def update_string():
 @app.route('/delete-string', methods = ['DELETE'])
 def del_srt():
     responce_object = {'status' : 'success'}
-    post_data = request.args.get('id')
-    responce_object['res'] = delete_string(post_data)
+    post_data = request.get_json()
+    print(post_data)
+    responce_object['res'] = delete_string(post_data.get('id'))
 
     return jsonify(responce_object)
 
