@@ -29,7 +29,11 @@ return {
           });
           this.form = response.data;
     },
-
+    async updateData(){
+      await axios.update('/update-string', {
+        form: this.form
+      });
+    }
     // вы со своей красотой кода заебали
 
   },
