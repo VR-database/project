@@ -35,12 +35,24 @@ def login_user(pas):
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         cursor.execute(f'SELECT * FROM admins')
+        print(pas)
 
-        password = cursor.fetchone()
+        password = cursor.fetchall()
+
         passwords = []
+
         for row in password:
             passwords.append(dict(row))
         pg.commit()
+        print(passwords)
+        if pas==passwords[0]['admin_pass']: 
+            return_data = True
+            session['isAdmin'] = True
+        elif pas==passwords[0]['person_pass']: 
+            return_data = False
+            session['isAdmin'] = False
+        else: 
+            return_data = "Неверный пароль!"
     except (Exception, Error) as error:
         print(f'DB ERROR: ', error)
         return_data = 'ошибка дб'
@@ -52,16 +64,7 @@ def login_user(pas):
             pg.close
             print("Соединение с PostgreSQL закрыто")
             return return_data
-        
-    if pas==passwords['admin']: 
-        return_data = True
-        session['isAdmin'] = True
-    elif pas==passwords['person']: 
-        return_data = False
-        session['isAdmin'] = False
-    else: 
-        return_data = "Неверный пароль!"
-    return return_data
+
 
 # Добавление строчки
 def add_string(info):
@@ -478,7 +481,7 @@ def login():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         post_data = request.get_json()
-        post_data['isAdmin'] = login_user(post_data.get('password'))
+        response_object['isAdmin'] = login_user(post_data.get('Login'))
         return jsonify(response_object)
     
 
