@@ -30,7 +30,7 @@ export default {
         CtkModel: '',
         MrtModel: '',
         OperationVideo: '',
-        EffectOfUse: '',
+        EffectOfUse1: '',
         Notes: '',
         
         
@@ -61,124 +61,178 @@ export default {
     check() {
       if (this.form.Code.length == 0 && this.form.Fio.length == 0 && this.form.Floor.length == 0 && this.form.Age.length == 0 &&
         this.form.NumberHistory.length == 0 && this.form.Date1.length == 0 && this.form.Date2.length == 0 && this.form.Result.length == 0 &&
-        this.form.Diagnosis.length == 0 && this.form.Fgds.length == 0 && this.form.Fks.length == 0 && this.form.Ckt.length == 0 &&
-        this.form.Mrt.length == 0 && this.form.Research.length == 0 &&
-
+        this.form.Diagnosis.length == 0 &&
         this.form.Date3.length == 0 && this.form.NameOperation.length == 0 && this.form.Protocol.length == 0 && this.form.DrugVideo.length == 0 &&
-        this.form.GistolСonclusion.length == 0 && this.form.CktDisk.length == 0 && this.form.MrtDisk.length == 0 &&
-
-        this.form.CtkModel.length == 0 && this.form.MrtModel.length == 0 && this.form.OperationVideo.length == 0 && this.form.EffectOfUse.length == 0 &&
         this.form.Notes.length == 0) {
-        return false
+        this.status = 'Заполните все поля!'
 
       } else {
-        return true
+        this.status = 'Данные занесены в таблицу.'
+        this.postData()
       }
     },
     async postData() {
-      if (check()) {
         let response = await axios.post(`/new-string`, {
           form: this.form
         })
-        this.status = 'Данные занесены в таблицу.'
-      } else {
-        this.status = 'Заполните все поля.'
-      }
-
     },
     convertFileFGDS(event) {
       const file = event.target.files[0];
-        const reader = new FileReader();
-  
-        reader.onload = () => {
-            this.Fgds = reader.result;
-            console.log(this.Fgds);
-          
-        };
-  
-            reader.readAsDataURL(file);
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.Fgds = reader.result;
+        console.log(this.Fgds);
+
+      };
+
+      reader.readAsDataURL(file);
     },
     convertFileFKS(event) {
       const file = event.target.files[0];
-        const reader = new FileReader();
-  
-        reader.onload = () => {
-          this.Fks = reader.result;
-            console.log(this.Fks);
-          
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.Fks = reader.result;
+        console.log(this.Fks);
+
       };
       reader.readAsDataURL(file);
-   },
-   convertFileMRT(event) {
-     const file = event.target.files[0];
-        const reader = new FileReader();
-  
-        reader.onload = () => {
-          this.Mrt = reader.result;
-            console.log(this.Mrt);
-          
-        };
-        reader.readAsDataURL(file);
+    },
+    convertFileMRT(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.Mrt = reader.result;
+        console.log(this.Mrt);
+
+      };
+      reader.readAsDataURL(file);
     },
     convertFileCKT(event) {
-     const file = event.target.files[0];
-        const reader = new FileReader();
-  
-        reader.onload = () => {
-          this.Ckt = reader.result;
-            console.log(reader.result);
-          
-        };
-        reader.readAsDataURL(file);
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.Ckt = reader.result;
+        console.log(reader.result);
+
+      };
+      reader.readAsDataURL(file);
     },
     convertFileProtocol(event) {
-     const file = event.target.files[0];
-        const reader = new FileReader();
-  
-        reader.onload = () => {
-          this.Protocol = reader.result;
-            console.log(reader.result);
-          
-        };
-        reader.readAsDataURL(file);
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.Protocol = reader.result;
+        console.log(reader.result);
+
+      };
+      reader.readAsDataURL(file);
     },
-  
+
     convertFileDrugVideo(event) {
-     const file = event.target.files[0];
-        const reader = new FileReader();
-  
-        reader.onload = () => {
-          this.DrugVideo = reader.result;
-            console.log(reader.result);
-          
-        };
-        reader.readAsDataURL(file);
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.DrugVideo = reader.result;
+        console.log(reader.result);
+
+      };
+      reader.readAsDataURL(file);
     },
     convertFileGistolСonclusion(event) {
-     const file = event.target.files[0];
-        const reader = new FileReader();
-  
-        reader.onload = () => {
-          this.GistolСonclusion = reader.result;
-            console.log(reader.result);
-          
-        };
-        reader.readAsDataURL(file);
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.GistolСonclusion = reader.result;
+        console.log(reader.result);
+
+      };
+      reader.readAsDataURL(file);
     },
     convertFileResearch(event) {
-     const file = event.target.files[0];
-        const reader = new FileReader();
-  
-        reader.onload = () => {
-          this.Research = reader.result;
-            console.log(reader.result);
-          
-        };
-        reader.readAsDataURL(file);
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.Research = reader.result;
+        console.log(reader.result);
+
+      };
+      reader.readAsDataURL(file);
     },
-    test() {
-      this.$router.push('/Table');
-    }
+    convertFileCktDisk(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.CktDisk = reader.result;
+        console.log(reader.result);
+
+      };
+      reader.readAsDataURL(file);
+    },
+    convertFileMrtDisk(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.MrtDisk = reader.result;
+        console.log(reader.result);
+
+      };
+      reader.readAsDataURL(file);
+    },
+    convertFileCtkModel(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.CtkModel = reader.result;
+        console.log(reader.result);
+
+      };
+      reader.readAsDataURL(file);
+    },
+    convertFileMrtModel(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.MrtModel = reader.result;
+        console.log(reader.result);
+
+      };
+      reader.readAsDataURL(file);
+    },
+    convertFileOperationVideo(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.OperationVideo = reader.result;
+        console.log(reader.result);
+
+      };
+      reader.readAsDataURL(file);
+    },
+    convertFileEffectOfUse1(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.EffectOfUse1 = reader.result;
+        console.log(reader.result);
+
+      };
+      reader.readAsDataURL(file);
+    },
+
   },
   mounted() {
     this.postData( )
@@ -291,37 +345,35 @@ export default {
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Заключение" @change="convertFileGistolСonclusion">
     </div>
 
-    <h4 class="mt-5 mb-3">Ссылки 
-      (с протоколом http/https)
-    </h4>
+    <h4 class="mt-5 mb-3">Ссылки </h4>
     <div class="mb-3 mt-4">
   <label for="exampleFormControlInput1" class="form-label">Диск СКТ</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.CktDisk">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" @change="convertFileCktDisk">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Диск МРТ</label>
-  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.MrtDisk">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileMrtDisk">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Построенная модель СТК</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.CtkModel">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileCtkModel">
     </div>
 
     <div class="mb-3">
-  <label for="exampleFormControlInput1" class="form-label">Построенная модель МРТ</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.MrtModel">
+  <label for="eleFormControlInput1" class="form-label">Построенная модель МРТ</label>
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" @change="convertFileMrtModel">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Видео(фото) операции с ДР</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.OperationVideo">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileOperationVideo">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Эффект предоперационного применения ДР(0/1)</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" v-model="form.EffectOfUse">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileEffectOfUse1">
     </div>
 
     <div class="mb-3">

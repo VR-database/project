@@ -1,6 +1,7 @@
 <script>
 import ErrorComp from "./ErrorComp.vue";
 import ModalComp from "./ModalComp.vue";
+import EditComp from "./EditComp.vue";
 import axios from 'axios'
 export default {
   data() {
@@ -9,10 +10,100 @@ export default {
       ShowMod: false,
       item: '',
       isAdmin: false,
-      items: [
-        
+      editShow: false,
+      edit: null,
+      items: [{
+        id: '3',
+        Code: '2', 
+        Fio: 'Абдулбек Максим Петрович',
+        Floor: 'М',
+        Age: '32',
+        NumberHistory: '432423',
+        Date1: '20.02.23',
+        Date2: '20.02.23',
+        Result: '1',
+        Diagnosis: 'Дебилизм, тупой, ахахахахахахахаххха, прикол',
+        Date3: '20.02.23',
+        NameOperation: 'ШГылрпвлрув куцкуеукц укецукеукцецу ',
+        CktDisk: '',
+        MrtDisk: '',
+        CtkModel: '',
+        MrtModel: '',
+        OperationVideo: '',
+        EffectOfUse1: '1',
+        Notes: 'цукецукецук',
+        Fgds: '',
+        Fks: '',
+        Ckt: '',
+        Mrt: '',
+        Research: '',
+        Protocol: '',
+        DrugVideo: '',
+        GistolСonclusion: '',
+      },
+        {
+        id: '6',
+        Code: '2', 
+        Fio: 'Абдулбек Максим Петрович',
+        Floor: 'М',
+        Age: '32',
+        NumberHistory: '432423',
+        Date1: '20.02.23',
+        Date2: '20.02.23',
+        Result: '1',
+        Diagnosis: 'Дебилизм, тупой, ахахахахахахахаххха, прикол',
+        Date3: '20.02.23',
+        NameOperation: 'ШГылрпвлрув куцкуеукц укецукеукцецу ',
+        CktDisk: '',
+        MrtDisk: '',
+        CtkModel: '',
+        MrtModel: '',
+        OperationVideo: '',
+        EffectOfUse1: '1',
+        Notes: 'цукецукецук',
+        Fgds: '',
+        Fks: '',
+        Ckt: '',
+        Mrt: '',
+        Research: '',
+        Protocol: '',
+        DrugVideo: '',
+        GistolСonclusion: '',
+        },
+        {
+        id: '7',
+        Code: '2', 
+        Fio: 'Абдулбек Максим Петрович',
+        Floor: 'М',
+        Age: '32',
+        NumberHistory: '432423',
+        Date1: '20.02.23',
+        Date2: '20.02.23',
+        Result: '1',
+        Diagnosis: 'Дебилизм, тупой, ахахахахахахахаххха, прикол',
+        Date3: '20.02.23',
+        NameOperation: 'ШГылрпвлрув куцкуеукц укецукеукцецу ',
+        CktDisk: '',
+        MrtDisk: '',
+        CtkModel: '',
+        MrtModel: '',
+        OperationVideo: '',
+        EffectOfUse1: '1',
+        Notes: 'цукецукецук',
+        Fgds: '',
+        Fks: '',
+        Ckt: '',
+        Mrt: '',
+        Research: '',
+        Protocol: '',
+        DrugVideo: '',
+        GistolСonclusion: '',
+      },
+      
+      
 
-      ],
+   ],
+      
       code: '',
       gender: '',
       death: '',
@@ -39,13 +130,17 @@ export default {
     ShowModal(Diagnosis) {
       this.ShowMod = !this.ShowMod
       this.item = Diagnosis;
+      console.log(0)
       
     },
     ShowModal(Notes) {
       this.ShowMod = !this.ShowMod
       this.item = Notes;
       
-    },// this.code == '' && this.death == '' && this.gender==''
+    },
+    Edit(item) {
+      this.edit = item;
+    },
     async filtre(){
       
       if (false){
@@ -79,12 +174,13 @@ export default {
   components: {
     ErrorComp,
     ModalComp,
+    EditComp,
   },
 };
 </script>
 
 <template>
-  <error-comp v-if="false" />
+  <error-comp v-if="false"/>
   <div class="container" v-if="true">
     <h1 class="head">DataBase</h1>
     <button @click='filtre'></button>
@@ -95,7 +191,6 @@ export default {
       <a class="button1" @click="Show"
         ><img src="../assets/delete.png" alt=""
       /></a>
-      <a href="#1" class="button1"><img src="../assets/up.png" alt="" /></a>
     </div>
   </div>
 
@@ -143,7 +238,7 @@ export default {
         <tbody>
             <tr v-for="(item, index) in items">
             <td v-if="none"><input type="checkbox" /></td> 
-            <td><a href="/Edit"><img src="../assets/edit.png" alt="" class="edit"></a></td>
+            <td><a :href="'/edit?id=' + item.id"><img src="../assets/edit.png" :alt="item" class="edit"></a></td>
             <td><a><div class="div">{{index + 1}}</div></a></td>
             <td>{{ item.Code }}</td>
             <td>{{item.Fio}}</td>
@@ -156,10 +251,8 @@ export default {
             <td @click="ShowModal(item.Diagnosis)"><img src="../assets/share.png" class="share" :alt="item.Diagnosis"></td>
             <td><a :href="item.Fgds"><img src="../assets/folder.png" :alt="item.Fgds" class="folder" /></a></td>
             <td><a :href="item.Fks"><img src="../assets/folder.png" :alt="item.Fks" class="folder" /></a></td>
-            
             <td><a :href="item.Ckt"><img src="../assets/folder.png" :alt="item.Ckt" class="folder"/></a></td>
             <td><a :href="item.Mrt"><img src="../assets/folder.png" :alt="item.Mrt" class="folder"/></a></td>
-            
             <td><a :href="item.Research"><img src="../assets/folder.png" :alt="item.Research" class="folder"/></a></td>
             <td>{{ item.Date3 }}</td>
            <td @click="ShowModal(item.NameOperation)"><img src="../assets/share.png" class="share" :alt="item.NameOperation"></td>
@@ -171,20 +264,21 @@ export default {
             <td><a :href="item.CtkModel"><img src="../assets/Link.png" :alt="item.CtkModel" class="folder"/></a></td>
             <td><a :href="item.MrtModel"><img src="../assets/Link.png" :alt="item.MrtModel" class="folder"/></a></td>
             <td><a :href="item.OperationVideo"><img src="../assets/Link.png" :alt="item.OperationVideo" class="folder"/></a></td>
-            <td>{{ item.EffectOfUse }}</td>
+            <td>{{ item.EffectOfUse1 }}</td>
             <td><a :href="item.OperationVideo"><img src="../assets/folder.png" :alt="item.OperationVideo" class="folder"/></a></td>
             <td @click="ShowModal(item.Notes)"><img src="../assets/share.png" class="share" :alt="items.Notes"></td>
             </tr>
 
             
-
-        </tbody>
-      </table>
+            
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-  <modal-comp v-if="ShowMod" :item="item" @CloseModal="CloseModal" />
+    <modal-comp v-if="ShowMod" :item="item" @CloseModal="CloseModal" />
 </template>
 <style scoped>
+
 .edit{
   background: none;
   width: 30px;
@@ -212,7 +306,7 @@ table th {
   border: 1px solid #fe00bf;
   padding: 15px 15px;
   text-align: center;
-  max-width: 600px; /* Максимальная ширина ячейки */
+  max-width: 500px; /* Максимальная ширина ячейки */
   overflow: hidden;
   text-overflow: ellipsis;
 }

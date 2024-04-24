@@ -1,4 +1,6 @@
 <script>
+import axios from 'axios'
+axios.defaults.baseURL = 'http://127.0.0.1:5000/'
 export default {
     data() {
         return {
@@ -8,7 +10,7 @@ export default {
             eyeOpen: true,
             error: '',
             eyeImg: '/src/assets/eye.svg',
-            isAdmin: '',
+            isAdmin: true,
         }
     },
     methods: {
@@ -17,7 +19,7 @@ export default {
                 this.error = '*Заполните поле ввода*'
             } else { 
                 this.error = ''
-                login()
+                this.login()
             } 
         },
         toggleVisibility() {
@@ -40,11 +42,16 @@ export default {
             this.isAdmin = response.data.isAdmin;
             if (this.isAdmin == 'Неверный пароль!') {
                 this.error = this.isAdmin;
-            } 
+            } else if (this.isAdmin == "false") {
+                this.$router.push('/Add');
+            } else if (this.isAdmin == "true") {
+                this.$router.push('/Table');
+            }
             
         },
-
-
+    },
+    mounted() {
+        this.login()
     }
 }
 
