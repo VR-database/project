@@ -14,46 +14,14 @@ load_dotenv()
 app = Flask(__name__)
 
 app.secret_key = os.getenv('PASSWORD_PG')
-app.config['PERMANENT_SESSION_LIFETIME'] = 3600
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600 * 24
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = "None"
 
 CORS(app, resources={r"*": {"origins": "http://localhost:5173", 'supports_credentials': True}})
 MEDIA_FOLDER = os.getenv('MEDIA')
 
-
-# BaZa
-def db_get():
-    try:
-        pg = psycopg2.connect(f"""
-            host=localhost
-            dbname=postgres
-            user=postgres
-            password={os.getenv('PASSWORD_PG')}
-            port={os.getenv('PORT_PG')}
-        """)
-
-        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        
-        pg.commit()
-
-        cursor.execute("SELECT * FROM users")
-        result = cursor.fetchall()
-
-        return_data = []
-        for row in result:
-            return_data.append(dict(row))
-
-    except (Exception, Error) as error:
-        return_data = f"Ошибка получения данных: {error}" 
-
-    finally:
-        if pg:
-            cursor.close
-            pg.close
-            print("Соединение с PostgreSQL закрыто")
-            return return_data
-        
+# Логин  
 def login_user(pas):
     try:
         pg = psycopg2.connect(f"""
@@ -107,7 +75,7 @@ def add_string(info):
         """)
         
         dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'NameOperation', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
-        info_for_db = []
+        info_for_db = [uuid.uuid4.hex]
 
         for key in info:
             if key not in dang_key:
@@ -465,6 +433,44 @@ def show_all():
             print("Соединение с PostgreSQL закрыто")
             return return_data
         
+# показ одной строки
+def show_one(id):
+    try:
+        pg = psycopg2.connect(f"""
+            host=localhost
+            dbname=postgres
+            user=postgres
+            password={os.getenv('PASSWORD_PG')}
+            port={os.getenv('PORT_PG')}
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        pg.commit()
+
+        cursor.execute(f"SELECT * FROM vr 
+                       WHERE id=$${id}$$")
+        result = cursor.fetchall()
+
+        return_data = []
+        for row in result:
+            print(dict(row))
+            return_data.append(dict(row))
+
+    except (Exception, Error) as error:
+        print(f"Ошибка получения данных: {error}")
+        return_data = 'Error'
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            print("Соединение с PostgreSQL закрыто")
+            return return_data
+        
+
+# ========================================================================================
+
 
 # Декоратор для логина
 @app.route('/login', methods=['POST'])
@@ -570,7 +576,14 @@ def serve_file(filename):
     
     return send_from_directory(directory=MEDIA_FOLDER, path='/'+filename)
 
+@app.route('/show-one', methods=['GET'])
+def one():
+    responce_object = {'status': 'success'}
 
+    id = request.args.get('id')
+    responce_object['all'] = show_one(id)
+
+    return jsonify(responce_object)
 #БаZа
 if __name__ == '__main__':
     app.run()
