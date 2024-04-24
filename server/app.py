@@ -14,7 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 
 app.secret_key = os.getenv('PASSWORD_PG')
-app.config['PERMANENT_SESSION_LIFETIME'] = 3600
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600 * 24
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = "None"
 
