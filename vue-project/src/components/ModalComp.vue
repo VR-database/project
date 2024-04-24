@@ -32,7 +32,7 @@ export default {
       <div class="close">
         <button class="btn" @click="CloseModal">X</button>
       </div>
-      <h1>Информация <img src="../assets/edit.png" alt="" class="edit" @click="editInformation"></h1>
+      <h1>Информация</h1>
       <div class="scroll">
       <p>
         {{ item }}
