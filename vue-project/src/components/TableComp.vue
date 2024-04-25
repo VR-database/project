@@ -205,6 +205,27 @@ this.Content()
       <a class="button1" @click="Show"
         ><img src="../assets/delete.png" alt=""
      /></a>
+     <select class="form-select" aria-label="Default select example">
+        <option selected>Код диагноза</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">9</option>
+
+      </select>
+      <select class="form-select" aria-label="Default select example">
+        <option selected value="1">Выписан</option>
+        <option value="0">Умер</option>
+      </select>
+      <select class="form-select" aria-label="Default select example">
+        <option selected value="M">Мужчина</option>
+        <option value="Ж">Женщина</option>
+      
+      </select>
     </div>
   </div>
 
@@ -292,7 +313,9 @@ this.Content()
     <modal-comp v-if="ShowMod" :item="item" @CloseModal="CloseModal" />
 </template>
 <style scoped>
-
+.form-select{
+  width: 200px;
+}
 .edit{
   background: none;
   width: 30px;

@@ -81,9 +81,9 @@ export default {
         })
     },
     convertFileFGDS(event) {
-      const file = event.target.files[0];
+      const file = event.target.files[0].name;
       const reader = new FileReader();
-
+      console.log(file)
       reader.onload = () => {
         this.form.Fgds = reader.result;
         console.log(this.form.Fgds);
