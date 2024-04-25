@@ -118,6 +118,7 @@ export default {
     async Check() {
       let response = await axios.get(`/check`);
       this.isAdmin = data.isAdmin;
+
     },
     async Content() {
       let response = await axios.get(`/show-all`);

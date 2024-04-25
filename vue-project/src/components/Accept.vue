@@ -14,41 +14,8 @@ export default {
         }
     },
     methods: {
-        check() {
-            if ( this.password === '') {
-                this.error = '*Заполните поле ввода*'
-            } else { 
-                this.error = ''
-                this.login()
-            } 
-        },
-        toggleVisibility() {
-            this.isShowPassword = !this.isShowPassword
-            this.eyeOpen = !this.eyeOpen
 
-            if (this.isShowPassword) {
-                this.showPassword = 'text'
-                this.eyeImg = '/src/assets/svg-editor-image2.svg'
-            } else {
-                this.showPassword = 'password'
-                this.eyeImg = '/src/assets/eye.svg'
-            } 
 
-        },
-        async login() {
-            let response = await axios.post(`/login`, {
-                Login: this.password
-            }); 
-            this.isAdmin = response.data.isAdmin;
-            if (this.isAdmin == 'Неверный пароль!') {
-                this.error = this.isAdmin;
-            } else if (this.isAdmin == false) {
-                this.$router.push('/Add');
-            } else if (this.isAdmin == true) {
-                this.$router.push('/Table');
-            }
-            
-        },
     },
 }
 
@@ -56,19 +23,14 @@ export default {
 
 <template>
     <div class="container">
-        <h1>Вход</h1>
-        <form action="#!">
+        <h1>Кем вы являетесь?</h1>
+
            
             <div class="password">
-                <input class="form-item" v-model="password" :type="showPassword" placeholder="Введите ключ доступа" name="" id="">
-                <img @click="toggleVisibility" class="password-show" :src="eyeImg" alt="">
+                <button class="btn-reg" @click="check"><a href="/UserPassword" class="tt">Пользователь</a></button>
+                <button class="btn-reg" @click="check"><a href="/AdminPassword" class="tt">Админ</a></button>
             </div>
-        </form>
-        <div class="error-end-btn">
-            <p class="error">{{ error }}</p>
-            <button class="btn-reg" @click="check">Войти</button>
-        </div>
-        <a href="/AcceptPassword">Сменить пароль</a>
+            
     </div>
 </template>
 
@@ -92,7 +54,7 @@ export default {
 }
 
 h1 {
-    font-size: 45px;
+    font-size: 30px;
     margin-bottom: 50px;
     user-select: none;
 }
@@ -157,10 +119,9 @@ form {
 }
 
 div a {
-    font-size: 17px;
+    font-size: 20px;
     text-decoration: none;
     color: #4200FF;
-    margin-top: 20px;
 }
 
 .nha_div {
@@ -169,6 +130,7 @@ div a {
 
 .password {
     position: relative;
+    margin-left: 60px;
 }
 
 .password-show {
