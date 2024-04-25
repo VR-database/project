@@ -177,12 +177,16 @@ def pass_check(pas, Admin):
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-            isTrue = cursor.execute(f'''SELECT COUNT FROM password_admin 
-                                        WHERE password=$${pas}$$
+            print(pas)
+            cursor.execute(f'''SELECT COUNT(*) FROM admins 
+                                        WHERE admin_pass=$${pas}$$
                                         ''')
-            if isTrue == 1:
+            isTrue = cursor.fetchall()
+            print(isTrue)
+            if isTrue[0][0] == 1:
                 return_data = True
+            else: return_data = False
+
 
 
         except (Exception, Error) as error:
@@ -196,35 +200,7 @@ def pass_check(pas, Admin):
                 print("Соединение с PostgreSQL закрыто")
                 return return_data
     
-    else:
-        try: 
-            pg = psycopg2.connect(f"""
-                host=localhost
-                dbname=postgres
-                user=postgres
-                password={os.getenv('PASSWORD_PG')}               
-                port={os.getenv('PORT_PG')}
-            """)
-
-            cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-            isTrue = cursor.execute(f'''SELECT COUNT FROM password 
-                                        WHERE password=$${pas}$$
-                                        ''')
-            if isTrue == 1:
-                return_data = True
-
-
-        except (Exception, Error) as error:
-            print(f'DB ERROR: ', error)
-            return_data = f"Ошибка обращения к базе данных: {error}" 
-
-        finally:
-            if pg:
-                cursor.close
-                pg.close
-                print("Соединение с PostgreSQL закрыто")
-                return return_data
+    
 
 # Смена пароля
 def new_pass(pas, Admin):
@@ -240,10 +216,10 @@ def new_pass(pas, Admin):
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-            cursor.execute(f'''UPDATE password_admin 
-                                    SET password =$${pas}$$''')
+            cursor.execute(f'''UPDATE admins 
+                                    SET admin_pass=$${pas}$$''')
             return_data = 'Пароль обновлен'
-
+            pg.commit()
 
         except (Exception, Error) as error:
             print(f'DB ERROR: ', error)
@@ -268,9 +244,9 @@ def new_pass(pas, Admin):
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-            cursor.execute(f'''SELECT COUNT FROM password 
-                                        SET password =$${pas}$$''')
-
+            cursor.execute(f'''UPDATE admins 
+                            SET person_pass=$${pas}$$''')
+            pg.commit()
             return_data = 'Пароль обновлен'
 
 
@@ -393,12 +369,14 @@ def filtration(filters):
 # Добовление файла в папку
 def add_img(key, base, fio):
     decoded_bytes = base64.b64decode(base)
-    print(base)
     name=key+'_'+fio
     print(name)
+    # # print(decoded_bytes)
     with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
         # Записываем данные в файл
         file.write(decoded_bytes)
+    # with open(f"{MEDIA_FOLDER}/{name}", "wb") as file:
+    #  file.write(base64.decodebytes(base.encode()))
 
     return MEDIA_FOLDER+'/'+name
 
@@ -519,18 +497,18 @@ def del_srt():
 
 
 # Декоратор для семены пароля
-@app.route('/change_pass', methods=['UPDATE'])
+@app.route('/change-pass', methods=['POST'])
 def change():
     responce_object = {'status' : 'success'}
     post_data = request.get_json()
 
     # Проверка на то, админ ли это и проходит лит он проверку (pass_check возращает True/False в зависимости от совпадаемости паролей)
-    if post_data.get('Admin') and pass_check(post_data.get('old_pass'), True):
-        responce_object['res'] = new_pass(post_data.get('old_pass'), True)
+    if post_data.get('Admin') and pass_check(post_data.get('Login').get('passwordOld'), True):
+        responce_object['res'] = new_pass(post_data.get('Login').get('Newpassword1'), True)
     
     # Проверка на то проходит ли он проверку (pass_check возращает True/False в зависимости от совпадаемости паролей)
-    elif pass_check(post_data.get('old_pass'), False):
-        responce_object['res'] = new_pass(post_data.get('old_pass'), False)
+    elif not post_data.get('Admin') and pass_check(post_data.get('Login').get('passwordOld'), True):
+        responce_object['res'] = new_pass(post_data.get('Login').get('Newpassword1'), False)
     
     # Иначе возращаем, что пароль неверный
     else: responce_object['res'] = 'Неверный пороль'
