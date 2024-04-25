@@ -121,12 +121,12 @@ export default {
     },
     async Content() {
       let response = await axios.get(`/show-all`);
-      this.items = response.data.all;
+      // this.items = response.data.all;
       console.log(this.items, 1)
     },
     async deleteItem() {
       await axios.delete(`/delete-string`,{
-        body: {
+        data: {
           id: this.ritems
         }
       });

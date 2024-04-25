@@ -35,12 +35,24 @@ def login_user(pas):
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         cursor.execute(f'SELECT * FROM admins')
+        print(pas)
 
-        password = cursor.fetchone()
+        password = cursor.fetchall()
+
         passwords = []
+
         for row in password:
             passwords.append(dict(row))
         pg.commit()
+        print(passwords)
+        if pas==passwords[0]['admin_pass']: 
+            return_data = True
+            session['isAdmin'] = True
+        elif pas==passwords[0]['person_pass']: 
+            return_data = False
+            session['isAdmin'] = False
+        else: 
+            return_data = "Неверный пароль!"
     except (Exception, Error) as error:
         print(f'DB ERROR: ', error)
         return_data = 'ошибка дб'
@@ -52,16 +64,6 @@ def login_user(pas):
             pg.close
             print("Соединение с PostgreSQL закрыто")
             return return_data
-        
-    if pas==passwords['admin']: 
-        return_data = True
-        session['isAdmin'] = True
-    elif pas==passwords['person']: 
-        return_data = False
-        session['isAdmin'] = False
-    else: 
-        return_data = "Неверный пароль!"
-    return return_data
 
 # Добавление строчки
 def add_string(info):
@@ -75,17 +77,18 @@ def add_string(info):
         """)
         
         dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'NameOperation', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
-        info_for_db = [uuid.uuid4.hex]
+        info_for_db = f"'{uuid.uuid4().hex}'"
 
         for key in info:
             if key not in dang_key:
-                info_for_db.append(info[key])
+                info_for_db+=f", '{info[key]}'"
             else: 
                 src = add_img(key, info[key], info['Fio'])
-                info_for_db.append(src)
+                info_for_db+=f", '{src}'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-        cursor.execute(f' INSERT INTO VR VALUES({info_for_db})')
+
+        cursor.execute(f'INSERT INTO VR VALUES({info_for_db})')
         pg.commit()
 
         return_data = 'Иформация добавлена'
@@ -145,11 +148,11 @@ def delete_string(ids):
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         for id in ids:
-            cursor.execute(f'''DELETE patients
+            cursor.execute(f'''DELETE FROM vr
                         WHERE id=$${id}$$''')
         
         pg.commit()
-
+        return_data = 'Success'
     except (Exception, Error) as error:
         print(f'DB ERROR: ', error)
         return_data = f"Ошибка обращения к базе данных: {error}" 
@@ -390,9 +393,9 @@ def filtration(filters):
 # Добовление файла в папку
 def add_img(key, base, fio):
     decoded_bytes = base64.b64decode(base)
-
-    name=key+fio
-
+    print(base)
+    name=key+'_'+fio
+    print(name)
     with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
         # Записываем данные в файл
         file.write(decoded_bytes)
@@ -448,8 +451,8 @@ def show_one(id):
         
         pg.commit()
 
-        cursor.execute(f"SELECT * FROM vr 
-                       WHERE id=$${id}$$")
+        cursor.execute(f'''SELECT * FROM vr 
+                       WHERE id=$${id}$$''')
         result = cursor.fetchall()
 
         return_data = []
@@ -478,7 +481,7 @@ def login():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         post_data = request.get_json()
-        post_data['isAdmin'] = login_user(post_data.get('password'))
+        response_object['isAdmin'] = login_user(post_data.get('Login'))
         return jsonify(response_object)
     
 
@@ -488,7 +491,7 @@ def new_string():
     response_object = {'status': 'success'}
     post_data = request.get_json()
 
-    add_string(post_data.get().values())
+    add_string(post_data.get('form'))
 
     return jsonify(response_object)
 
@@ -508,8 +511,9 @@ def update_string():
 @app.route('/delete-string', methods = ['DELETE'])
 def del_srt():
     responce_object = {'status' : 'success'}
-    post_data = request.args.get('id')
-    responce_object['res'] = delete_string(post_data)
+    post_data = request.get_json()
+    print(post_data)
+    responce_object['res'] = delete_string(post_data.get('id'))
 
     return jsonify(responce_object)
 
@@ -570,10 +574,12 @@ def shows():
 
 @app.route('/media/<path:filename>')
 def serve_file(filename):
-    if not os.path.exists('{}/{}'.format(MEDIA_FOLDER, filename)):
+    path = filename
+    print(MEDIA_FOLDER+path)
+    if not os.path.exists('{}/{}'.format(MEDIA_FOLDER, '/'+filename)):
         return jsonify({'error': 'File not found'}), 404
-    
-    return send_from_directory(directory=MEDIA_FOLDER, path='/'+filename)
+
+    return send_from_directory(directory=MEDIA_FOLDER, path=path)
 
 @app.route('/show-one', methods=['GET'])
 def one():
