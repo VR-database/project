@@ -353,7 +353,7 @@ def filtration(filters):
 
         return_data = []
         for row in result:
-            return_data.append(dict(row))
+            return_data.append(form_dict(dict(row)))
 
     except (Exception, Error) as error:
         print(f"Ошибка получения данных: {error}")
@@ -401,7 +401,7 @@ def show_all():
         return_data = []
         for row in result:
             print(dict(row))
-            return_data.append(dict(row))
+            return_data.append(form_dict(dict(row)))
 
     except (Exception, Error) as error:
         print(f"Ошибка получения данных: {error}")
@@ -436,7 +436,7 @@ def show_one(id):
         return_data = []
         for row in result:
             print(dict(row))
-            return_data.append(dict(row))
+            return_data.append(form_dict(dict(row)))
 
     except (Exception, Error) as error:
         print(f"Ошибка получения данных: {error}")
@@ -449,7 +449,37 @@ def show_one(id):
             print("Соединение с PostgreSQL закрыто")
             return return_data
         
-
+def form_dict(slovar):
+    form = {
+        'Code': slovar['code'],
+        'Fio': slovar['fio'],
+        'Floor': slovar['floor'],
+        'Age': slovar['age'],
+        'NumberHistory': slovar['numberhistory'],
+        'Date1': slovar['date1'],
+        'Date2': slovar['date2'],
+        'Result': slovar['result'],
+        'Diagnosis': slovar['diagnosis'],
+        'Date3': slovar['date3'],
+        'NameOperation': slovar['nameoperation'],
+        'CktDisk': slovar['cktdisk'],
+        'MrtDisk': slovar['mrtdisk'],
+        'CktModel': slovar['cktmodel'],
+        'MrtModel': slovar['mrtmodel'],
+        'OperationVideo': slovar['operationvideo'],
+        'EffectOfUse1': slovar['effectofuse1'],
+        'Notes': slovar['notes'],
+        'Fgds': slovar['fgds'],
+        'Fks': slovar['fks'],
+        'Ckt': slovar['ckt'],
+        'Mrt': slovar['mrt'],
+        'Research': slovar['research'],
+        'Protocol': slovar['protocol'],
+        'DrugVideo': slovar['drugvideo'],
+        'GistolСonclusion': slovar['gistolСonclusion']
+    }
+    
+    return form
 # ========================================================================================
 
 
@@ -565,6 +595,8 @@ def one():
 
     id = request.args.get('id')
     responce_object['all'] = show_one(id)
+    print(responce_object['all'])
+
 
     return jsonify(responce_object)
 
