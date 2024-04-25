@@ -393,12 +393,14 @@ def filtration(filters):
 # Добовление файла в папку
 def add_img(key, base, fio):
     decoded_bytes = base64.b64decode(base)
-    print(base)
     name=key+'_'+fio
     print(name)
+    # # print(decoded_bytes)
     with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
         # Записываем данные в файл
         file.write(decoded_bytes)
+    # with open(f"{MEDIA_FOLDER}/{name}", "wb") as file:
+    #  file.write(base64.decodebytes(base.encode()))
 
     return MEDIA_FOLDER+'/'+name
 
@@ -519,7 +521,7 @@ def del_srt():
 
 
 # Декоратор для семены пароля
-@app.route('/change_pass', methods=['UPDATE'])
+@app.route('/change-pass', methods=['UPDATE'])
 def change():
     responce_object = {'status' : 'success'}
     post_data = request.get_json()
