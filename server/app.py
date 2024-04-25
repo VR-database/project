@@ -400,7 +400,6 @@ def show_all():
 
         return_data = []
         for row in result:
-            print(dict(row))
             return_data.append(form_dict(dict(row)))
 
     except (Exception, Error) as error:
