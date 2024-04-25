@@ -77,10 +77,11 @@ export default {
     async getData() {
       let response = await axios.get(`/show-one`, {
         params: {
-            id: this.id
+            id: '6'
           }
       }) 
       this.arr = response.data.all;
+      console.log(this.arr)
     },
 
     convertFileFGDS(event) {
@@ -242,7 +243,7 @@ export default {
 
   },
   mounted() {
-    this.postData( )
+    this.getData()
   },
   props: {
     edit: Object,
