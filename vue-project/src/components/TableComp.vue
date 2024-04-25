@@ -103,6 +103,11 @@ export default {
       
 
       ],
+  fil: {
+    code: '',
+    gender: '',
+    death: ''
+  },
    ritems:[],
    checkedId: '',
       code: '',
@@ -157,17 +162,17 @@ this.Content()
     },
     async filtre(){
       
-      if (false){
+      if (this.fil.code=='' && this.fil.gender=='' && this.fil.gender==''){
         this.filters = {
-          'filtr': false
+          filtr: false
         }
       }
       else {
         this.filters = {
           filtr: true,
-          code: '4',
-          gender: 'М',
-          death: '0',
+          code: this.fil.code,
+          gender: this.fil.gender,
+          death: this.fil.death,
         };
       }
       let res = await axios.post('/filtre', {
@@ -205,9 +210,9 @@ this.Content()
       <a class="button1" @click="Show"
         ><img src="../assets/delete.png" alt=""
      /></a>
-     <select class="form-select" aria-label="Default select example">
-        <option selected>Код диагноза</option>
-        <option value="1">1</option>
+     <select class="form-select" aria-label="Default select example" v-model="this.fil.code">
+      <option value="" >Отмена выбора</option>
+      <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
@@ -216,16 +221,27 @@ this.Content()
         <option value="7">7</option>
         <option value="8">9</option>
 
+
+
       </select>
-      <select class="form-select" aria-label="Default select example">
+      <select class="form-select" aria-label="Default select example" v-model='this.fil.death'>
+        <option value="" >Отмена выбора</option>
+        
         <option selected value="1">Выписан</option>
         <option value="0">Умер</option>
+
+
       </select>
-      <select class="form-select" aria-label="Default select example">
+      <select class="form-select" aria-label="Default select example" v-model="this.fil.gender">
+        <option value="" >Отмена выбора</option>
+        
         <option selected value="M">Мужчина</option>
-        <option value="Ж">Женщина</option>
+        <option value="Ж" >Женщина</option>
+
+
       
       </select>
+      <button class='btn btn-primary' @click='filtre'>Отфильтровать</button>
     </div>
   </div>
 
