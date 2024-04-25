@@ -10,12 +10,17 @@ export default {
             eyeOpen: true,
             error: '',
             eyeImg: '/src/assets/eye.svg',
-            isAdmin: true,
+            Admin: false,
+            form: {
+                passwordOld: '',
+                Newpassword1: '',
+            },
+            Newpassword2: '',
         }
     },
     methods: {
         check() {
-            if ( this.password === '') {
+            if ( this.form.passwordOld === '' || this.form.Newpassword1 === '' || this.Newpassword2 === '' ) {
                 this.error = '*Заполните поле ввода*'
             } else { 
                 this.error = ''
@@ -36,17 +41,12 @@ export default {
 
         },
         async login() {
-            let response = await axios.post(`/login`, {
-                Login: this.password
+            let response = await axios.post(`/change-pass`, {
+                Login: this.form,
+                Admin: this.Admin,
             }); 
-            this.isAdmin = response.data.isAdmin;
-            if (this.isAdmin == 'Неверный пароль!') {
-                this.error = this.isAdmin;
-            } else if (this.isAdmin == false) {
-                this.$router.push('/Add');
-            } else if (this.isAdmin == true) {
-                this.$router.push('/Table');
-            }
+            this.error = response.data.res;
+
             
         },
     },
@@ -56,11 +56,19 @@ export default {
 
 <template>
     <div class="container">
-        <h1>Вход</h1>
+        <h1>Новый пароль</h1>
         <form action="#!">
            
             <div class="password">
-                <input class="form-item" v-model="password" :type="showPassword" placeholder="Введите ключ доступа" name="" id="">
+                <input class="form-item" v-model="form.passwordOld" :type="showPassword" placeholder="Старый пароль" name="" id="">
+                <img @click="toggleVisibility" class="password-show" :src="eyeImg" alt="">
+            </div>
+            <div class="password">
+                <input class="form-item" v-model="form.Newpassword1" :type="showPassword" placeholder="Новый пароль" name="" id="">
+                <img @click="toggleVisibility" class="password-show" :src="eyeImg" alt="">
+            </div>
+            <div class="password">
+                <input class="form-item" v-model="Newpassword2" :type="showPassword" placeholder="Подтверждение нового пароля" name="" id="">
                 <img @click="toggleVisibility" class="password-show" :src="eyeImg" alt="">
             </div>
         </form>
@@ -68,7 +76,6 @@ export default {
             <p class="error">{{ error }}</p>
             <button class="btn-reg" @click="check">Войти</button>
         </div>
-        <a href="/AcceptPassword">Сменить пароль</a>
     </div>
 </template>
 
@@ -92,7 +99,7 @@ export default {
 }
 
 h1 {
-    font-size: 45px;
+    font-size:30px;
     margin-bottom: 50px;
     user-select: none;
 }

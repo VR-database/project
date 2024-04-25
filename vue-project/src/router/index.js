@@ -34,6 +34,22 @@ export default createRouter({
       path: "/:pathMatch(.*)*",
       component: () => import("../components/ErrorComp.vue"),
     },
+    {
+      path: "/:pathMatch(.*)*",
+      component: () => import("../components/ErrorComp.vue"),
+    },
+    {
+      path: "/AcceptPassword",
+      component: () => import("../components/Accept.vue"),
+    },
+    {
+      path: "/AdminPassword",
+      component: () => import("../components/AdminPassword.vue"),
+    },
+    {
+      path: "/UserPassword",
+      component: () => import("../components/UserPassword.vue"),
+    },
 
   ],
 });
