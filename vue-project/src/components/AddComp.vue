@@ -47,7 +47,7 @@ export default {
 
         Protocol: '',
         DrugVideo: '',
-        GistolConclusion: '',
+        GistolСonclusion: '',
       },
       
       
@@ -59,17 +59,19 @@ export default {
   },
   methods: {
     check() {
-      // if (this.form.Code == '' || this.form.Fio == '' || this.form.Floor == '' || this.form.Age == '' ||
-      //   this.form.NumberHistory == '' || this.form.Date1 == '' || this.form.Date2 == '' && this.form.Result == '' ||
-      //   this.form.Diagnosis == '' ||
-      //   this.form.Date3 == '' || this.form.NameOperation == '' || 
-      //   this.form.Notes == ''){
-      //   this.status = 'Заполните все поля!'
+      if (this.form.Code == '' || this.form.Fio == '' || this.form.Floor == '' || this.form.Age == '' ||
+        this.form.NumberHistory == '' || this.form.Date1 == '' || this.form.Date2 == '' && this.form.Result == '' ||
+        this.form.Diagnosis == '' ||
+        this.form.Date3 == '' || this.form.NameOperation == '' || 
+        this.form.Notes == ''){
+        this.status = 'Заполните все поля!'
 
-      // } else {
+      } else {
         this.status = 'Данные занесены в таблицу.'
         this.postData()
-      // }
+        console.log(0)
+        console.log(this.form)
+      }
     },
     async postData() {
         let response = await axios.post(`/new-string`, {
@@ -81,8 +83,8 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.Fgds = reader.result;
-        console.log(this.Fgds);
+        this.form.Fgds = reader.result;
+        console.log(this.form.Fgds);
 
       };
 
@@ -93,8 +95,8 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.Fks = reader.result;
-        console.log(this.Fks);
+        this.form.Fks = reader.result;
+        console.log(this.form.Fks);
 
       };
       reader.readAsDataURL(file);
@@ -104,8 +106,8 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.Mrt = reader.result;
-        console.log(this.Mrt);
+        this.form.Mrt = reader.result;
+        console.log(this.form.Mrt);
 
       };
       reader.readAsDataURL(file);
@@ -115,7 +117,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.Ckt = reader.result;
+        this.form.Ckt = reader.result;
         console.log(reader.result);
 
       };
@@ -126,7 +128,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.Protocol = reader.result;
+        this.form.Protocol = reader.result;
         console.log(reader.result);
 
       };
@@ -138,7 +140,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.DrugVideo = reader.result;
+        this.form.DrugVideo = reader.result;
         console.log(reader.result);
 
       };
@@ -149,7 +151,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.GistolСonclusion = reader.result;
+        this.form.GistolСonclusion = reader.result;
         console.log(reader.result);
 
       };
@@ -160,7 +162,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.Research = reader.result;
+        this.form.Research = reader.result;
         console.log(reader.result);
 
       };
@@ -171,7 +173,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.CktDisk = reader.result;
+        this.form.CktDisk = reader.result;
         console.log(reader.result);
 
       };
@@ -182,7 +184,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.MrtDisk = reader.result;
+        this.form.MrtDisk = reader.result;
         console.log(reader.result);
 
       };
@@ -193,7 +195,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.CtkModel = reader.result;
+        this.form.CtkModel = reader.result;
         console.log(reader.result);
 
       };
@@ -204,7 +206,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.MrtModel = reader.result;
+        this.form.MrtModel = reader.result;
         console.log(reader.result);
 
       };
@@ -215,7 +217,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.OperationVideo = reader.result;
+        this.form.OperationVideo = reader.result;
         console.log(reader.result);
 
       };
@@ -226,7 +228,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = () => {
-        this.EffectOfUse1 = reader.result;
+        this.form.EffectOfUse1 = reader.result;
         console.log(reader.result);
 
       };

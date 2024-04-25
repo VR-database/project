@@ -125,11 +125,11 @@ export default {
 }
 .modal-backdrop {
   position: absolute;
-  top: 0;
+  top: 40px;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0);
   display: flex;
   justify-content: center;
   align-items: center;

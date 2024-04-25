@@ -61,7 +61,7 @@ export default {
         OperationVideo: '',
         EffectOfUse1: '1',
         Notes: 'цукецукецук',
-        Fgds: '',
+        Fgds: '../assets/edit.png',
         Fks: '',
         Ckt: '',
         Mrt: '',
@@ -203,7 +203,7 @@ export default {
       /></a>
       <a class="button1" @click="Show"
         ><img src="../assets/delete.png" alt=""
-      /></a>
+     /></a>
     </div>
   </div>
 
@@ -262,7 +262,7 @@ export default {
             <td>{{item.Date2}}</td>
             <td>{{ item.Result }}</td>
             <td @click="ShowModal(item.Diagnosis)"><img src="../assets/share.png" class="share" :alt="item.Diagnosis"></td>
-            <td><a :href="item.Fgds"><img src="../assets/folder.png" :alt="item.Fgds" class="folder" /></a></td>
+            <td><a :href="item.Fgds" download="fgds"><img src="../assets/folder.png" :alt="item.Fgds" class="folder" /></a></td>
             <td><a :href="item.Fks"><img src="../assets/folder.png" :alt="item.Fks" class="folder" /></a></td>
             <td><a :href="item.Ckt"><img src="../assets/folder.png" :alt="item.Ckt" class="folder"/></a></td>
             <td><a :href="item.Mrt"><img src="../assets/folder.png" :alt="item.Mrt" class="folder"/></a></td>
@@ -332,7 +332,7 @@ table th {
 
 .Container {
   overflow-y: scroll;
-  height: 500px;
+  height: 450px;
   margin-right: 35px;
   margin-left: 30px;
   margin-bottom: 0px;
