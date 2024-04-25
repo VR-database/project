@@ -53,6 +53,7 @@ export default {
       
       file: '',
       status: '',
+      xyi: '',
 
 
     }
@@ -82,11 +83,13 @@ export default {
     },
     convertFileFGDS(event) {
       const file = event.target.files[0].name;
+      this.xyi = file;
+      
       const reader = new FileReader();
-      console.log(file)
+     
       reader.onload = () => {
         this.form.Fgds = reader.result;
-        console.log(this.form.Fgds);
+   
 
       };
 
