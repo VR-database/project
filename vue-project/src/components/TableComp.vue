@@ -131,7 +131,7 @@ export default {
           id: this.ritems
         }
       });
-
+this.Content()
     },
     Show() {
       this.none = !this.none;

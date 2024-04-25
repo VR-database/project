@@ -8,66 +8,60 @@ export default {
 
 
   data() {
-    return{
-      form:{
-        Code: '', 
-        Fio: '',
-        Floor: '',
-        Age: '',
-        NumberHistory: '',
-        Date1: '',
-        Date2: '',
-        Result: '',
-        Diagnosis: '',
-        Date3: '',
-        NameOperation: '',
+    return {
+      arr:[ {
+          Code: '',
+          Fio: '',
+          Floor: '',
+          Age: '',
+          NumberHistory: '',
+          Date1: '',
+          Date2: '',
+          Result: '',
+          Diagnosis: '',
+          Date3: '',
+          NameOperation: '',
+
+          CktDisk: '',
+          MrtDisk: '',
+          CtkModel: '',
+          MrtModel: '',
+          OperationVideo: '',
+          EffectOfUse1: '',
+          Notes: '',
+
+          Fgds: '',
+          Fks: '',
+          Ckt: '',
+          Mrt: '',
+
+
+          Research: '',
 
 
 
-
-        CktDisk: '',
-        MrtDisk: '',
-        CtkModel: '',
-        MrtModel: '',
-        OperationVideo: '',
-        EffectOfUse1: '',
-        Notes: '',
-        
-        
-
-        Fgds: '',
-        Fks: '',
-        Ckt: '',
-        Mrt: '',
-        
-        
-        Research: '',
+          Protocol: '',
+          DrugVideo: '',
+          GistolСonclusion: '',
+        },],
+        file: '',
+        status: '',
+        id: '',
 
 
-
-        Protocol: '',
-        DrugVideo: '',
-        GistolСonclusion: '',
-      },
-      
-      
-      file: '',
-      status: '',
-      id: '',
-
-
-    }
+      }
+    
   },
   methods: {
     routGet(){
        this.id = this.$route.query.id 
     },
     check() {
-      if (this.form.Code == '' || this.form.Fio == '' || this.form.Floor == '' || this.form.Age == '' ||
-        this.form.NumberHistory == '' || this.form.Date1 == '' || this.form.Date2 == '' && this.form.Result == '' ||
-        this.form.Diagnosis == '' ||
-        this.form.Date3 == '' || this.form.NameOperation == '' || 
-        this.form.Notes == '') {
+      if (this.arr[0].Code == '' || this.arr[0].Fio == '' || this.arr[0].Floor == '' || this.arr[0].Age == '' ||
+        this.arr[0].NumberHistory == '' || this.arr[0].Date1 == '' || this.arr[0].Date2 == '' && this.arr[0].Result == '' ||
+        this.arr[0].Diagnosis == '' ||
+        this.arr[0].Date3 == '' || this.arr[0].NameOperation == ''.
+        this.arr[0].Notes == '') {
         this.status = 'Заполните все поля!'
 
       } else {
@@ -85,7 +79,8 @@ export default {
         params: {
             id: this.id
           }
-        }) 
+      }) 
+      this.arr = response.data.all;
     },
 
     convertFileFGDS(event) {
@@ -265,48 +260,48 @@ export default {
       <form>
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Код диагноза</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="1/2/3/4/5/6/7/8/9" v-model="form.Code">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="1/2/3/4/5/6/7/8/9" v-model="arr[0].Code">
   <p></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">ФИО</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ФИО" v-model="form.Fio">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ФИО" v-model="arr[0].Fio">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Пол</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="М/Ж" v-model="form.Floor">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="М/Ж" v-model="arr[0].Floor">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Возраст</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Возраст" v-model="form.Age">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Возраст" v-model="arr[0].Age">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Номер истории болезни</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Номер истории болезни" v-model="form.NumberHistory">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Номер истории болезни" v-model="arr[0].NumberHistory">
     </div>
-
+{{arr[0].Date1}}
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Дата госпитализации</label>
-  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" v-model="form.Date1">
+  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" v-model="arr[0].Date1">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Дата выписки (смерти)</label>
-  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата выписки (смерти)" v-model="form.Date2">
+  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата выписки (смерти)" v-model="arr[0].Date2">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Исход (1 - выписан / 0 - умер)</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Исход" v-model="form.Result">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Исход" v-model="arr[0].Result">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Диагноз окончательный</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Диагноз" v-model="form.Diagnosis">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Диагноз" v-model="arr[0].Diagnosis">
     </div>
 
     <div class="mb-3">
@@ -336,14 +331,14 @@ export default {
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Дата операции</label>
-  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата операции" v-model="form.Date3">
+  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата операции" v-model="arr[0].Date3">
     </div>
 
 
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Название операции</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Название" v-model="form.NameOperation">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Название" v-model="arr[0].NameOperation">
     </div>
 
     <div class="mb-3">
@@ -394,7 +389,7 @@ export default {
 
     <div class="mb-3">
   <label for="exampleFormControlTextarea1" class="form-label">Примечания.</label>
-  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="form.Notes"></textarea>
+  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="arr[0].Notes"></textarea>
     </div>
 </form>
    <p class="p">{{ status }}</p> 
