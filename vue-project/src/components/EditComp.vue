@@ -76,7 +76,7 @@ export default {
       }
     },
     async postData() {
-        let response = await axios.post(`/new-string`, {
+        let response = await axios.put(`/update-string`, {
           form: this.form
         })
     },
