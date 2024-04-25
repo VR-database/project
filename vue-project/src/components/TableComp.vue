@@ -171,8 +171,8 @@ this.Content()
         this.filters = {
           filtr: true,
           code: this.fil.code,
-          gender: this.fil.gender,
-          death: this.fil.death,
+          floor: this.fil.gender,
+          result: this.fil.death,
         };
       }
       let res = await axios.post('/filtre', {

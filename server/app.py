@@ -79,12 +79,31 @@ def add_string(info):
         dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'NameOperation', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
         info_for_db = f"'{uuid.uuid4().hex}'"
 
+        xyi= {
+              '1': info['xyi']['xyi1'],
+              '2': info['xyi']['xyi2'],
+              '3': info['xyi']['xyi3'],
+              '4': info['xyi']['xyi4'],
+              '5': info['xyi']['xyi5'],
+              '6': info['xyi']['xyi6'],
+              '7': info['xyi']['xyi7'],
+              '8': info['xyi']['xyi8'],
+              '9': info['xyi']['xyi9'],
+              '10': info['xyi']['xyi10'],
+              '11': info['xyi']['xyi11'],
+              '12': info['xyi']['xyi12'],
+              '13': info['xyi']['xyi13'],
+              '14': info['xyi']['xyi14']
+            },
+        cnt=0
         for key in info:
-            if key not in dang_key:
-                info_for_db+=f", '{info[key]}'"
-            else: 
-                src = add_img(key, info[key], info['Fio'])
-                info_for_db+=f", '{src}'"
+            if key != 'xyi':
+                if key not in dang_key:
+                    info_for_db+=f", '{info[key]}'"
+                else: 
+                    cnt+=1
+                    src = add_img(key, info[key], info['Fio'], xyi[str(cnt)])
+                    info_for_db+=f", '{src}'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 
@@ -327,6 +346,7 @@ def filtration(filters):
     elif filters["filtr"]:
         filtr = ' WHERE'
         for i in filters:
+            print(i)
             if filters[i] != 'false':
                 if i == 'filtr':
                     continue
@@ -367,9 +387,10 @@ def filtration(filters):
             return return_data
 
 # Добовление файла в папку
-def add_img(key, base, fio):
+def add_img(key, base, fio, name):
     decoded_bytes = base64.b64decode(base)
-    name=key+'_'+fio
+    dote = trim_to_first_dot(name)
+    name=key+'_'+fio+'dote'
     print(name)
     # # print(decoded_bytes)
     with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
@@ -379,6 +400,10 @@ def add_img(key, base, fio):
     #  file.write(base64.decodebytes(base.encode()))
 
     return MEDIA_FOLDER+'/'+name
+
+def trim_to_first_dot(s):
+    # Возвращаем подстроку до первого вхождения точки включительно
+    return s[:s.find('.')] if '.' in s else s
 
 # Показ всего
 def show_all():
