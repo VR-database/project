@@ -48,12 +48,12 @@ export default {
         Protocol: '',
         DrugVideo: '',
         GistolСonclusion: '',
+        xyi: '',
       },
       
       
       file: '',
       status: '',
-      xyi: '',
 
 
     }
@@ -82,14 +82,15 @@ export default {
         })
     },
     convertFileFGDS(event) {
-      const file = event.target.files[0].name;
-      this.xyi = file;
+      const file = event.target.files[0];
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       
       const reader = new FileReader();
      
       reader.onload = () => {
         this.form.Fgds = reader.result;
-   
+          console.log(this.form.xyi)
 
       };
 
@@ -98,7 +99,8 @@ export default {
     convertFileFKS(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.Fks = reader.result;
         console.log(this.form.Fks);
@@ -109,7 +111,8 @@ export default {
     convertFileMRT(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.Mrt = reader.result;
         console.log(this.form.Mrt);
@@ -120,7 +123,8 @@ export default {
     convertFileCKT(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.Ckt = reader.result;
         console.log(reader.result);
@@ -131,7 +135,8 @@ export default {
     convertFileProtocol(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.Protocol = reader.result;
         console.log(reader.result);
@@ -143,7 +148,8 @@ export default {
     convertFileDrugVideo(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.DrugVideo = reader.result;
         console.log(reader.result);
@@ -154,7 +160,8 @@ export default {
     convertFileGistolСonclusion(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.GistolСonclusion = reader.result;
         console.log(reader.result);
@@ -165,7 +172,8 @@ export default {
     convertFileResearch(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.Research = reader.result;
         console.log(reader.result);
@@ -176,7 +184,8 @@ export default {
     convertFileCktDisk(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.CktDisk = reader.result;
         console.log(reader.result);
@@ -187,7 +196,8 @@ export default {
     convertFileMrtDisk(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.MrtDisk = reader.result;
         console.log(reader.result);
@@ -198,7 +208,8 @@ export default {
     convertFileCtkModel(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.CtkModel = reader.result;
         console.log(reader.result);
@@ -209,7 +220,8 @@ export default {
     convertFileMrtModel(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.MrtModel = reader.result;
         console.log(reader.result);
@@ -220,7 +232,8 @@ export default {
     convertFileOperationVideo(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.OperationVideo = reader.result;
         console.log(reader.result);
@@ -231,7 +244,8 @@ export default {
     convertFileEffectOfUse1(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
+      const filename = event.target.files[0].name;
+      this.form.xyi = filename;
       reader.onload = () => {
         this.form.EffectOfUse1 = reader.result;
         console.log(reader.result);
