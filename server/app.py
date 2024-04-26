@@ -104,10 +104,10 @@ def add_string(info):
                     info_for_db+=f", '{info[key]}'"
                 else: 
                     cnt+=1
+                    print(key, xyi[str(cnt)], cnt)
                     if cnt!=14:
-                        print(cnt, key)
-                        print(xyi[str(cnt)])
-                        src = add_img(key, info[key], info['Fio'], xyi[str(cnt)])
+
+                        src = add_img(key, info[key], info['Fio'], xyi[str(cnt)], cnt)
 
                         info_for_db+=f", '{src}'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -425,9 +425,8 @@ def filtration(filters):
             return return_data
 
 # Добовление файла в папку
-def add_img(key, base, fio, name):
+def add_img(key, base, fio, name, cnt):
     base=base[base.find(',')+1:]
-    print(base)
     decoded_bytes = base64.b64decode(base)
     name=key+'_'+fio+name
     print(name)
