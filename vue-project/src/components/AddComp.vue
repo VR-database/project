@@ -104,7 +104,7 @@ export default {
       const reader = new FileReader();
      
       reader.onload = () => {
-        this.form.Fgds = reader.result;
+        this.form.CktDisk = reader.result;
           console.log(this.form.xyi)
 
       };
@@ -118,8 +118,8 @@ export default {
       this.form.xyi.xyi2 = filename;
 
       reader.onload = () => {
-        this.form.Fks = reader.result;
-        console.log(this.form.Fks);
+        this.form.MrtDisk = reader.result;
+        console.log(this.form.MrtDisk);
 
       };
       reader.readAsDataURL(file);
@@ -131,8 +131,8 @@ export default {
       this.form.xyi.xyi3 = filename;
 
       reader.onload = () => {
-        this.form.Mrt = reader.result;
-        console.log(this.form.Mrt);
+        this.form.CtkModel = reader.result;
+        console.log(this.form.CtkModel);
 
       };
       reader.readAsDataURL(file);
@@ -144,7 +144,7 @@ export default {
       this.form.xyi.xyi4 = filename;
 
       reader.onload = () => {
-        this.form.Ckt = reader.result;
+        this.form.MrtModel = reader.result;
         console.log(reader.result);
 
       };
@@ -157,7 +157,7 @@ export default {
       this.form.xyi.xyi5 = filename;
 
       reader.onload = () => {
-        this.form.Protocol = reader.result;
+        this.form.OperationVideo = reader.result;
         console.log(reader.result);
 
       };
@@ -171,7 +171,7 @@ export default {
       this.form.xyi.xyi6 = filename;
 
       reader.onload = () => {
-        this.form.DrugVideo = reader.result;
+        this.form.EffectOfUse1 = reader.result;
         console.log(reader.result);
 
       };
@@ -181,7 +181,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi7 = filename;
+      this.form.xyi.Notes = filename;
 
       reader.onload = () => {
         this.form.GistolСonclusion = reader.result;
@@ -197,7 +197,7 @@ export default {
       this.form.xyi.xyi8 = filename;
 
       reader.onload = () => {
-        this.form.Research = reader.result;
+        this.form.Fgds = reader.result;
         console.log(reader.result);
 
       };
@@ -210,7 +210,7 @@ export default {
       this.form.xyi.xyi9 = filename;
 
       reader.onload = () => {
-        this.form.CktDisk = reader.result;
+        this.form.Fks = reader.result;
         console.log(reader.result);
 
       };
@@ -223,7 +223,7 @@ export default {
       this.form.xyi.xyi10 = filename;
 
       reader.onload = () => {
-        this.form.MrtDisk = reader.result;
+        this.form.Ckt = reader.result;
         console.log(reader.result);
 
       };
@@ -236,7 +236,7 @@ export default {
       this.form.xyi.xyi11 = filename;
 
       reader.onload = () => {
-        this.form.CtkModel = reader.result;
+        this.form.Mrt = reader.result;
         console.log(reader.result);
 
       };
@@ -249,7 +249,7 @@ export default {
       this.form.xyi.xyi12 = filename;
 
       reader.onload = () => {
-        this.form.MrtModel = reader.result;
+        this.form.Research = reader.result;
         console.log(reader.result);
 
       };
@@ -262,7 +262,7 @@ export default {
       this.form.xyi.xyi13 = filename;
 
       reader.onload = () => {
-        this.form.OperationVideo = reader.result;
+        this.form.Protocol = reader.result;
         console.log(reader.result);
 
       };
@@ -275,7 +275,7 @@ export default {
       this.form.xyi.xyi14 = filename;
 
       reader.onload = () => {
-        this.form.EffectOfUse1 = reader.result;
+        this.form.DrugVideo = reader.result;
         console.log(reader.result);
 
       };

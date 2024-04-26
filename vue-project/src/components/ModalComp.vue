@@ -145,10 +145,10 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
-}
-@media (max-width: 900px) {
-    .window{
+    z-index: 1000;
+  }
+  @media (max-width: 900px) {
+      .window{
         margin-top: 50px;
         padding: 5px;
         min-width: 300px;
