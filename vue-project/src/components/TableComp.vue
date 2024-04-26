@@ -100,9 +100,9 @@ export default {
         GistolСonclusion: '',
       },],
   fil: {
-    code: '',
-    gender: '',
-    death: ''
+    code: 'false',
+    gender: 'false',
+    death: 'false'
   },
    ritems:[],
    checkedId: '',
@@ -194,7 +194,7 @@ this.Content()
             filters: this.filters
           }
       });
-      this.table = res.data.all;
+      this.items = res.data.all;
       console.log(this.table)
     },
     CloseModal(Show) {
@@ -225,7 +225,8 @@ this.Content()
         ><img src="../assets/delete.png" alt=""
      /></a>
      <select class="form-select" aria-label="Default select example" v-model="this.fil.code">
-      <option value="" >Отмена выбора</option>
+      <option value="false">Выберите код диагноза</option>
+      
       <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -234,24 +235,27 @@ this.Content()
         <option value="6">6</option>
         <option value="7">7</option>
         <option value="8">9</option>
-
+        <option value="fasle" >Отмена выбора</option>
 
 
       </select>
       <select class="form-select" aria-label="Default select example" v-model='this.fil.death'>
-        <option value="" >Отмена выбора</option>
+        <!-- <option value="" disabled selected>Выберите исход</option> -->
+        <option value="false" >Выберите исход</option>
+
         
         <option selected value="1">Выписан</option>
         <option value="0">Умер</option>
-
+        <option value="false" >Отмена выбора</option>
 
       </select>
-      <select class="form-select" aria-label="Default select example" v-model="this.fil.gender">
-        <option value="" >Отмена выбора</option>
+      <select placeholder= "d"class="form-select" aria-label="Default select example" v-model="this.fil.gender">
+        <option value="false">Выберите пол</option>
+
         
         <option selected value="M">Мужчина</option>
         <option value="Ж" >Женщина</option>
-
+        <option value="false" >Отмена выбора</option>
 
       
       </select>

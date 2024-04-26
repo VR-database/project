@@ -385,7 +385,7 @@ def filtration(filters):
     elif filters["filtr"]:
         filtr = ' WHERE'
         for i in filters:
-            print(i)
+            print(filters[i])
             if filters[i] != 'false':
                 if i == 'filtr':
                     continue
@@ -405,11 +405,11 @@ def filtration(filters):
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
-        pg.commit()
 
+        print(filtr)
         cursor.execute(f"SELECT * FROM vr{filtr}")
         result = cursor.fetchall()
-
+        pg.commit()
         return_data = []
         for row in result:
             return_data.append(form_dict(dict(row)))
@@ -458,10 +458,11 @@ def show_all():
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
-        pg.commit()
+
 
         cursor.execute(f"SELECT * FROM vr")
         result = cursor.fetchall()
+        pg.commit()
 
         return_data = []
         for row in result:
