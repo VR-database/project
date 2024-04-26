@@ -96,7 +96,7 @@ export default {
         })
         
     },
-    convertFileFGDS(event) {
+    convertFileCktDisk(event) {
       const file = event.target.files[0];
       const filename = event.target.files[0].name;
       this.form.xyi.xyi1 = filename;
@@ -111,7 +111,7 @@ export default {
 
       reader.readAsDataURL(file);
     },
-    convertFileFKS(event) {
+    convertFileMrtDisk(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
@@ -124,7 +124,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    convertFileMRT(event) {
+    convertFileCtkModel(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
@@ -137,7 +137,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    convertFileCKT(event) {
+    convertFileMrtModel(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
@@ -150,7 +150,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    convertFileProtocol(event) {
+    convertFileOperationVideo(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
@@ -164,7 +164,7 @@ export default {
       reader.readAsDataURL(file);
     },
 
-    convertFileDrugVideo(event) {
+    convertFileEffectOfUse1(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
@@ -190,7 +190,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    convertFileResearch(event) {
+     convertFileFGDS(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
@@ -203,7 +203,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    convertFileCktDisk(event) {
+     convertFileFKS(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
@@ -216,7 +216,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    convertFileMrtDisk(event) {
+    convertFileResearch(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
@@ -229,7 +229,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    convertFileCtkModel(event) {
+    convertFileMRT(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
@@ -255,7 +255,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    convertFileOperationVideo(event) {
+    convertFileProtocol(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
@@ -268,7 +268,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    convertFileEffectOfUse1(event) {
+    convertFileDrugVideo(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
