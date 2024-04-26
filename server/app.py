@@ -139,10 +139,44 @@ def update_string(info, id):
             port={os.getenv('PORT_PG')}
         """)
 
+        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
+        info_for_db = f"'{uuid.uuid4().hex}'"
+
+        xyi= {
+              '1': info['xyi']['xyi1'],
+              '2': info['xyi']['xyi2'],
+              '3': info['xyi']['xyi3'],
+              '4': info['xyi']['xyi4'],
+              '5': info['xyi']['xyi5'],
+              '6': info['xyi']['xyi6'],
+              '7': info['xyi']['xyi7'],
+              '8': info['xyi']['xyi8'],
+              '9': info['xyi']['xyi9'],
+              '10': info['xyi']['xyi10'],
+              '11': info['xyi']['xyi11'],
+              '12': info['xyi']['xyi12'],
+              '13': info['xyi']['xyi13'],
+              '14': info['xyi']['xyi14'],
+              '15': info['xyi']['xyi15']
+            }
+        cnt=0
+        print(xyi)
+
+        for key in info:
+            if key != 'xyi':
+                if key not in dang_key:
+                    info_for_db+=f", '{info[key]}'"
+                else: 
+                    cnt+=1
+                    if cnt!=14:
+                        print(xyi[str(cnt)], str(cnt), key)
+                        src = add_img(key, info[key], info['Fio'], xyi[str(cnt)])
+                        print(1)
+                        info_for_db+=f", '{src}'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         cursor.execute(f''' UPDATE patient 
-                       SET $${info}$$
+                       SET ($${info_for_db}$$)
                        WHERE id=$${id}$$''')
         pg.commit()
 
