@@ -605,7 +605,7 @@ def shows():
     responce_object = {'status': 'success'}
 
     responce_object['all'] = show_all()
-    print(responce_object['all'])
+    # print(responce_object['all'])
     return jsonify(responce_object)
 
 @app.route('/media/<path:filename>')
