@@ -93,7 +93,8 @@ def add_string(info):
               '11': info['xyi']['xyi11'],
               '12': info['xyi']['xyi12'],
               '13': info['xyi']['xyi13'],
-              '14': info['xyi']['xyi14']
+              '14': info['xyi']['xyi14'],
+              '15': info['xyi']['xyi15']
             }
         cnt=0
         print(xyi)
@@ -104,10 +105,11 @@ def add_string(info):
                     info_for_db+=f", '{info[key]}'"
                 else: 
                     cnt+=1
-                    print(xyi[str(cnt)], str(cnt), key)
-                    src = add_img(key, info[key], info['Fio'], xyi[str(cnt)])
-                    print(1)
-                    info_for_db+=f", '{src}'"
+                    if cnt!=14:
+                        print(xyi[str(cnt)], str(cnt), key)
+                        src = add_img(key, info[key], info['Fio'], xyi[str(cnt)])
+                        print(1)
+                        info_for_db+=f", '{src}'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cursor.execute(f'INSERT INTO vr VALUES({info_for_db})')
         pg.commit()
