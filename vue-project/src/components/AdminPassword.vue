@@ -46,7 +46,7 @@ export default {
                 Admin: this.Admin,
             }); 
             this.error = response.data.res;
-
+            this.$router.push('/Table');
             
         },
     },
