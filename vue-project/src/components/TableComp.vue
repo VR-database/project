@@ -29,7 +29,7 @@ export default {
         MrtDisk: '',
         CtkModel: '',
         MrtModel: '',
-        OperationVideo: '',
+        OperationVideo: 'jpg',
         EffectOfUse1: '1',
         Notes: 'цукецукецук',
         Fgds: '',
@@ -58,7 +58,7 @@ export default {
         MrtDisk: '',
         CtkModel: '',
         MrtModel: '',
-        OperationVideo: '',
+        OperationVideo: 'jpg',
         EffectOfUse1: '1',
         Notes: 'цукецукецук',
         Fgds: '../assets/edit.png',
@@ -113,8 +113,12 @@ export default {
       code: '',
       gender: '',
       death: '',
-      table: null
-
+      table: null,
+      img: false,
+      video: false,
+      itemBool: false,
+      itemPhoto: false,
+      itemVideo: false,
     };
   },
 
@@ -143,8 +147,8 @@ this.Content()
       
     },
     tog(id){
-  let i = this.ritems.indexOf(id);
-          if (i===-1){this.ritems.push(id);}
+      let i = this.ritems.indexOf(id);
+      if (i===-1){this.ritems.push(id);}
       else { this.ritems.splice(i, 1); }
   
     },
@@ -155,10 +159,24 @@ this.Content()
       console.log(0)
       
     },
+    ShowModal(OperationVideo) {
+      this.ShowMod = !this.ShowMod
+      this.item = OperationVideo;
+      if (this.item.OperationVideo.includes('jpg') || this.item.OperationVideo.includes('png')) {
+        this.itemBool = true;
+        this.itemPhoto = true;
+        this.itemVideo = false;
+      } else if (this.item.OperationVideo.includes('mkv') || this.item.OperationVideo.includes('mp4')) {
+        this.itemBool = true;
+        this.itemPhoto = false;
+        this.itemVideo = true;
+      }
+      
+    },
     ShowModal(Notes) {
       this.ShowMod = !this.ShowMod
       this.item = Notes;
-      
+      this.itemBool = false;
     },
     async filtre(){
       
@@ -202,7 +220,7 @@ this.Content()
   <error-comp v-if="false"/>
   <div class="container" v-if="true">
     <h1 class="head">DataBase</h1>
-    <button @click='filtre'></button>
+   
     <div class="buttons mb-5">
       <a class="button1" href="/Add"
         ><img src="../assets/image.png" alt=""
@@ -316,7 +334,7 @@ this.Content()
             <td><a :href="item.MrtModel"><img src="../assets/Link.png" :alt="item.MrtModel" class="folder"/></a></td>
             <td><a :href="item.OperationVideo"><img src="../assets/Link.png" :alt="item.OperationVideo" class="folder"/></a></td>
             <td>{{ item.EffectOfUse1 }}</td>
-            <td><a :href="item.OperationVideo"><img src="../assets/folder.png" :alt="item.OperationVideo" class="folder"/></a></td>
+            <td><img src="../assets/share.png" :alt="item.OperationVideo" class="share"  @click="ShowModal(item.OperationVideo)"/></td>
             <td @click="ShowModal(item.Notes)"><img src="../assets/share.png" class="share" :alt="items.Notes"></td>
             </tr>
 

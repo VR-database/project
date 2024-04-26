@@ -4,7 +4,10 @@ export default {
   props: {
     
     ShowMod: Boolean,
-    item: String
+    item: String,
+    itemBool: Boolean,
+    itemVideo: Boolean,
+    itemPhoto:Boolean,  
   },
   data() {
     return {
@@ -33,16 +36,25 @@ export default {
         <button class="btn" @click="CloseModal">X</button>
       </div>
       <h1>Информация</h1>
-      <div class="scroll">
+      <div class="scroll" v-if="itemBool">
       <p>
         {{ item }}
       </p>
+    </div>
+    <div class="img-cont">
+      <img src="https://grill-bbq.ru/wp-content/uploads/2024/02/zimnie-taco.jpg" alt="" class="image">
     </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.image{
+  width: auto;
+  height: auto;
+  max-width: 500px;
+  max-height: 550px;
+}
 .edit{
   background: none;
   width: 30px;
@@ -138,6 +150,12 @@ export default {
 @media (max-width: 900px) {
     .window{
         margin-top: 50px;
+        padding: 5px;
+        min-width: 300px;
     }
+    .image{
+      max-width: 200px;
+     max-height: 250px;
+}
 }
 </style>

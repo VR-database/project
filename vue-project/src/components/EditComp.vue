@@ -83,6 +83,7 @@ export default {
 
       } else {
         this.status = 'Данные занесены в таблицу.'
+        this.$router.push('/Table');
         this.postData()
       }
     },
@@ -94,7 +95,7 @@ export default {
     async getData() {
       let response = await axios.get(`/show-one`, {
         params: {
-            id: '6'
+          id: this.id
           }
       }) 
       this.arr = response.data.all;

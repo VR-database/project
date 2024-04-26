@@ -87,7 +87,6 @@ export default {
       } else {
         this.status = 'Данные занесены в таблицу.'
         this.postData()
-        console.log(0)
         console.log(this.form)
       }
     },
@@ -95,6 +94,7 @@ export default {
         let response = await axios.post(`/new-string`, {
           form: this.form
         })
+        
     },
     convertFileFGDS(event) {
       const file = event.target.files[0];
