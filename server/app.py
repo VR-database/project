@@ -75,8 +75,8 @@ def add_string(info):
             password={os.getenv('PASSWORD_PG')}
             port={os.getenv('PORT_PG')}
         """)
-        
-        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'NameOperation', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
+
+        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
         info_for_db = f"'{uuid.uuid4().hex}'"
 
         xyi= {
@@ -94,27 +94,30 @@ def add_string(info):
               '12': info['xyi']['xyi12'],
               '13': info['xyi']['xyi13'],
               '14': info['xyi']['xyi14']
-            },
+            }
         cnt=0
+        print(xyi)
+
         for key in info:
             if key != 'xyi':
                 if key not in dang_key:
                     info_for_db+=f", '{info[key]}'"
                 else: 
                     cnt+=1
+                    print(xyi[str(cnt)], str(cnt), key)
                     src = add_img(key, info[key], info['Fio'], xyi[str(cnt)])
+                    print(1)
                     info_for_db+=f", '{src}'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-
-        cursor.execute(f'INSERT INTO VR VALUES({info_for_db})')
+        cursor.execute(f'INSERT INTO vr VALUES({info_for_db})')
         pg.commit()
 
         return_data = 'Иформация добавлена'
 
     except (Exception, Error) as error:
         print(f'DB ERROR: ', error)
-        return_data = f"Ошибка обращения к базе данных: {error}" 
+        return_data = f"Ошибка обращения к базе данных: {error}"
+        return 0
 
     finally:
         if pg:
@@ -390,7 +393,8 @@ def filtration(filters):
 def add_img(key, base, fio, name):
     decoded_bytes = base64.b64decode(base)
     dote = trim_to_first_dot(name)
-    name=key+'_'+fio+'dote'
+    print(name)
+    name=key+'_'+fio+dote
     print(name)
     # # print(decoded_bytes)
     with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:

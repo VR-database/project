@@ -75,12 +75,12 @@ export default {
   },
   methods: {
     check() {
-      if (
-        this.form.Code == '' || this.form.Fio == '' || this.form.Floor == '' || this.form.Age == '' ||
-        this.form.NumberHistory == '' || this.form.Date1 == '' || this.form.Date2 == '' && this.form.Result == '' ||
-        this.form.Diagnosis == '' ||
-        this.form.Date3 == '' || this.form.NameOperation == '' || 
-        this.form.Notes == ''
+      if (false
+        // this.form.Code == '' || this.form.Fio == '' || this.form.Floor == '' || this.form.Age == '' ||
+        // this.form.NumberHistory == '' || this.form.Date1 == '' || this.form.Date2 == '' && this.form.Result == '' ||
+        // this.form.Diagnosis == '' ||
+        // this.form.Date3 == '' || this.form.NameOperation == '' || 
+        // this.form.Notes == ''
         ){
         this.status = 'Заполните все поля!'
 
