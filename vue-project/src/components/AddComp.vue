@@ -62,7 +62,9 @@ export default {
               xyi11: '',
               xyi12: '',
               xyi13: '',
+              xyi14: '',
               xyi14: ''
+
             },
       },
       
@@ -181,7 +183,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.Notes = filename;
+      this.form.xyi.xyi15 = filename;
 
       reader.onload = () => {
         this.form.GistolСonclusion = reader.result;
@@ -220,7 +222,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi10 = filename;
+      this.form.xyi.xyi12 = filename;
 
       reader.onload = () => {
         this.form.Ckt = reader.result;
@@ -237,19 +239,6 @@ export default {
 
       reader.onload = () => {
         this.form.Mrt = reader.result;
-        console.log(reader.result);
-
-      };
-      reader.readAsDataURL(file);
-    },
-    convertFileMrtModel(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.form.xyi.xyi12 = filename;
-
-      reader.onload = () => {
-        this.form.Research = reader.result;
         console.log(reader.result);
 
       };
