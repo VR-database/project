@@ -78,7 +78,6 @@ def add_string(info):
 
         dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
         info_for_db = f"'{uuid.uuid4().hex}'"
-
         xyi= {
               '1': info['xyi']['xyi1'],
               '2': info['xyi']['xyi2'],
@@ -96,7 +95,7 @@ def add_string(info):
               '14': info['xyi']['xyi14'],
               '15': info['xyi']['xyi15']
             }
-        cnt=0
+        cnt=1
         print(xyi)
 
         for key in info:
@@ -106,9 +105,10 @@ def add_string(info):
                 else: 
                     cnt+=1
                     if cnt!=14:
-                        print(xyi[str(cnt)], str(cnt), key)
+                        print(cnt, key)
+                        print(xyi[str(cnt)])
                         src = add_img(key, info[key], info['Fio'], xyi[str(cnt)])
-                        print(1)
+
                         info_for_db+=f", '{src}'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cursor.execute(f'INSERT INTO vr VALUES({info_for_db})')
@@ -168,10 +168,11 @@ def update_string(info, id):
                     info_for_db+=f", '{info[key]}'"
                 else: 
                     cnt+=1
+
                     if cnt!=14:
-                        print(xyi[str(cnt)], str(cnt), key)
+
                         src = add_img(key, info[key], info['Fio'], xyi[str(cnt)])
-                        print(1)
+
                         info_for_db+=f", '{src}'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
@@ -258,8 +259,6 @@ def pass_check(pas, Admin):
                 print("Соединение с PostgreSQL закрыто")
                 return return_data
     
-    
-
 # Смена пароля
 def new_pass(pas, Admin):
     if Admin:
@@ -427,17 +426,15 @@ def filtration(filters):
 
 # Добовление файла в папку
 def add_img(key, base, fio, name):
+    base=base[base.find(',')+1:]
+    print(base)
     decoded_bytes = base64.b64decode(base)
-    dote = trim_to_first_dot(name)
+    name=key+'_'+fio+name
     print(name)
-    name=key+'_'+fio+dote
-    print(name)
-    # # print(decoded_bytes)
+
     with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
-        # Записываем данные в файл
         file.write(decoded_bytes)
-    # with open(f"{MEDIA_FOLDER}/{name}", "wb") as file:
-    #  file.write(base64.decodebytes(base.encode()))
+
 
     return MEDIA_FOLDER+'/'+name
 
