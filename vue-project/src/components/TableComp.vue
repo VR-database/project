@@ -293,7 +293,7 @@ this.Content()
         <option value="false" >Отмена выбора</option>
 
       </select>
-      <select placeholder= "d"class="form-select" aria-label="Default select example" v-model="this.fil.gender">
+      <select placeholder= "d" class="form-select" aria-label="Default select example" v-model="this.fil.gender">
         <option value="false">Выберите пол</option>
 
         
