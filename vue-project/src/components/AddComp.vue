@@ -27,7 +27,7 @@ export default {
 
         CktDisk: '', //
         MrtDisk: '', //
-        CtkModel: '', //
+        CktModel: '', //
         MrtModel: '', //
         OperationVideo: '', //
         EffectOfUse1: '',
@@ -128,15 +128,15 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    convertFileCtkModel(event) {
+    convertFileCktModel(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
       this.form.xyi.xyi3 = filename;
 
       reader.onload = () => {
-        this.form.CtkModel = reader.result;
-        console.log(this.form.CtkModel);
+        this.form.CktModel = reader.result;
+        console.log(this.form.CktModel);
 
       };
       reader.readAsDataURL(file);
@@ -407,7 +407,7 @@ export default {
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Построенная модель СТК</label>
-  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileCtkModel">
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileCktModel">
     </div>
 
     <div class="mb-3">

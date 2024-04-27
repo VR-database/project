@@ -76,7 +76,7 @@ def add_string(info):
             port={os.getenv('PORT_PG')}
         """)
 
-        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'EffectOfUse1']
+        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'EffectOfUse1']
         info_for_db = f"'{uuid.uuid4().hex}'"
         xyi= {
               'CktDisk': info['xyi']['xyi1'],
@@ -101,13 +101,15 @@ def add_string(info):
             if key != 'xyi':
                 if key not in dang_key:
                     info_for_db+=f", '{info[key]}'"
-                else: 
+                else:
+                    if key=='CtkModel': print(1)
                     print(key, xyi[key])
                     if key!='Note':
 
                         src = add_img(key, info[key], info['Fio'], xyi[key])
 
                         info_for_db+=f", '{src}'"
+                    else: info_for_db+=", 'rdfkek'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cursor.execute(f'INSERT INTO vr VALUES({info_for_db})')
         pg.commit()

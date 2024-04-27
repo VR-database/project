@@ -27,7 +27,7 @@ export default {
         NameOperation: 'ШГылрпвлрув куцкуеукц укецукеукцецу ',
         CktDisk: '',
         MrtDisk: '',
-        CtkModel: '',
+        CktModel: '',
         MrtModel: '',
         OperationVideo: 'jpg',
         EffectOfUse1: '1',
@@ -56,7 +56,7 @@ export default {
         NameOperation: 'ШГылрпвлрув куцкуеукц укецукеукцецу ',
         CktDisk: '',
         MrtDisk: '',
-        CtkModel: '',
+        CktModel: '',
         MrtModel: '',
         OperationVideo: 'jpg',
         EffectOfUse1: '1',
@@ -85,7 +85,7 @@ export default {
         NameOperation: 'ШГылрпвлрув куцкуеукц укецукеукцецу ',
         CktDisk: '',
         MrtDisk: '',
-        CtkModel: '',
+        CktModel: '',
         MrtModel: '',
         OperationVideo: '',
         EffectOfUse1: '1',
@@ -373,7 +373,7 @@ this.Content()
             <td><a :href="item.GistolСonclusion"><img src="../assets/folder.png" :alt="item.GistolСonclusion" class="folder"/></a></td>
             <td @click="ShowModal5(item.CtkModel)"><img src="../assets/share.png" class="share" :alt="item.CtkModel"></td>
             <td @click="ShowModal6(item.MrtDisk)"><img src="../assets/share.png" class="share" :alt="item.MrtDisk"></td>
-            <td><a :href="item.CtkModel"><img src="../assets/Link.png" :alt="item.CtkModel" class="folder"/></a></td>
+            <td><a :href="item.CktModel"><img src="../assets/Link.png" :alt="item.CktModel" class="folder"/></a></td>
             <td><a :href="item.MrtModel"><img src="../assets/Link.png" :alt="item.MrtModel" class="folder"/></a></td>
             <td>{{ item.EffectOfUse1 }}</td>
             <td><img src="../assets/share.png" :alt="item.OperationVideo" class="share"  @click="ShowModal2(item.OperationVideo)"/></td>
