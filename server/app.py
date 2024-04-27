@@ -509,6 +509,7 @@ def show_one(id):
         
 def form_dict(slovar):
     form = {
+        'id': slovar['id'],
         'Code': slovar['code'],
         'Fio': slovar['fio'],
         'Floor': slovar['floor'],
