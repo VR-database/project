@@ -77,7 +77,7 @@ def add_string(info):
         """)
 
         dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'Protocol']
-        info_for_db = f"'{uuid.uuid4().hex}'"
+        info_for_db = f"'{mini(uuid.uuid4().hex)}'"
         xyi= {
               'CktDisk': info['xyi']['xyi1'],
               'MrtDisk': info['xyi']['xyi2'],
@@ -140,7 +140,7 @@ def update_string(info, id):
         """)
 
         dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'EffectOfUse1']
-        info_for_db = f"'{uuid.uuid4().hex}'"
+        info_for_db = f"'{mini(uuid.uuid4().hex)}'"
         xyi= {
               'CktDisk': info['xyi']['xyi1'],
               'MrtDisk': info['xyi']['xyi2'],
@@ -539,6 +539,8 @@ def form_dict(slovar):
     }
     
     return form
+def mini(id):
+    return id[:10]
 # ========================================================================================
 
 
@@ -651,10 +653,10 @@ def serve_file(filename):
 @app.route('/show-one', methods=['GET'])
 def one():
     responce_object = {'status': 'success'}
-
     id = request.args.get('id')
+
     responce_object['all'] = show_one(id)
-    print(responce_object['all'])
+
 
 
     return jsonify(responce_object)

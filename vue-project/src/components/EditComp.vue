@@ -74,6 +74,7 @@ export default {
   methods: {
     routGet(){
        this.id = this.$route.query.id 
+       console.log(this.id)
     },
     check() {
       if (this.arr[0].Code == '' || this.arr[0].Fio == '' || this.arr[0].Floor == '' || this.arr[0].Age == '' ||
@@ -95,10 +96,11 @@ export default {
         })
     },
     async getData() {
-      let response = await axios.get(`/show-one`, {
-        params: {
-          id: this.id
-          }
+      this.id = this.$route.query.id 
+      let response = await axios.get(`/show-one?id=${this.id}`, {
+        // params: {
+        //   id: this.id
+        //   }
       }) 
       this.arr = response.data.all;
       console.log(this.arr)
@@ -279,7 +281,8 @@ export default {
 
   },
   mounted() {
-    this.getData()
+    this.getData();
+    this.routGet()
   },
   props: {
     edit: Object,
@@ -320,7 +323,7 @@ export default {
   <label for="exampleFormControlInput1" class="form-label">Номер истории болезни</label>
   <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Номер истории болезни" v-model="arr[0].NumberHistory">
     </div>
-{{arr[0].Date1}}
+<!-- {{arr[0].Date1}} -->
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Дата госпитализации</label>
   <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" v-model="arr[0].Date1">
