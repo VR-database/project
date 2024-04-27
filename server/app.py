@@ -76,26 +76,25 @@ def add_string(info):
             port={os.getenv('PORT_PG')}
         """)
 
-        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
+        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'EffectOfUse1']
         info_for_db = f"'{uuid.uuid4().hex}'"
         xyi= {
-              '1': info['xyi']['xyi1'],
-              '2': info['xyi']['xyi2'],
-              '3': info['xyi']['xyi3'],
-              '4': info['xyi']['xyi4'],
-              '5': info['xyi']['xyi5'],
-              '6': info['xyi']['xyi6'],
+              'CktDisk': info['xyi']['xyi1'],
+              'MrtDisk': info['xyi']['xyi2'],
+              'CktModel': info['xyi']['xyi3'],
+              'MrtModel': info['xyi']['xyi4'],
+              'OperationVideo': info['xyi']['xyi5'],
+              'EffectOfUse1': info['xyi']['xyi6'],
               '7': info['xyi']['xyi7'],
-              '8': info['xyi']['xyi8'],
-              '9': info['xyi']['xyi9'],
-              '10': info['xyi']['xyi10'],
-              '11': info['xyi']['xyi11'],
-              '12': info['xyi']['xyi12'],
-              '13': info['xyi']['xyi13'],
+              'Fgds': info['xyi']['xyi8'],
+              'Fks': info['xyi']['xyi9'],
+              'Ckt': info['xyi']['xyi10'],
+              'Mrt': info['xyi']['xyi11'],
+              'Research': info['xyi']['xyi12'],
+              'DrugVideo': info['xyi']['xyi13'],
               '14': info['xyi']['xyi14'],
-              '15': info['xyi']['xyi15']
+              'GistolConclusion': info['xyi']['xyi15']
             }
-        cnt=1
         print(xyi)
 
         for key in info:
@@ -103,11 +102,10 @@ def add_string(info):
                 if key not in dang_key:
                     info_for_db+=f", '{info[key]}'"
                 else: 
-                    cnt+=1
-                    print(key, xyi[str(cnt)], cnt)
-                    if cnt!=14:
+                    print(key, xyi[key])
+                    if key!='Note':
 
-                        src = add_img(key, info[key], info['Fio'], xyi[str(cnt)], cnt)
+                        src = add_img(key, info[key], info['Fio'], xyi[key])
 
                         info_for_db+=f", '{src}'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -139,27 +137,25 @@ def update_string(info, id):
             port={os.getenv('PORT_PG')}
         """)
 
-        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo']
+        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'EffectOfUse1']
         info_for_db = f"'{uuid.uuid4().hex}'"
-
         xyi= {
-              '1': info['xyi']['xyi1'],
-              '2': info['xyi']['xyi2'],
-              '3': info['xyi']['xyi3'],
-              '4': info['xyi']['xyi4'],
-              '5': info['xyi']['xyi5'],
-              '6': info['xyi']['xyi6'],
+              'CktDisk': info['xyi']['xyi1'],
+              'MrtDisk': info['xyi']['xyi2'],
+              'CktModel': info['xyi']['xyi3'],
+              'MrtModel': info['xyi']['xyi4'],
+              'OperationVideo': info['xyi']['xyi5'],
+              'EffectOfUse1': info['xyi']['xyi6'],
               '7': info['xyi']['xyi7'],
-              '8': info['xyi']['xyi8'],
-              '9': info['xyi']['xyi9'],
-              '10': info['xyi']['xyi10'],
-              '11': info['xyi']['xyi11'],
-              '12': info['xyi']['xyi12'],
-              '13': info['xyi']['xyi13'],
+              'Fgds': info['xyi']['xyi8'],
+              'Fks': info['xyi']['xyi9'],
+              'Ckt': info['xyi']['xyi10'],
+              'Mrt': info['xyi']['xyi11'],
+              'Research': info['xyi']['xyi12'],
+              'DrugVideo': info['xyi']['xyi13'],
               '14': info['xyi']['xyi14'],
-              '15': info['xyi']['xyi15']
+              'GistolConclusion': info['xyi']['xyi15']
             }
-        cnt=0
         print(xyi)
 
         for key in info:
@@ -167,11 +163,10 @@ def update_string(info, id):
                 if key not in dang_key:
                     info_for_db+=f", '{info[key]}'"
                 else: 
-                    cnt+=1
+                    print(key, xyi[key])
+                    if key!='Note':
 
-                    if cnt!=14:
-
-                        src = add_img(key, info[key], info['Fio'], xyi[str(cnt)])
+                        src = add_img(key, info[key], info['Fio'], xyi[key])
 
                         info_for_db+=f", '{src}'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -425,7 +420,7 @@ def filtration(filters):
             return return_data
 
 # Добовление файла в папку
-def add_img(key, base, fio, name, cnt):
+def add_img(key, base, fio, name):
     base=base[base.find(',')+1:]
     decoded_bytes = base64.b64decode(base)
     name=key+'_'+fio+name
@@ -435,7 +430,7 @@ def add_img(key, base, fio, name, cnt):
         file.write(decoded_bytes)
 
 
-    return MEDIA_FOLDER+'/'+name
+    return 'http://127.0.0.1:5000/media/'+name
 
 def trim_to_first_dot(s):
     # Возвращаем подстроку до первого вхождения точки включительно
@@ -485,7 +480,7 @@ def show_one(id):
             password={os.getenv('PASSWORD_PG')}
             port={os.getenv('PORT_PG')}
         """)
-
+        print(id)
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
         pg.commit()

@@ -25,29 +25,29 @@ export default {
 
 
 
-        CktDisk: '',
-        MrtDisk: '',
-        CtkModel: '',
-        MrtModel: '',
-        OperationVideo: '',
+        CktDisk: '', //
+        MrtDisk: '', //
+        CtkModel: '', //
+        MrtModel: '', //
+        OperationVideo: '', //
         EffectOfUse1: '',
         Notes: '',
         
         
 
-        Fgds: '',
-        Fks: '',
-        Ckt: '',
-        Mrt: '',
+        Fgds: '', //
+        Fks: '', //
+        Ckt: '', //
+        Mrt: '', //
         
         
-        Research: '',
+        Research: '', //
 
 
 
-        Protocol: '',
-        DrugVideo: '',
-        GistolСonclusion: '',
+        Protocol: '', //
+        DrugVideo: '', //
+        GistolConclusion: '', //
         xyi : {
               xyi1: '',
               xyi2: '',
@@ -181,14 +181,14 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    convertFileGistolСonclusion(event) {
+    convertFileGistolConclusion(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
       this.form.xyi.xyi15 = filename;
 
       reader.onload = () => {
-        this.form.GistolСonclusion = reader.result;
+        this.form.GistolConclusion = reader.result;
         console.log(reader.result);
 
       };
@@ -220,11 +220,11 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    convertFileResearch(event) {
+    convertFileCKT(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi12 = filename;
+      this.form.xyi.xyi10 = filename;
 
       reader.onload = () => {
         this.form.Ckt = reader.result;
@@ -272,7 +272,19 @@ export default {
       };
       reader.readAsDataURL(file);
     },
+    convertFileResearch(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      const filename = event.target.files[0].name;
+      this.form.xyi.xyi14 = filename;
 
+      reader.onload = () => {
+        this.form.Research = reader.result;
+        console.log(reader.result);
+
+      };
+      reader.readAsDataURL(file);
+    },
   },
  
 } 
