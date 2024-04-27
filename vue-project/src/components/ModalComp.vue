@@ -23,6 +23,7 @@ export default {
     },
     CloseModal() {
             this.$emit('CloseModal', this.ShowMod)
+            console.log(this.item)
         }
   },
 
