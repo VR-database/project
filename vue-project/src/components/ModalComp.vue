@@ -36,19 +36,31 @@ export default {
         <button class="btn" @click="CloseModal">X</button>
       </div>
       <h1>Информация</h1>
-      <div class="scroll" v-if="itemBool">
-      <p>
+      <div class="scroll">
+        <div class="img-cont" v-if="itemPhoto">
+          <img :src="item" alt="" class="image">
+        </div>
+<video width="320" height="240" controls class="ttt" v-if="itemVideo">
+<source class="yyy" :src="item" type="video/mp4">
+</video>
+      <p v-if="!itemBool">
         {{ item }}
       </p>
-    </div>
-    <div class="img-cont">
-      <img src="https://grill-bbq.ru/wp-content/uploads/2024/02/zimnie-taco.jpg" alt="" class="image">
+
     </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.yyy{
+  width: 500px;
+  height: 600px;
+}
+.ttt{
+  width: 500px;
+  height: 300px;
+}
 .image{
   width: auto;
   height: auto;

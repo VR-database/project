@@ -149,30 +149,74 @@ this.Content()
   
     },
 
-    ShowModal(Diagnosis) {
+    ShowModal1(Diagnosis) {
       this.ShowMod = !this.ShowMod
       this.item = Diagnosis;
       console.log(0)
-      
+      this.itemBool = false;
     },
-    ShowModal(OperationVideo) {
+    ShowModal2(OperationVideo) {
       this.ShowMod = !this.ShowMod
       this.item = OperationVideo;
-      if (this.item.OperationVideo.includes('jpg') || this.item.OperationVideo.includes('png')) {
+      console.log(this.item)
+      if (this.item.includes('jpg') || this.item.includes('png') || this.item.includes('http')) {
         this.itemBool = true;
         this.itemPhoto = true;
         this.itemVideo = false;
-      } else if (this.item.OperationVideo.includes('mkv') || this.item.OperationVideo.includes('mp4')) {
+        
+      } else if (this.item.includes('mkv') || this.item.includes('mp4')) {
         this.itemBool = true;
         this.itemPhoto = false;
         this.itemVideo = true;
       }
       
     },
-    ShowModal(Notes) {
+    ShowModal3(Notes) {
       this.ShowMod = !this.ShowMod
       this.item = Notes;
       this.itemBool = false;
+    },
+    ShowModal4(DrugVideo) {
+      this.ShowMod = !this.ShowMod
+      this.item = DrugVideo;
+      if (this.item.includes('jpg') || this.item.includes('png') || this.item.includes('http')) {
+        this.itemBool = true;
+        this.itemPhoto = true;
+        this.itemVideo = false;
+        
+      } else if (this.item.includes('mkv') || this.item.includes('mp4')) {
+        this.itemBool = true;
+        this.itemPhoto = false;
+        this.itemVideo = true;
+      }
+    },
+    ShowModal5(CktDisk) {
+      this.ShowMod = !this.ShowMod
+      this.item = CktDisk;
+      if (this.item.includes('jpg') || this.item.includes('png') || this.item.includes('http')) {
+        this.itemBool = true;
+        this.itemPhoto = true;
+        this.itemVideo = false;
+        
+      } else if (this.item.includes('mkv') || this.item.includes('mp4')) {
+        this.itemBool = true;
+        this.itemPhoto = false;
+        this.itemVideo = true;
+      }
+    },
+    ShowModal6(MrtDisk) {
+      this.ShowMod = !this.ShowMod
+      this.item = MrtDisk;
+      if (this.item.includes('jpg') || this.item.includes('png') || this.item.includes('http')) {
+        this.itemBool = true;
+        this.itemPhoto = true;
+        this.itemVideo = false;
+        
+      } else if (this.item.includes('mkv') || this.item.includes('mp4')) {
+        this.itemBool = true;
+        this.itemPhoto = false;
+        this.itemVideo = true;
+      }
     },
     async filtre(){
       
@@ -298,7 +342,6 @@ this.Content()
             <th>Диск МРТ</th>
             <th>Построенная модель СТК</th>
             <th>Построенная модель МРТ</th>
-            <th>Видео(фото) операции с ДР</th>
             <th>Эффект предоперационного применения ДР(0/1)</th>
             <th>Видео(фото) операции с ДР</th>
             <th>Примечания</th>
@@ -317,25 +360,24 @@ this.Content()
             <td>{{item.Date1}}</td>
             <td>{{item.Date2}}</td>
             <td>{{ item.Result }}</td>
-            <td @click="ShowModal(item.Diagnosis)"><img src="../assets/share.png" class="share" :alt="item.Diagnosis"></td>
+            <td @click="ShowModal1(item.Diagnosis)"><img src="../assets/share.png" class="share" :alt="item.Diagnosis"></td>
             <td><a :href="item.Fgds" download="fgds"><img src="../assets/folder.png" :alt="item.Fgds" class="folder" /></a></td>
             <td><a :href="item.Fks"><img src="../assets/folder.png" :alt="item.Fks" class="folder" /></a></td>
             <td><a :href="item.Ckt"><img src="../assets/folder.png" :alt="item.Ckt" class="folder"/></a></td>
             <td><a :href="item.Mrt"><img src="../assets/folder.png" :alt="item.Mrt" class="folder"/></a></td>
             <td><a :href="item.Research"><img src="../assets/folder.png" :alt="item.Research" class="folder"/></a></td>
             <td>{{ item.Date3 }}</td>
-           <td @click="ShowModal(item.NameOperation)"><img src="../assets/share.png" class="share" :alt="item.NameOperation"></td>
+           <td @click="ShowModal2(item.NameOperation)"><img src="../assets/share.png" class="share" :alt="item.NameOperation"></td>
             <td><a :href="item.Protocol"><img src="../assets/folder.png" :alt="item.Protocol" class="folder"/></a></td>
-            <td><a :href="item.DrugVideo"><img src="../assets/folder.png" :alt="item.DrugVideo"  class="folder"/></a></td>
+            <td @click="ShowModal4(item.DrugVideo)"><img src="../assets/share.png" class="share" :alt="item.DrugVideo"></td>
             <td><a :href="item.GistolСonclusion"><img src="../assets/folder.png" :alt="item.GistolСonclusion" class="folder"/></a></td>
-            <td><a :href="item.CktDisk"><img src="../assets/Link.png" :alt="item.CktDisk" class="folder"/></a></td>
-            <td><a :href="item.MrtDisk"><img src="../assets/Link.png" :alt="item.MrtDisk" class="folder"/></a></td>
+            <td @click="ShowModal5(item.CtkModel)"><img src="../assets/share.png" class="share" :alt="item.CtkModel"></td>
+            <td @click="ShowModal6(item.MrtDisk)"><img src="../assets/share.png" class="share" :alt="item.MrtDisk"></td>
             <td><a :href="item.CtkModel"><img src="../assets/Link.png" :alt="item.CtkModel" class="folder"/></a></td>
             <td><a :href="item.MrtModel"><img src="../assets/Link.png" :alt="item.MrtModel" class="folder"/></a></td>
-            <td><a :href="item.OperationVideo"><img src="../assets/Link.png" :alt="item.OperationVideo" class="folder"/></a></td>
             <td>{{ item.EffectOfUse1 }}</td>
-            <td><img src="../assets/share.png" :alt="item.OperationVideo" class="share"  @click="ShowModal(item.OperationVideo)"/></td>
-            <td @click="ShowModal(item.Notes)"><img src="../assets/share.png" class="share" :alt="items.Notes"></td>
+            <td><img src="../assets/share.png" :alt="item.OperationVideo" class="share"  @click="ShowModal2(item.OperationVideo)"/></td>
+            <td @click="ShowModal3(item.Notes)"><img src="../assets/share.png" class="share" :alt="item.Notes"></td>
             </tr>
 
             
@@ -344,7 +386,8 @@ this.Content()
         </table>
       </div>
     </div>
-    <modal-comp v-if="ShowMod" :item="item" @CloseModal="CloseModal" />
+    <modal-comp v-if="ShowMod" :item="item" :itemBool="itemBool" :itemPhoto="itemPhoto" :itemVideo="itemVideo"  @CloseModal="CloseModal" />
+
 </template>
 <style scoped>
 .form-select{

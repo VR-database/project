@@ -422,7 +422,7 @@ export default {
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Эффект предоперационного применения ДР(0/1)</label>
-  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileEffectOfUse1">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="0/1"  v-model="form.EffectOfUse1">
     </div>
 
     <div class="mb-3">
