@@ -76,7 +76,7 @@ def add_string(info):
             port={os.getenv('PORT_PG')}
         """)
 
-        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'EffectOfUse1']
+        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'EffectOfUse1', 'Protocol']
         info_for_db = f"'{uuid.uuid4().hex}'"
         xyi= {
               'CktDisk': info['xyi']['xyi1'],
