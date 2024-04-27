@@ -5,13 +5,13 @@ export default {
     
     ShowMod: Boolean,
     item: String,
-    itemBool: Boolean,
+    textbool: Boolean,
     itemVideo: Boolean,
     itemPhoto:Boolean,  
   },
   data() {
     return {
-      dish: "",
+      
     };
   },
   mounted() {
@@ -23,7 +23,8 @@ export default {
     },
     CloseModal() {
             this.$emit('CloseModal', this.ShowMod)
-            console.log(this.item)
+      console.log(this.itemPhoto)
+      console.log(this.textbool)
         }
   },
 
@@ -38,13 +39,14 @@ export default {
       </div>
       <h1>Информация</h1>
       <div class="scroll">
+
         <div class="img-cont" v-if="itemPhoto">
           <img :src="item" alt="" class="image">
         </div>
 <video width="320" height="240" controls class="ttt" v-if="itemVideo">
 <source class="yyy" :src="item" type="video/mp4">
 </video>
-      <p v-if="!itemBool">
+      <p v-if="textbool">
         {{ item }}
       </p>
 

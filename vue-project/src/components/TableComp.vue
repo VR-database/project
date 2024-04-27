@@ -29,7 +29,7 @@ export default {
         MrtDisk: '',
         CktModel: '',
         MrtModel: '',
-        OperationVideo: 'jpg',
+        DrugVideo: 'jpg',
         EffectOfUse1: '1',
         Notes: 'цукецукецук',
         Fgds: '',
@@ -38,7 +38,7 @@ export default {
         Mrt: '',
         Research: '',
         Protocol: '',
-        DrugVideo: '',
+        OperationVideo: '.jpg',
         GistolСonclusion: '',
       },
         {
@@ -58,7 +58,7 @@ export default {
         MrtDisk: '',
         CktModel: '',
         MrtModel: '',
-        OperationVideo: 'jpg',
+        DrugVideo: '',
         EffectOfUse1: '1',
         Notes: 'цукецукецук',
         Fgds: '../assets/edit.png',
@@ -67,7 +67,7 @@ export default {
         Mrt: '',
         Research: '',
         Protocol: '',
-        DrugVideo: '',
+        OperationVideo: '.jpg',
         GistolСonclusion: '',
         },
         {
@@ -87,7 +87,7 @@ export default {
         MrtDisk: '',
         CktModel: '',
         MrtModel: '',
-        OperationVideo: '',
+        DrugVideo: '',
         EffectOfUse1: '1',
         Notes: 'цукецукецук',
         Fgds: '',
@@ -96,7 +96,7 @@ export default {
         Mrt: '',
         Research: '',
         Protocol: '',
-        DrugVideo: '',
+        OperationVideo: '.jpg',
         GistolСonclusion: '',
       },],
   fil: {
@@ -112,7 +112,7 @@ export default {
       table: null,
       img: false,
       video: false,
-      itemBool: false,
+      textbool: false,
       itemPhoto: false,
       itemVideo: false,
     };
@@ -153,19 +153,19 @@ this.Content()
       this.ShowMod = !this.ShowMod
       this.item = Diagnosis;
       console.log(0)
-      this.itemBool = false;
+      this.textbool = true;
     },
     ShowModal2(OperationVideo) {
       this.ShowMod = !this.ShowMod
       this.item = OperationVideo;
       console.log(this.item)
-      if (this.item.includes('jpg') || this.item.includes('png') || this.item.includes('http')) {
-        this.itemBool = true;
+      if (this.item.includes('.jpg') || this.item.includes('.png')) {
+        this.textbool = false;
         this.itemPhoto = true;
         this.itemVideo = false;
         
-      } else if (this.item.includes('mkv') || this.item.includes('mp4')) {
-        this.itemBool = true;
+      } else if (this.item.includes('.mkv') || this.item.includes('.mp4')) {
+        this.textbool = false;
         this.itemPhoto = false;
         this.itemVideo = true;
       }
@@ -174,18 +174,18 @@ this.Content()
     ShowModal3(Notes) {
       this.ShowMod = !this.ShowMod
       this.item = Notes;
-      this.itemBool = false;
+      this.textbool = true;
     },
     ShowModal4(DrugVideo) {
       this.ShowMod = !this.ShowMod
       this.item = DrugVideo;
-      if (this.item.includes('jpg') || this.item.includes('png') || this.item.includes('http')) {
-        this.itemBool = true;
+      if (this.item.includes('.jpg') || this.item.includes('.png')){
+        this.textbool = false;
         this.itemPhoto = true;
         this.itemVideo = false;
         
-      } else if (this.item.includes('mkv') || this.item.includes('mp4')) {
-        this.itemBool = true;
+      } else if (this.item.includes('.mkv') || this.item.includes('.mp4')) {
+        this.textbool = false;
         this.itemPhoto = false;
         this.itemVideo = true;
       }
@@ -193,13 +193,13 @@ this.Content()
     ShowModal5(CktDisk) {
       this.ShowMod = !this.ShowMod
       this.item = CktDisk;
-      if (this.item.includes('jpg') || this.item.includes('png') || this.item.includes('http')) {
-        this.itemBool = true;
+      if (this.item.includes('.jpg') || this.item.includes('.png') ) {
+        this.textbool = false;
         this.itemPhoto = true;
         this.itemVideo = false;
         
-      } else if (this.item.includes('mkv') || this.item.includes('mp4')) {
-        this.itemBool = true;
+      } else if (this.item.includes('.mkv') || this.item.includes('.mp4')) {
+        this.textbool = false;
         this.itemPhoto = false;
         this.itemVideo = true;
       }
@@ -207,13 +207,13 @@ this.Content()
     ShowModal6(MrtDisk) {
       this.ShowMod = !this.ShowMod
       this.item = MrtDisk;
-      if (this.item.includes('jpg') || this.item.includes('png') || this.item.includes('http')) {
-        this.itemBool = true;
+      if (this.item.includes('.jpg') || this.item.includes('.png')) {
+        this.textbool = false;
         this.itemPhoto = true;
         this.itemVideo = false;
         
-      } else if (this.item.includes('mkv') || this.item.includes('mp4')) {
-        this.itemBool = true;
+      } else if (this.item.includes('.mkv') || this.item.includes('.mp4')) {
+        this.textbool = false;
         this.itemPhoto = false;
         this.itemVideo = true;
       }
@@ -386,7 +386,7 @@ this.Content()
         </table>
       </div>
     </div>
-    <modal-comp v-if="ShowMod" :item="item" :itemBool="itemBool" :itemPhoto="itemPhoto" :itemVideo="itemVideo"  @CloseModal="CloseModal" />
+    <modal-comp v-if="ShowMod" :item="item" :textbool="textbool" :itemPhoto="itemPhoto" :itemVideo="itemVideo"  @CloseModal="CloseModal" />
 
 </template>
 <style scoped>
