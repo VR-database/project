@@ -76,7 +76,7 @@ def add_string(info):
             port={os.getenv('PORT_PG')}
         """)
 
-        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'EffectOfUse1', 'Protocol']
+        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'Protocol']
         info_for_db = f"'{uuid.uuid4().hex}'"
         xyi= {
               'CktDisk': info['xyi']['xyi1'],
@@ -91,8 +91,8 @@ def add_string(info):
               'Ckt': info['xyi']['xyi10'],
               'Mrt': info['xyi']['xyi11'],
               'Research': info['xyi']['xyi12'],
-              'DrugVideo': info['xyi']['xyi13'],
-              '14': info['xyi']['xyi14'],
+              'Protocol': info['xyi']['xyi13'],
+              'DrugVideo': info['xyi']['xyi14'],
               'GistolConclusion': info['xyi']['xyi15']
             }
         print(xyi)
@@ -375,21 +375,21 @@ def file_from_db():
 
 # ФИЛЬТРЫ
 def filtration(filters):
-
-    if not filters['filtr']:
-        filtr = ''
-    elif filters["filtr"]:
-        filtr = ' WHERE'
-        for i in filters:
-            print(filters[i])
-            if filters[i] != 'false':
-                if i == 'filtr':
-                    continue
-                if filtr == ' WHERE':
-                    filtr += f' {i}=$${filters[i]}$$'
-                else:
-                    filtr += f' AND {i}=$${filters[i]}$$'
-
+    if filters['filtr']!='false':
+        if not filters['filtr']:
+            filtr = ''
+        elif filters["filtr"]:
+            filtr = ' WHERE'
+            for i in filters:
+                print(filters[i])
+                if filters[i] != 'false':
+                    if i == 'filtr':
+                        continue
+                    if filtr == ' WHERE':
+                        filtr += f' {i}=$${filters[i]}$$'
+                    else:
+                        filtr += f' AND {i}=$${filters[i]}$$'
+    else: return show_all()
     try:
         pg = psycopg2.connect(f"""
             host=localhost
