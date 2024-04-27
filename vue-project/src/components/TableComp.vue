@@ -122,8 +122,14 @@ export default {
 
     async Check() {
       let response = await axios.get(`/check`);
-      this.isAdmin = data.isAdmin;
-
+      this.isAdmin = response.data.isAdmin;
+      if (this.isAdmin == 'True'){
+        this.Content()
+      } else if (this.isAdmin == 'False'){
+        this.$router.push('/Add');
+      }else {
+        this.$router.push('/login');
+      }
     },
     async Content() {
       let response = await axios.get(`/show-all`);
@@ -247,7 +253,10 @@ this.Content()
 
 
   },
-  mounted() {this.Content()},
+  mounted() {
+
+    this.Check()
+  },
   components: {
     ErrorComp,
     ModalComp,
@@ -350,7 +359,7 @@ this.Content()
         <tbody>
             <tr v-for="(item, index) in items">
             <td v-if="none"><input type="checkbox" :value="item.id" @change="tog(item.id)" /></td> 
-            <td><a :href="'/edit?id=' + item.id"><img src="../assets/edit.png" :alt="item" class="edit"></a></td>
+            <td><a :href="'/Edit?id=' + item.id"><img src="../assets/edit.png" :alt="item" class="edit"></a></td>
             <td><a><div class="div">{{index + 1}}</div></a></td>
             <td>{{ item.Code }}</td>
             <td>{{item.Fio}}</td>

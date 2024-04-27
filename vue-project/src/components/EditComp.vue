@@ -43,7 +43,9 @@ export default {
           Protocol: '',
           DrugVideo: '',
           GistolСonclusion: '',
-          xyi : {
+
+      }],
+      xyi : {
               xyi1: '',
               xyi2: '',
               xyi3: '',
@@ -61,8 +63,6 @@ export default {
               xyi15: ''
 
             },
-
-        },],
         file: '',
         status: '',
         id: '',
@@ -72,16 +72,31 @@ export default {
     
   },
   methods: {
+    async Check() {
+      let response = await axios.get(`/check`);
+      this.isAdmin = response.data.isAdmin;
+      if (this.isAdmin == 'True'){
+        this.getData();
+        this.routGet()
+      } else if (this.isAdmin == 'False'){
+        this.getData();
+        this.routGet()
+      }else {
+        this.$router.push('/login');
+      }
+    },
     routGet(){
        this.id = this.$route.query.id 
        console.log(this.id)
     },
     check() {
-      if (this.arr[0].Code == '' || this.arr[0].Fio == '' || this.arr[0].Floor == '' || this.arr[0].Age == '' ||
+      if (
+        this.arr[0].Code == '' || this.arr[0].Fio == '' || this.arr[0].Floor == '' || this.arr[0].Age == '' ||
         this.arr[0].NumberHistory == '' || this.arr[0].Date1 == '' || this.arr[0].Date2 == '' && this.arr[0].Result == '' ||
         this.arr[0].Diagnosis == '' ||
         this.arr[0].Date3 == '' || this.arr[0].NameOperation == ''.
-        this.arr[0].Notes == '') {
+        this.arr[0].Notes == ''
+        ) {
         this.status = 'Заполните все поля!'
 
       } else {
@@ -92,8 +107,10 @@ export default {
     },
     async postData() {
         let response = await axios.put(`/update-string`, {
-          form: this.form
-        })
+        body: {
+          form: this.arr[0],
+          xyi: this.xyi
+        }})
     },
     async getData() {
       this.id = this.$route.query.id 
@@ -109,13 +126,13 @@ export default {
     convertFileCktDisk(event) {
       const file = event.target.files[0];
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi1 = filename;
+      this.xyi.xyi1 = filename;
       
       const reader = new FileReader();
      
       reader.onload = () => {
         this.form.CktDisk = reader.result;
-          console.log(this.form.xyi)
+          console.log(this.xyi)
 
       };
 
@@ -125,7 +142,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi2 = filename;
+      this.xyi.xyi2 = filename;
 
       reader.onload = () => {
         this.form.MrtDisk = reader.result;
@@ -138,7 +155,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi3 = filename;
+      this.xyi.xyi3 = filename;
 
       reader.onload = () => {
         this.form.CtkModel = reader.result;
@@ -151,7 +168,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi4 = filename;
+      this.xyi.xyi4 = filename;
 
       reader.onload = () => {
         this.form.MrtModel = reader.result;
@@ -164,7 +181,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi5 = filename;
+      this.xyi.xyi5 = filename;
 
       reader.onload = () => {
         this.form.OperationVideo = reader.result;
@@ -178,7 +195,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi6 = filename;
+      this.xyi.xyi6 = filename;
 
       reader.onload = () => {
         this.form.EffectOfUse1 = reader.result;
@@ -191,7 +208,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi15 = filename;
+      this.xyi.xyi15 = filename;
 
       reader.onload = () => {
         this.form.GistolСonclusion = reader.result;
@@ -204,7 +221,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi8 = filename;
+      this.xyi.xyi8 = filename;
 
       reader.onload = () => {
         this.form.Fgds = reader.result;
@@ -217,7 +234,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi9 = filename;
+      this.xyi.xyi9 = filename;
 
       reader.onload = () => {
         this.form.Fks = reader.result;
@@ -230,7 +247,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi12 = filename;
+      this.xyi.xyi12 = filename;
 
       reader.onload = () => {
         this.form.Ckt = reader.result;
@@ -243,7 +260,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi11 = filename;
+      this.xyi.xyi11 = filename;
 
       reader.onload = () => {
         this.form.Mrt = reader.result;
@@ -256,7 +273,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi13 = filename;
+      this.xyi.xyi13 = filename;
 
       reader.onload = () => {
         this.form.Protocol = reader.result;
@@ -269,7 +286,7 @@ export default {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
-      this.form.xyi.xyi14 = filename;
+      this.xyi.xyi14 = filename;
 
       reader.onload = () => {
         this.form.DrugVideo = reader.result;
@@ -281,8 +298,7 @@ export default {
 
   },
   mounted() {
-    this.getData();
-    this.routGet()
+    this.Check()
   },
   props: {
     edit: Object,

@@ -47,10 +47,10 @@ def login_user(pas):
         print(passwords)
         if pas==passwords[0]['admin_pass']: 
             return_data = True
-            session['isAdmin'] = True
+            session['isAdmin'] = 'True'
         elif pas==passwords[0]['person_pass']: 
             return_data = False
-            session['isAdmin'] = False
+            session['isAdmin'] = 'False'
         else: 
             return_data = "Неверный пароль!"
     except (Exception, Error) as error:
@@ -129,7 +129,7 @@ def add_string(info):
             return return_data
 
 # Обновление строчки
-def update_string(info, id):
+def update_string(info,xyi,  id):
     try: 
         pg = psycopg2.connect(f"""
             host=localhost
@@ -139,42 +139,50 @@ def update_string(info, id):
             port={os.getenv('PORT_PG')}
         """)
 
-        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolСonclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'EffectOfUse1']
-        info_for_db = f"'{mini(uuid.uuid4().hex)}'"
+        dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'Protocol']
+        info_for_db = ""
         xyi= {
-              'CktDisk': info['xyi']['xyi1'],
-              'MrtDisk': info['xyi']['xyi2'],
-              'CktModel': info['xyi']['xyi3'],
-              'MrtModel': info['xyi']['xyi4'],
-              'OperationVideo': info['xyi']['xyi5'],
-              'EffectOfUse1': info['xyi']['xyi6'],
-              '7': info['xyi']['xyi7'],
-              'Fgds': info['xyi']['xyi8'],
-              'Fks': info['xyi']['xyi9'],
-              'Ckt': info['xyi']['xyi10'],
-              'Mrt': info['xyi']['xyi11'],
-              'Research': info['xyi']['xyi12'],
-              'DrugVideo': info['xyi']['xyi13'],
-              '14': info['xyi']['xyi14'],
-              'GistolConclusion': info['xyi']['xyi15']
+              'CktDisk': xyi['xyi1'],
+              'MrtDisk': xyi['xyi2'],
+              'CktModel': xyi['xyi3'],
+              'MrtModel': xyi['xyi4'],
+              'OperationVideo': xyi['xyi5'],
+              'EffectOfUse1': xyi['xyi6'],
+              '7': xyi['xyi7'],
+              'Fgds': xyi['xyi8'],
+              'Fks': xyi['xyi9'],
+              'Ckt': xyi['xyi10'],
+              'Mrt': xyi['xyi11'],
+              'Research': xyi['xyi12'],
+              'Protocol': xyi['xyi13'],
+              'DrugVideo': xyi['xyi14'],
+              'GistolConclusion': xyi['xyi15']
             }
         print(xyi)
-
+        print(info)
         for key in info:
-            if key != 'xyi':
+            if key != 'Age':
                 if key not in dang_key:
-                    info_for_db+=f", '{info[key]}'"
-                else: 
+                    info_for_db+=f", {key} = $${info[key]}$$"
+                else:
+                    if key=='CtkModel': print(1)
+                    print(key)
                     print(key, xyi[key])
                     if key!='Note':
+                        if xyi[key]!='':
+                            src = add_img(key, info[key], info['Fio'], xyi[key])
 
-                        src = add_img(key, info[key], info['Fio'], xyi[key])
+                            info_for_db+=f", {key} = $${src}$$"
+                        else: 
+                            info_for_db+=f", {key} = ''"
 
-                        info_for_db+=f", '{src}'"
+                    else: info_for_db+=", 'rdfkek'"
+            else: 
+                info_for_db+=f" {key} = $${info[key]}$$"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         cursor.execute(f''' UPDATE patient 
-                       SET ($${info_for_db}$$)
+                       SET {info_for_db}
                        WHERE id=$${id}$$''')
         pg.commit()
 
@@ -391,7 +399,7 @@ def filtration(filters):
                         filtr += f' AND {i}=$${filters[i]}$$'
     else: return show_all()
     try:
-        pg = psycopg2.connect(f"""
+        pg = psycopg2.con.form.xyinect(f"""
             host=localhost
             dbname=postgres
             user=postgres
@@ -423,16 +431,18 @@ def filtration(filters):
 
 # Добовление файла в папку
 def add_img(key, base, fio, name):
-    base=base[base.find(',')+1:]
-    decoded_bytes = base64.b64decode(base)
-    name=key+'_'+fio+name
-    print(name)
+    if base!='':
+        base=base[base.find(',')+1:]
+        decoded_bytes = base64.b64decode(base)
+        name=key+'_'+fio+name
+        print(name)
 
-    with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
-        file.write(decoded_bytes)
+        with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
+            file.write(decoded_bytes)
 
 
-    return 'http://127.0.0.1:5000/media/'+name
+        return 'http://127.0.0.1:5000/media/'+name
+    return ''
 
 def trim_to_first_dot(s):
     # Возвращаем подстроку до первого вхождения точки включительно
@@ -493,7 +503,7 @@ def show_one(id):
 
         return_data = []
         for row in result:
-            print(dict(row))
+            # print(dict(row))
             return_data.append(form_dict(dict(row)))
 
     except (Exception, Error) as error:
@@ -540,7 +550,7 @@ def form_dict(slovar):
     
     return form
 def mini(id):
-    return id[:10]
+    return id
 # ========================================================================================
 
 
@@ -566,12 +576,14 @@ def new_string():
 
 
 # Декоратор для обновления строки
-@app.route('/update-string', methods=['UPDATE'])
-def update_string():
+@app.route('/update-string', methods=['PUT'])
+def update_stringaaaaaaaaaaaaaaaaa():
     response_object = {'status': 'success'}
     post_data = request.get_json()
-
-    response_object['res'] = update_string(post_data.get().values(), post_data.get('id'))
+    post_data = post_data.get('body')
+    form = post_data.get('form')
+    xyi = post_data.get('xyi')
+    response_object['res'] = update_string(form, xyi,  post_data.get('id'))
 
     return jsonify(response_object)
 
@@ -614,13 +626,13 @@ def change():
 def checking():
     responce_object = {'status': 'success'}
 
-    if session.get('isAdmin') == True:
-        responce_object['isAdmin'] = True
-    elif not session.get('isAdmin'):
-        responce_object['isAdmin'] = False
+    if session.get('isAdmin') == 'True':
+        responce_object['isAdmin'] = 'True'
+    elif session.get('isAdmin') == 'False':
+        responce_object['isAdmin'] = 'False'
     else: 
         responce_object['isAdmin'] = 'Он никто'
-    
+    print(responce_object)
     return jsonify(responce_object)
 
 @app.route('/filtre', methods=['POST'])

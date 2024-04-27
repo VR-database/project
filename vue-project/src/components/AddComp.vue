@@ -78,13 +78,27 @@ export default {
     }
   },
   methods: {
+    async Check() {
+      let response = await axios.get(`/check`);
+      this.isAdmin = response.data.isAdmin;
+      if (this.isAdmin == 'True'){
+        this.getData();
+        this.routGet()
+      } else if (this.isAdmin == 'False'){
+        this.getData();
+        this.routGet()
+      }else {
+        this.$router.push('/login');
+      }
+    },
     check() {
-      if (false
-        // this.form.Code == '' || this.form.Fio == '' || this.form.Floor == '' || this.form.Age == '' ||
-        // this.form.NumberHistory == '' || this.form.Date1 == '' || this.form.Date2 == '' && this.form.Result == '' ||
-        // this.form.Diagnosis == '' ||
-        // this.form.Date3 == '' || this.form.NameOperation == '' || 
-        // this.form.Notes == ''
+      
+      if (
+        this.form.Code == '' || this.form.Fio == '' || this.form.Floor == '' || this.form.Age == '' ||
+        this.form.NumberHistory == '' || this.form.Date1 == '' || this.form.Date2 == '' && this.form.Result == '' ||
+        this.form.Diagnosis == '' ||
+        this.form.Date3 == '' || this.form.NameOperation == '' || 
+        this.form.Notes == ''
         ){
         this.status = 'Заполните все поля!'
 
