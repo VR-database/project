@@ -146,7 +146,7 @@ this.Content()
       let i = this.ritems.indexOf(id);
       if (i===-1){this.ritems.push(id);}
       else { this.ritems.splice(i, 1); }
-  
+      console.log(this.ritems)
     },
 
     ShowModal1(Diagnosis) {
