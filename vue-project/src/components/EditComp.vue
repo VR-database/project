@@ -94,7 +94,7 @@ export default {
         this.arr[0].Code == '' || this.arr[0].Fio == '' || this.arr[0].Floor == '' || this.arr[0].Age == '' ||
         this.arr[0].NumberHistory == '' || this.arr[0].Date1 == '' || this.arr[0].Date2 == '' && this.arr[0].Result == '' ||
         this.arr[0].Diagnosis == '' ||
-        this.arr[0].Date3 == '' || this.arr[0].NameOperation == ''.
+        this.arr[0].Date3 == '' || this.arr[0].NameOperation == '' ||
         this.arr[0].Notes == ''
         ) {
         this.status = 'Заполните все поля!'
@@ -363,26 +363,31 @@ export default {
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">ФГДС</label>
   <input type="file" class="form-control"  placeholder="ФГДС"  @change="convertFileFGDS">
+  <p class="mt-2"><a :href="arr[0].Fgds">Скачать</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">ФКС</label>
   <input type="file" class="form-control"  placeholder="ФКС" @change="convertFileFKS">
+  <p class="mt-2"><a :href="arr[0].Fks">Скачать</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Протокол СКТ</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" @change="convertFileCKT">
+  <p class="mt-2"><a :href="arr[0].Ckt">Скачать</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Протокол МРТ</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" @change="convertFileMRT">
+  <p class="mt-2"><a :href="arr[0].Mrt">Скачать</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Прочие исследования</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Исследования" @change="convertFileResearch">
+  <p class="mt-2"><a :href="arr[0].Research">Скачать</a></p>
     </div>
 
     <div class="mb-3">
@@ -400,47 +405,55 @@ export default {
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Протокол операции</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" @change="convertFileProtocol">
+  <p class="mt-2"><a :href="arr[0].Protocol">Скачать</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Фото (видео) препарата</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Фото, видео" @change="convertFileDrugVideo">
+  <p class="mt-2"><a :href="arr[0].DrugVideo">Скачать</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Гистологическое заключение</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Заключение" @change="convertFileGistolСonclusion">
+  <p class="mt-2"><a :href="arr[0].GistolСonclusion">Скачать</a></p>
     </div>
 
     <h4 class="mt-5 mb-3">Ссылки </h4>
     <div class="mb-3 mt-4">
   <label for="exampleFormControlInput1" class="form-label">Диск СКТ</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" @change="convertFileCktDisk">
+  <p class="mt-2"><a :href="arr[0].CktDisk">Скачать</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Диск МРТ</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileMrtDisk">
+  <p class="mt-2"><a :href="arr[0].MrtDisk">Скачать</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Построенная модель СТК</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileCtkModel">
+  <p class="mt-2"><a :href="arr[0].CtkModel">Скачать</a></p>
     </div>
 
     <div class="mb-3">
   <label for="eleFormControlInput1" class="form-label">Построенная модель МРТ</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" @change="convertFileMrtModel">
+  <p class="mt-2"><a :href="arr[0].MrtModel">Скачать</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Видео(фото) операции с ДР</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileOperationVideo">
+  <p class="mt-2"><a :href="arr[0].OperationVideo">Скачать</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Эффект предоперационного применения ДР(0/1)</label>
-  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileEffectOfUse1">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="0/1"  @change="convertFileEffectOfUse1">
     </div>
 
     <div class="mb-3">
