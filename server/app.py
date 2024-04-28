@@ -170,13 +170,15 @@ def update_string(info,xyi,  id):
                     print(key, xyi[key])
                     if key!='Note':
                         if xyi[key]!='':
-                            src = add_img(key, info[key], info['Fio'], xyi[key])
-
-                            info_for_db+=f", {key} = $${src}$$"
+                            if 'base64' in info[key]:
+                                src = add_img(key, info[key], info['Fio'], xyi[key])
+    
+                                info_for_db+=f", {key} = $${src}$$"
+                            else: info_for_db+=f", {key} = $${info[key]}$$"
                         else: 
                             info_for_db+=f", {key} = ''"
 
-                    else: info_for_db+=", 'rdfkek'"
+                    else: info_for_db+=", ''"
             else: 
                 info_for_db+=f" {key} = $${info[key]}$$"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
