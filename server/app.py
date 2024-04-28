@@ -105,9 +105,7 @@ def add_string(info):
                     if key=='CtkModel': print(1)
                     print(key, xyi[key])
                     if key!='Note':
-
-                        src = add_img(key, info[key], info['Fio'], xyi[key])
-
+                        src = add_img(key, info[key], info['Fio'], xyi[key], False)
                         info_for_db+=f", '{src}'"
                     else: info_for_db+=", 'rdfkek'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -159,19 +157,17 @@ def update_string(info,xyi,  id):
               'GistolConclusion': xyi['xyi15']
             }
         print(xyi)
-        print(info)
         for key in info:
             if key != 'Age':
                 if key not in dang_key:
                     info_for_db+=f", {key} = $${info[key]}$$"
                 else:
                     if key=='CtkModel': print(1)
-                    print(key)
-                    print(key, xyi[key])
+
                     if key!='Note':
                         if xyi[key]!='':
                             if 'base64' in info[key]:
-                                src = add_img(key, info[key], info['Fio'], xyi[key])
+                                src = add_img(key, info[key], info['Fio'], xyi[key], id)
     
                                 info_for_db+=f", {key} = $${src}$$"
                             else: info_for_db+=f", {key} = $${info[key]}$$"
@@ -183,7 +179,7 @@ def update_string(info,xyi,  id):
                 info_for_db+=f" {key} = $${info[key]}$$"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-        cursor.execute(f''' UPDATE patient 
+        cursor.execute(f''' UPDATE vr 
                        SET {info_for_db}
                        WHERE id=$${id}$$''')
         pg.commit()
@@ -431,8 +427,9 @@ def filtration(filters):
             return return_data
 
 # Добовление файла в папку
-def add_img(key, base, fio, name):
-    if base!='':
+def add_img(key, base, fio, name, isId):
+    print(isId, key, name)
+    if isId == False:
         base=base[base.find(',')+1:]
         decoded_bytes = base64.b64decode(base)
         name=key+'_'+fio+name
@@ -441,9 +438,19 @@ def add_img(key, base, fio, name):
         with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
             file.write(decoded_bytes)
 
-
         return 'http://127.0.0.1:5000/media/'+name
-    return ''
+    else:
+        d = show_one(isId)
+        print(1)
+        base=base[base.find(',')+1:]
+        d = d[0]
+        print(d)
+        name = d[key][d[key].find('m'):]
+        decoded_bytes = base64.b64decode(base)
+        with open(os.path.join(name), "wb") as file:
+            file.write(decoded_bytes)
+        return d[key]
+
 
 def trim_to_first_dot(s):
     # Возвращаем подстроку до первого вхождения точки включительно
@@ -550,6 +557,7 @@ def form_dict(slovar):
     }
     
     return form
+
 def mini(id):
     return id
 # ========================================================================================
@@ -584,7 +592,8 @@ def update_stringaaaaaaaaaaaaaaaaa():
     post_data = post_data.get('body')
     form = post_data.get('form')
     xyi = post_data.get('xyi')
-    response_object['res'] = update_string(form, xyi,  post_data.get('id'))
+    print(form)
+    response_object['res'] = update_string(form, xyi, form['id'])
 
     return jsonify(response_object)
 

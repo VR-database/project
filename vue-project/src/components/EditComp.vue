@@ -101,8 +101,8 @@ export default {
 
       } else {
         this.status = 'Данные занесены в таблицу.'
-        this.$router.push('/Table');
-        this.postData()
+        this.postData();
+        
       }
     },
     async postData() {
@@ -110,7 +110,7 @@ export default {
         body: {
           form: this.arr[0],
           xyi: this.xyi
-        }})
+        }});
     },
     async getData() {
       this.id = this.$route.query.id 
@@ -131,7 +131,7 @@ export default {
       const reader = new FileReader();
      
       reader.onload = () => {
-        this.form.CktDisk = reader.result;
+        this.arr[0].CktDisk = reader.result;
           console.log(this.xyi)
 
       };
@@ -145,8 +145,8 @@ export default {
       this.xyi.xyi2 = filename;
 
       reader.onload = () => {
-        this.form.MrtDisk = reader.result;
-        console.log(this.form.MrtDisk);
+        this.arr[0].MrtDisk = reader.result;
+        console.log(this.arr[0].MrtDisk);
 
       };
       reader.readAsDataURL(file);
@@ -158,8 +158,8 @@ export default {
       this.xyi.xyi3 = filename;
 
       reader.onload = () => {
-        this.form.CtkModel = reader.result;
-        console.log(this.form.CtkModel);
+        this.arr[0].CtkModel = reader.result;
+        console.log(this.arr[0].CtkModel);
 
       };
       reader.readAsDataURL(file);
@@ -171,7 +171,7 @@ export default {
       this.xyi.xyi4 = filename;
 
       reader.onload = () => {
-        this.form.MrtModel = reader.result;
+        this.arr[0].MrtModel = reader.result;
         console.log(reader.result);
 
       };
@@ -184,7 +184,7 @@ export default {
       this.xyi.xyi5 = filename;
 
       reader.onload = () => {
-        this.form.OperationVideo = reader.result;
+        this.arr[0].OperationVideo = reader.result;
         console.log(reader.result);
 
       };
@@ -198,7 +198,7 @@ export default {
       this.xyi.xyi6 = filename;
 
       reader.onload = () => {
-        this.form.EffectOfUse1 = reader.result;
+        this.arr[0].EffectOfUse1 = reader.result;
         console.log(reader.result);
 
       };
@@ -211,7 +211,7 @@ export default {
       this.xyi.xyi15 = filename;
 
       reader.onload = () => {
-        this.form.GistolСonclusion = reader.result;
+        this.arr[0].GistolСonclusion = reader.result;
         console.log(reader.result);
 
       };
@@ -224,7 +224,7 @@ export default {
       this.xyi.xyi8 = filename;
 
       reader.onload = () => {
-        this.form.Fgds = reader.result;
+        this.arr[0].Fgds = reader.result;
         console.log(reader.result);
 
       };
@@ -237,7 +237,7 @@ export default {
       this.xyi.xyi9 = filename;
 
       reader.onload = () => {
-        this.form.Fks = reader.result;
+        this.arr[0].Fks = reader.result;
         console.log(reader.result);
 
       };
@@ -250,7 +250,7 @@ export default {
       this.xyi.xyi12 = filename;
 
       reader.onload = () => {
-        this.form.Ckt = reader.result;
+        this.arr[0].Ckt = reader.result;
         console.log(reader.result);
 
       };
@@ -263,7 +263,7 @@ export default {
       this.xyi.xyi11 = filename;
 
       reader.onload = () => {
-        this.form.Mrt = reader.result;
+        this.arr[0].Mrt = reader.result;
         console.log(reader.result);
 
       };
@@ -276,7 +276,7 @@ export default {
       this.xyi.xyi13 = filename;
 
       reader.onload = () => {
-        this.form.Protocol = reader.result;
+        this.arr[0].Protocol = reader.result;
         console.log(reader.result);
 
       };
@@ -289,7 +289,7 @@ export default {
       this.xyi.xyi14 = filename;
 
       reader.onload = () => {
-        this.form.DrugVideo = reader.result;
+        this.arr[0].DrugVideo = reader.result;
         console.log(reader.result);
 
       };
