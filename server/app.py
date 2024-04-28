@@ -401,7 +401,7 @@ def filtration(filters):
                         filtr += f' AND {i}=$${filters[i]}$$'
     else: return show_all()
     try:
-        pg = psycopg2.con.form.xyinect(f"""
+        pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
             user=postgres
