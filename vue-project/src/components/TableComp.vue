@@ -165,7 +165,7 @@ this.Content()
       this.ShowMod = !this.ShowMod
       this.item = OperationVideo;
       console.log(this.item)
-      if (this.item.includes('.jpg') || this.item.includes('.png')) {
+      if (this.item.includes('.jpg') || this.item.includes('.png') || this.item.includes('.jpeg')) {
         this.textbool = false;
         this.itemPhoto = true;
         this.itemVideo = false;
@@ -185,7 +185,7 @@ this.Content()
     ShowModal4(DrugVideo) {
       this.ShowMod = !this.ShowMod
       this.item = DrugVideo;
-      if (this.item.includes('.jpg') || this.item.includes('.png')){
+      if (this.item.includes('.jpg') || this.item.includes('.png') || this.item.includes('.jpeg')){
         this.textbool = false;
         this.itemPhoto = true;
         this.itemVideo = false;
@@ -199,7 +199,7 @@ this.Content()
     ShowModal5(CktDisk) {
       this.ShowMod = !this.ShowMod
       this.item = CktDisk;
-      if (this.item.includes('.jpg') || this.item.includes('.png') ) {
+      if (this.item.includes('.jpg') || this.item.includes('.png') || this.item.includes('.jpeg') ) {
         this.textbool = false;
         this.itemPhoto = true;
         this.itemVideo = false;
@@ -213,7 +213,7 @@ this.Content()
     ShowModal6(MrtDisk) {
       this.ShowMod = !this.ShowMod
       this.item = MrtDisk;
-      if (this.item.includes('.jpg') || this.item.includes('.png')) {
+      if (this.item.includes('.jpg') || this.item.includes('.png') || this.item.includes('.jpeg')) {
         this.textbool = false;
         this.itemPhoto = true;
         this.itemVideo = false;

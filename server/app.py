@@ -385,14 +385,12 @@ def file_from_db():
 
 # ФИЛЬТРЫ
 def filtration(filters):
-    
     if filters['filtr']!='false':
         if not filters['filtr']:
             filtr = ''
         elif filters["filtr"]:
             filtr = ' WHERE'
             for i in filters:
-                print(filters[i])
                 if filters[i] != 'false':
                     if i == 'filtr':
                         continue
