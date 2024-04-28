@@ -226,7 +226,7 @@ this.Content()
     },
     async filtre(){
       
-      if (this.fil.code=='' && this.fil.gender=='' && this.fil.gender==''){
+      if (this.fil.code=='false' && this.fil.gender=='false' && this.fil.gender=='false'){
         this.filters = {
           filtr: false
         }

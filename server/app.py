@@ -385,6 +385,7 @@ def file_from_db():
 
 # ФИЛЬТРЫ
 def filtration(filters):
+    
     if filters['filtr']!='false':
         if not filters['filtr']:
             filtr = ''
