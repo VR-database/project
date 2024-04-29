@@ -321,63 +321,6 @@ def new_pass(pas, Admin):
                 print("Соединение с PostgreSQL закрыто")
                 return return_data
 
-# Добовление файла в дб
-def file_to_db(base: str):
-    try: 
-        pg = psycopg2.connect(f"""
-            host=localhost
-            dbname=postgres
-            user=postgres
-            password={os.getenv('PASSWORD_PG')}
-            port={os.getenv('PORT_PG')}
-        """)
-
-
-        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute(f"INSERT INTO ggg VALUES('{base}', decode('{base}', 'base64'))")
-        pg.commit()
-        cursor.close
-        pg.close
-    except (Exception, Error) as error:
-        print(f'DB ERROR: ', error)
-        return_data = f"Ошибка обращения к базе данных: {error}" 
-
-    finally:
-        if pg:
-            cursor.close
-            pg.close
-            print("Соединение с PostgreSQL закрыто")
-            return return_data
-
-# Получение файла из дб
-def file_from_db():
-    try:
-        pg = psycopg2.connect(f"""
-            host=localhost
-            dbname=postgres
-            user=postgres
-            password={os.getenv('PASSWORD_PG')}
-            port={os.getenv('PORT_PG')}
-        """)
-
-        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute("SELECT * from ggg")
-        to_encode = bytes(cursor.fetchall()[1][1])
-        base64_bytes = base64.b64encode(to_encode)
-        return_data = base64_bytes
-        with open("bb.txt", "w") as f:
-            f.write(base64_bytes.decode())
-
-    except (Exception, Error) as error:
-        print(f'DB ERROR: ', error)
-        return_data = f"Ошибка обращения к базе данных: {error}" 
-
-    finally:
-        if pg:
-            cursor.close
-            pg.close
-            print("Соединение с PostgreSQL закрыто")
-            return return_data
 
 # ФИЛЬТРЫ
 def filtration(filters):
