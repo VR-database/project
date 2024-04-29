@@ -77,7 +77,8 @@ def add_string(info):
         """)
 
         dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'Protocol']
-        info_for_db = f"'{mini(uuid.uuid4().hex)}'"
+        id = uuid.uuid4().hex
+        info_for_db = f"'{id}'"
         xyi= {
               'CktDisk': info['xyi']['xyi1'],
               'MrtDisk': info['xyi']['xyi2'],
@@ -105,7 +106,7 @@ def add_string(info):
                     if key=='CtkModel': print(1)
                     print(key, xyi[key])
                     if key!='Note':
-                        src = add_img(key, info[key], info['Fio'], xyi[key], False)
+                        src = add_img(key, info[key], info['Fio'], xyi[key], False, id)
                         info_for_db+=f", '{src}'"
                     else: info_for_db+=", 'rdfkek'"
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -167,7 +168,7 @@ def update_string(info,xyi,  id):
                     if key!='Note':
                         if xyi[key]!='':
                             if 'base64' in info[key]:
-                                src = add_img(key, info[key], info['Fio'], xyi[key], id)
+                                src = add_img(key, info[key], info['Fio'], xyi[key], True, id)
     
                                 info_for_db+=f", {key} = $${src}$$"
                             else: info_for_db+=f", {key} = $${info[key]}$$"
@@ -370,12 +371,13 @@ def filtration(filters):
             return return_data
 
 # Добовление файла в папку
-def add_img(key, base, fio, name, isId):
+def add_img(key, base, fio, name, isId, id):
     print(isId, key, name)
     if isId == False:
         base=base[base.find(',')+1:]
         decoded_bytes = base64.b64decode(base)
-        name=key+'_'+fio+name
+        name = name[name.find('.'):]
+        name=key+'_'+id+name
         print(name)
 
         with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
@@ -384,7 +386,6 @@ def add_img(key, base, fio, name, isId):
         return 'http://127.0.0.1:5000/media/'+name
     else:
         d = show_one(isId)
-        print(1)
         base=base[base.find(',')+1:]
         d = d[0]
         print(d)
