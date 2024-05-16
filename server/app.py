@@ -32,7 +32,58 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s",
     datefmt="%Y—%m—%d %H:%M:%S",
 )
+def all_tables():
+    pg = psycopg2.connect(f"""
+        host=localhost
+        dbname=postgres
+        user={USER_PG}
+        password={PASSWORD_PG}
+        port={os.getenv('PORT_PG')}
+    """)
+    cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cursor.execute('''CREATE TABLE IF NOT EXIST vr (
+                        id text,
+                        Code text,
+                        Fio text,
+                        Floor text,
+                        Age text,
+                        NumberHistory text,
+                        Date1 text,
+                        Date2 text,
+                        Result text,
+                        Diagnosis text,
+                        Date3 text,
+                        NameOperation text,
+                        CktDisk text,
+                        MrtDisk text,
+                        CktModel text,
+                        MrtModel text,
+                        OperationVideo text,
+                        EffectOfUse1 text,
+                        Notes text,
 
+
+
+                        Fgds text,
+                        Fks text,
+                        Ckt text,
+                        Mrt text,
+                        Research text,
+                        Protocol text,
+                        DrugVideo text,
+                        GistolСonclusion text
+                        )
+                        ''')
+    
+    pg.commit()
+
+    cursor.execute('''CREATE TABLE IF NOT EXIST admins (
+                        admin_pass text,
+                        person_pass text
+                        )''')
+    cursor.close
+    pg.close
+    logging.info("Соединение с PostgreSQL закрыто")
 # Логин  
 def login_user(pas):
     try:
@@ -641,4 +692,5 @@ def one():
 
 #БаZа
 if __name__ == '__main__':
+      all_tables()
       app.run(host='0.0.0.0', port=80)
