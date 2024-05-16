@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  vue_app:
+    build:
+      context: ./vue-project
+      dockerfile: Dockerfile
+    container_name: vue-app
+    ports:
+      - "8080:3000"
+    networks:
+      - netw
+    volumes:
+      - ./dist:/dist
+
+  flask-app:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: flask-app
+    ports: 
+      - "8081:80"
+    networks:
+      - netw
+    environment:
+      - PASSWORD_PG=password
+      - PORT_PG=5432
+  
+  postgres-db:
+    image: postgres:latest
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    network_mode: "host"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+networks:
+  netw:
+    driver: bridge
+
+volumes:
+  postgres-data:
