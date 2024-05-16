@@ -7,6 +7,7 @@ from flask_cors import CORS
 import base64
 import io
 from dotenv import load_dotenv
+import logging
 
 # .env
 load_dotenv()
@@ -23,8 +24,14 @@ app.config['PERMANENT_SESSION_LIFETIME'] = 3600 * 24
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = "None"
 
-CORS(app, resources={r"*": {"origins": "http://localhost:5173", 'supports_credentials': True}})
+CORS(app, resources={r"*": {"origins": "*", 'supports_credentials': True}})
 MEDIA_FOLDER = os.getenv('MEDIA')
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s %(message)s",
+    datefmt="%Y—%m—%d %H:%M:%S",
+)
 
 # Логин  
 def login_user(pas):
@@ -40,7 +47,7 @@ def login_user(pas):
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         cursor.execute(f'SELECT * FROM admins')
-        print(pas)
+        logging.info(pas)
 
         password = cursor.fetchall()
 
@@ -49,7 +56,7 @@ def login_user(pas):
         for row in password:
             passwords.append(dict(row))
         pg.commit()
-        print(passwords)
+        logging.info(passwords)
         if pas==passwords[0]['admin_pass']: 
             return_data = True
             session['isAdmin'] = 'True'
@@ -59,7 +66,7 @@ def login_user(pas):
         else: 
             return_data = "Неверный пароль!"
     except (Exception, Error) as error:
-        print(f'DB ERROR: ', error)
+        logging.error(f'DB ERROR: ', error)
         return_data = 'ошибка дб'
 
 
@@ -67,7 +74,7 @@ def login_user(pas):
         if pg:
             cursor.close
             pg.close
-            print("Соединение с PostgreSQL закрыто")
+            logging.info("Соединение с PostgreSQL закрыто")
             return return_data
 
 # Добавление строчки
@@ -101,15 +108,15 @@ def add_string(info):
               'DrugVideo': info['xyi']['xyi14'],
               'GistolConclusion': info['xyi']['xyi15']
             }
-        print(xyi)
+        logging.info(xyi)
 
         for key in info:
             if key != 'xyi':
                 if key not in dang_key:
                     info_for_db+=f", '{info[key]}'"
                 else:
-                    if key=='CtkModel': print(1)
-                    print(key, xyi[key])
+                    if key=='CtkModel': logging.info(1)
+                    logging.info(key, xyi[key])
                     if key!='Note':
                         src = add_img(key, info[key], info['Fio'], xyi[key], False, id)
                         info_for_db+=f", '{src}'"
@@ -121,7 +128,7 @@ def add_string(info):
         return_data = 'Иформация добавлена'
 
     except (Exception, Error) as error:
-        print(f'DB ERROR: ', error)
+        logging.error(f'DB ERROR: ', error)
         return_data = f"Ошибка обращения к базе данных: {error}"
         return 0
 
@@ -129,7 +136,7 @@ def add_string(info):
         if pg:
             cursor.close
             pg.close
-            print("Соединение с PostgreSQL закрыто")
+            logging.info("Соединение с PostgreSQL закрыто")
             return return_data
 
 # Обновление строчки
@@ -162,13 +169,13 @@ def update_string(info,xyi,  id):
               'DrugVideo': xyi['xyi14'],
               'GistolConclusion': xyi['xyi15']
             }
-        print(xyi)
+        logging.info(xyi)
         for key in info:
             if key != 'Age':
                 if key not in dang_key:
                     info_for_db+=f", {key} = $${info[key]}$$"
                 else:
-                    if key=='CtkModel': print(1)
+                    if key=='CtkModel': logging.info(1)
 
                     if key!='Note':
                         if xyi[key]!='':
@@ -193,14 +200,14 @@ def update_string(info,xyi,  id):
         return_data = 'Иформация обновлена'
 
     except (Exception, Error) as error:
-        print(f'DB ERROR: ', error)
+        logging.error(f'DB ERROR: ', error)
         return_data = f"Ошибка обращения к базе данных: {error}" 
 
     finally:
         if pg:
             cursor.close
             pg.close
-            print("Соединение с PostgreSQL закрыто")
+            logging.info("Соединение с PostgreSQL закрыто")
             return return_data
 
 # удаление строчки
@@ -222,14 +229,14 @@ def delete_string(ids):
         pg.commit()
         return_data = 'Success'
     except (Exception, Error) as error:
-        print(f'DB ERROR: ', error)
+        logging.error(f'DB ERROR: ', error)
         return_data = f"Ошибка обращения к базе данных: {error}" 
 
     finally:
         if pg:
             cursor.close
             pg.close
-            print("Соединение с PostgreSQL закрыто")
+            logging.info("Соединение с PostgreSQL закрыто")
             return return_data
 
 # Проверка пароля
@@ -245,12 +252,12 @@ def pass_check(pas, Admin):
             """)
 
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
-            print(pas)
+            logging.info(pas)
             cursor.execute(f'''SELECT COUNT(*) FROM admins 
                                         WHERE admin_pass=$${pas}$$
                                         ''')
             isTrue = cursor.fetchall()
-            print(isTrue)
+            logging.info(isTrue)
             if isTrue[0][0] == 1:
                 return_data = True
             else: return_data = False
@@ -258,14 +265,14 @@ def pass_check(pas, Admin):
 
 
         except (Exception, Error) as error:
-            print(f'DB ERROR: ', error)
+            logging.error(f'DB ERROR: ', error)
             return_data = f"Ошибка обращения к базе данных: {error}" 
 
         finally:
             if pg:
                 cursor.close
                 pg.close
-                print("Соединение с PostgreSQL закрыто")
+                logging.info("Соединение с PostgreSQL закрыто")
                 return return_data
     
 # Смена пароля
@@ -288,14 +295,14 @@ def new_pass(pas, Admin):
             pg.commit()
 
         except (Exception, Error) as error:
-            print(f'DB ERROR: ', error)
+            logging.error(f'DB ERROR: ', error)
             return_data = f"Ошибка обращения к базе данных: {error}" 
 
         finally:
             if pg:
                 cursor.close
                 pg.close
-                print("Соединение с PostgreSQL закрыто")
+                logging.info("Соединение с PostgreSQL закрыто")
                 return return_data
     
     else:
@@ -317,14 +324,14 @@ def new_pass(pas, Admin):
 
 
         except (Exception, Error) as error:
-            print(f'DB ERROR: ', error)
+            logging.error(f'DB ERROR: ', error)
             return_data = f"Ошибка обращения к базе данных: {error}" 
 
         finally:
             if pg:
                 cursor.close
                 pg.close
-                print("Соединение с PostgreSQL закрыто")
+                logging.info("Соединение с PostgreSQL закрыто")
                 return return_data
 
 
@@ -356,7 +363,7 @@ def filtration(filters):
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
 
-        print(filtr)
+        logging.info(filtr)
         cursor.execute(f"SELECT * FROM vr{filtr}")
         result = cursor.fetchall()
         pg.commit()
@@ -365,25 +372,25 @@ def filtration(filters):
             return_data.append(form_dict(dict(row)))
 
     except (Exception, Error) as error:
-        print(f"Ошибка получения данных: {error}")
+        logging.info(f"Ошибка получения данных: {error}")
         return_data = 'Error'
 
     finally:
         if pg:
             cursor.close
             pg.close
-            print("Соединение с PostgreSQL закрыто")
+            logging.info("Соединение с PostgreSQL закрыто")
             return return_data
 
 # Добовление файла в папку
 def add_img(key, base, fio, name, isId, id):
-    print(isId, key, name)
+    logging.info(isId, key, name)
     if isId == False:
         base=base[base.find(',')+1:]
         decoded_bytes = base64.b64decode(base)
         name = name[name.find('.'):]
         name=key+'_'+id+name
-        print(name)
+        logging.info(name)
 
         with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
             file.write(decoded_bytes)
@@ -393,7 +400,7 @@ def add_img(key, base, fio, name, isId, id):
         d = show_one(isId)
         base=base[base.find(',')+1:]
         d = d[0]
-        print(d)
+        logging.info(d)
         name = d[key][d[key].find('m'):]
         decoded_bytes = base64.b64decode(base)
         with open(os.path.join(name), "wb") as file:
@@ -429,14 +436,14 @@ def show_all():
             return_data.append(form_dict(dict(row)))
 
     except (Exception, Error) as error:
-        print(f"Ошибка получения данных: {error}")
+        logging.info(f"Ошибка получения данных: {error}")
         return_data = 'Error'
 
     finally:
         if pg:
             cursor.close
             pg.close
-            print("Соединение с PostgreSQL закрыто")
+            logging.info("Соединение с PostgreSQL закрыто")
             return return_data
         
 # показ одной строки
@@ -449,7 +456,7 @@ def show_one(id):
             password={PASSWORD_PG}
             port={os.getenv('PORT_PG')}
         """)
-        print(id)
+        logging.info(id)
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
         pg.commit()
@@ -460,18 +467,18 @@ def show_one(id):
 
         return_data = []
         for row in result:
-            # print(dict(row))
+            # logging.info(dict(row))
             return_data.append(form_dict(dict(row)))
 
     except (Exception, Error) as error:
-        print(f"Ошибка получения данных: {error}")
+        logging.info(f"Ошибка получения данных: {error}")
         return_data = 'Error'
 
     finally:
         if pg:
             cursor.close
             pg.close
-            print("Соединение с PostgreSQL закрыто")
+            logging.info("Соединение с PostgreSQL закрыто")
             return return_data
         
 def form_dict(slovar):
@@ -541,7 +548,7 @@ def update_stringaaaaaaaaaaaaaaaaa():
     post_data = post_data.get('body')
     form = post_data.get('form')
     xyi = post_data.get('xyi')
-    print(form)
+    logging.info(form)
     response_object['res'] = update_string(form, xyi, form['id'])
 
     return jsonify(response_object)
@@ -552,7 +559,7 @@ def update_stringaaaaaaaaaaaaaaaaa():
 def del_srt():
     responce_object = {'status' : 'success'}
     post_data = request.get_json()
-    print(post_data)
+    logging.info(post_data)
     responce_object['res'] = delete_string(post_data.get('id'))
 
     return jsonify(responce_object)
@@ -575,7 +582,7 @@ def change():
     # Иначе возращаем, что пароль неверный
     else: responce_object['res'] = 'Неверный пороль'
     
-    print(responce_object['res'])
+    logging.info(responce_object['res'])
 
     return jsonify(responce_object)
 
@@ -591,7 +598,7 @@ def checking():
         responce_object['isAdmin'] = 'False'
     else: 
         responce_object['isAdmin'] = 'Он никто'
-    print(responce_object)
+    logging.info(responce_object)
     return jsonify(responce_object)
 
 @app.route('/filtre', methods=['POST'])
@@ -609,13 +616,13 @@ def shows():
     responce_object = {'status': 'success'}
 
     responce_object['all'] = show_all()
-    # print(responce_object['all'])
+    # logging.info(responce_object['all'])
     return jsonify(responce_object)
 
 @app.route('/media/<path:filename>')
 def serve_file(filename):
     path = filename
-    print(MEDIA_FOLDER+path)
+    logging.info(MEDIA_FOLDER+path)
     if not os.path.exists('{}/{}'.format(MEDIA_FOLDER, '/'+filename)):
         return jsonify({'error': 'File not found'}), 404
 
