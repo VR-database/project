@@ -8,12 +8,17 @@ import base64
 import io
 from dotenv import load_dotenv
 
+# .env
 load_dotenv()
+
+PASSWORD_PG = os.getenv('PASSWORD_PG')
+USER_PG = os.getenv('USER_PG')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SetUp
 app = Flask(__name__)
 
-app.secret_key = os.getenv('PASSWORD_PG')
+app.secret_key = SECRET_KEY
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600 * 24
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = "None"
@@ -27,8 +32,8 @@ def login_user(pas):
         pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
-            user=postgres
-            password={os.getenv('PASSWORD_PG')}
+            user={USER_PG}
+            password={PASSWORD_PG}
             port={os.getenv('PORT_PG')}
         """)
          
@@ -71,8 +76,8 @@ def add_string(info):
         pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
-            user=postgres
-            password={os.getenv('PASSWORD_PG')}
+            user={USER_PG}
+            password={PASSWORD_PG}
             port={os.getenv('PORT_PG')}
         """)
 
@@ -133,8 +138,8 @@ def update_string(info,xyi,  id):
         pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
-            user=postgres
-            password={os.getenv('PASSWORD_PG')}
+            user={USER_PG}
+            password={PASSWORD_PG}
             port={os.getenv('PORT_PG')}
         """)
 
@@ -204,8 +209,8 @@ def delete_string(ids):
         pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
-            user=postgres
-            password={os.getenv('PASSWORD_PG')}
+            user={USER_PG}
+            password={PASSWORD_PG}
             port={os.getenv('PORT_PG')}
         """)
 
@@ -234,8 +239,8 @@ def pass_check(pas, Admin):
             pg = psycopg2.connect(f"""                
                 host=localhost
                 dbname=postgres
-                user=postgres
-                password={os.getenv('PASSWORD_PG')}               
+                user={USER_PG}
+                password={PASSWORD_PG}               
                 port={os.getenv('PORT_PG')}
             """)
 
@@ -270,8 +275,8 @@ def new_pass(pas, Admin):
             pg = psycopg2.connect(f"""
                 host=localhost
                 dbname=postgres
-                user=postgres
-                password={os.getenv('PASSWORD_PG')}               
+                user={USER_PG}
+                password={PASSWORD_PG}               
                 port={os.getenv('PORT_PG')}
             """)
 
@@ -298,8 +303,8 @@ def new_pass(pas, Admin):
             pg = psycopg2.connect(f"""
                 host=localhost
                 dbname=postgres
-                user=postgres
-                password={os.getenv('PASSWORD_PG')}               
+                user={USER_PG}
+                password={PASSWORD_PG}               
                 port={os.getenv('PORT_PG')}
             """)
 
@@ -343,8 +348,8 @@ def filtration(filters):
         pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
-            user=postgres
-            password={os.getenv('PASSWORD_PG')}
+            user={USER_PG}
+            password={PASSWORD_PG}
             port={os.getenv('PORT_PG')}
         """)
 
@@ -406,8 +411,8 @@ def show_all():
         pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
-            user=postgres
-            password={os.getenv('PASSWORD_PG')}
+            user={USER_PG}
+            password={PASSWORD_PG}
             port={os.getenv('PORT_PG')}
         """)
 
@@ -440,8 +445,8 @@ def show_one(id):
         pg = psycopg2.connect(f"""
             host=localhost
             dbname=postgres
-            user=postgres
-            password={os.getenv('PASSWORD_PG')}
+            user={USER_PG}
+            password={PASSWORD_PG}
             port={os.getenv('PORT_PG')}
         """)
         print(id)
