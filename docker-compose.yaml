@@ -1,6 +1,13 @@
 version: '3.8'
 
 services:
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 1234:8080
+    networks:
+      - netw
   vue_app:
     build:
       context: ./vue-project
@@ -48,3 +55,4 @@ networks:
 
 volumes:
   postgres-data:
+
