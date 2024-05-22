@@ -25,17 +25,20 @@ services:
     environment:
       - PASSWORD_PG=password
       - PORT_PG=5432
+      - HOST_PG=postgres-db
+      - USER_PG=postgres
   
   postgres-db:
     image: postgres:latest
     container_name: postgres-db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      USER_PG: postgres
+      PASSWORD_PG: password
       POSTGRES_DB: postgres
     ports:
-      - "5432:5432"
-    network_mode: "host"
+      - "5433:5432"
+    networks:
+      - netw
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
