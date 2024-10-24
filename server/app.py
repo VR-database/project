@@ -8,21 +8,42 @@ import base64
 import io
 from dotenv import load_dotenv
 import logging
-
+# mMe3qeQn hfdhjdj
 # .env
 load_dotenv()
 
 PASSWORD_PG = os.getenv('PASSWORD_PG')
 USER_PG = os.getenv('USER_PG')
 SECRET_KEY = os.getenv('SECRET_KEY')
+HOST_PG = os.getenv('HOST_PG')
+PORT_PG = os.getenv('PORT_PG')
+
 
 # SetUp
 app = Flask(__name__)
 
 app.secret_key = SECRET_KEY
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600 * 24
-app.config["SESSION_COOKIE_SAMESITE"] = "None"
+app.config['MAX_CONTENT_LENGTH'] = 1000 * 1024 * 1024 * 20   # 20000 Mb limit
+# app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["SESSION_COOKIE_SECURE"] = "None"
+app.config.update(
+    SESSION_COOKIE_SECURE=False,
+    SESSION_COOKIE_HTTPONLY=True
+)
+
+try:
+    pg = psycopg2.connect(f"""
+            host={HOST_PG}
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={PORT_PG}
+        """)
+except (Exception, Error) as error:
+    logging.error(f'DB: ', error)
+
+
 
 CORS(app, resources={r"*": {"origins": "*", 'supports_credentials': True}})
 MEDIA_FOLDER = os.getenv('MEDIA')
@@ -32,14 +53,32 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s",
     datefmt="%Y—%m—%d %H:%M:%S",
 )
+
+
+@app.route('/api', methods=['GET'])
+def api():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden", "origin": request.origin}), 403
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    return jsonify(message="Hello from API!")
+
 def all_tables():
     pg = psycopg2.connect(f"""
-        host=localhost
+        host={HOST_PG}
         dbname=postgres
         user={USER_PG}
         password={PASSWORD_PG}
-        port={os.getenv('PORT_PG')}
+        port={PORT_PG}
     """)
+    
+    pg = psycopg2.connect(f"""
+            host={HOST_PG}
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={PORT_PG}
+        """)
     cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cursor.execute('''CREATE TABLE IF NOT EXISTS vr (
                         id text,
@@ -75,26 +114,29 @@ def all_tables():
                         )
                         ''')
     
-    pg.commit()
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS admins (
                         admin_pass text,
                         person_pass text
                         )''')
+    cursor.execute('''INSERT INTO admins (admin_pass, person_pass)
+                        SELECT '1', '2'
+                        WHERE NOT EXISTS (SELECT 1 FROM admins);''')
+    pg.commit()
     cursor.close
     pg.close
     logging.info("Соединение с PostgreSQL закрыто")
 # Логин  
 def login_user(pas):
-    try:
+    try:         
+        
         pg = psycopg2.connect(f"""
-            host=localhost
+            host={HOST_PG}
             dbname=postgres
             user={USER_PG}
             password={PASSWORD_PG}
-            port={os.getenv('PORT_PG')}
+            port={PORT_PG}
         """)
-         
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         cursor.execute(f'SELECT * FROM admins')
@@ -111,34 +153,24 @@ def login_user(pas):
         if pas==passwords[0]['admin_pass']: 
             return_data = True
             session['isAdmin'] = 'True'
+            session.modified = True
+            session.permanent = True
         elif pas==passwords[0]['person_pass']: 
             return_data = False
             session['isAdmin'] = 'False'
+            session.permanent = True
+            session.modified = True
+
         else: 
             return_data = "Неверный пароль!"
     except (Exception, Error) as error:
         logging.error(f'DB ERROR: ', error)
         return_data = 'ошибка дб'
-
-
     finally:
-        if pg:
-            cursor.close
-            pg.close
-            logging.info("Соединение с PostgreSQL закрыто")
-            return return_data
-
+        return return_data
 # Добавление строчки
 def add_string(info):
     try: 
-        pg = psycopg2.connect(f"""
-            host=localhost
-            dbname=postgres
-            user={USER_PG}
-            password={PASSWORD_PG}
-            port={os.getenv('PORT_PG')}
-        """)
-
         dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'Protocol']
         id = uuid.uuid4().hex
         info_for_db = f"'{id}'"
@@ -167,11 +199,19 @@ def add_string(info):
                     info_for_db+=f", '{info[key]}'"
                 else:
                     if key=='CtkModel': logging.info(1)
-                    logging.info(key, xyi[key])
+                    # logging.info(key, xyi[key])
                     if key!='Note':
                         src = add_img(key, info[key], info['Fio'], xyi[key], False, id)
                         info_for_db+=f", '{src}'"
                     else: info_for_db+=", 'rdfkek'"
+        
+        pg = psycopg2.connect(f"""
+            host={HOST_PG}
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={PORT_PG}
+        """)
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cursor.execute(f'INSERT INTO vr VALUES({info_for_db})')
         pg.commit()
@@ -184,23 +224,10 @@ def add_string(info):
         return 0
 
     finally:
-        if pg:
-            cursor.close
-            pg.close
-            logging.info("Соединение с PostgreSQL закрыто")
-            return return_data
-
+        return return_data
 # Обновление строчки
 def update_string(info,xyi,  id):
     try: 
-        pg = psycopg2.connect(f"""
-            host=localhost
-            dbname=postgres
-            user={USER_PG}
-            password={PASSWORD_PG}
-            port={os.getenv('PORT_PG')}
-        """)
-
         dang_key = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'Protocol']
         info_for_db = ""
         xyi= {
@@ -220,7 +247,7 @@ def update_string(info,xyi,  id):
               'DrugVideo': xyi['xyi14'],
               'GistolConclusion': xyi['xyi15']
             }
-        logging.info(xyi)
+        # logging.info(xyi)
         for key in info:
             if key != 'Age':
                 if key not in dang_key:
@@ -230,17 +257,29 @@ def update_string(info,xyi,  id):
 
                     if key!='Note':
                         if xyi[key]!='':
+                            logging.info('base64' in info[key], key)
                             if 'base64' in info[key]:
+                                logging.info(key)
+                                print(key, info['Fio'], xyi[key], True, id)
                                 src = add_img(key, info[key], info['Fio'], xyi[key], True, id)
     
                                 info_for_db+=f", {key} = $${src}$$"
-                            else: info_for_db+=f", {key} = $${info[key]}$$"
-                        else: 
-                            info_for_db+=f", {key} = ''"
+                                continue
+                            info_for_db+=f", {key} = $${info[key]}$$"
+                            continue
+                        info_for_db+=f", {key} = $${info[key]}$$"
 
                     else: info_for_db+=", ''"
             else: 
                 info_for_db+=f" {key} = $${info[key]}$$"
+        
+        pg = psycopg2.connect(f"""
+            host={HOST_PG}
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={PORT_PG}
+        """)
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         cursor.execute(f''' UPDATE vr 
@@ -255,23 +294,18 @@ def update_string(info,xyi,  id):
         return_data = f"Ошибка обращения к базе данных: {error}" 
 
     finally:
-        if pg:
-            cursor.close
-            pg.close
-            logging.info("Соединение с PostgreSQL закрыто")
-            return return_data
-
+        return return_data
 # удаление строчки
 def delete_string(ids):
     try: 
+        
         pg = psycopg2.connect(f"""
-            host=localhost
+            host={HOST_PG}
             dbname=postgres
             user={USER_PG}
             password={PASSWORD_PG}
-            port={os.getenv('PORT_PG')}
+            port={PORT_PG}
         """)
-
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         for id in ids:
             cursor.execute(f'''DELETE FROM vr
@@ -284,24 +318,19 @@ def delete_string(ids):
         return_data = f"Ошибка обращения к базе данных: {error}" 
 
     finally:
-        if pg:
-            cursor.close
-            pg.close
-            logging.info("Соединение с PostgreSQL закрыто")
-            return return_data
-
+        return return_data
 # Проверка пароля
 def pass_check(pas, Admin): 
     if Admin:
         try: 
-            pg = psycopg2.connect(f"""                
-                host=localhost
-                dbname=postgres
-                user={USER_PG}
-                password={PASSWORD_PG}               
-                port={os.getenv('PORT_PG')}
-            """)
-
+            
+            pg = psycopg2.connect(f"""
+            host={HOST_PG}
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={PORT_PG}
+        """)
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
             logging.info(pas)
             cursor.execute(f'''SELECT COUNT(*) FROM admins 
@@ -320,24 +349,20 @@ def pass_check(pas, Admin):
             return_data = f"Ошибка обращения к базе данных: {error}" 
 
         finally:
-            if pg:
-                cursor.close
-                pg.close
-                logging.info("Соединение с PostgreSQL закрыто")
-                return return_data
+            return return_data
     
 # Смена пароля
 def new_pass(pas, Admin):
     if Admin:
         try: 
+            
             pg = psycopg2.connect(f"""
-                host=localhost
-                dbname=postgres
-                user={USER_PG}
-                password={PASSWORD_PG}               
-                port={os.getenv('PORT_PG')}
-            """)
-
+            host={HOST_PG}
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={PORT_PG}
+        """)
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
             cursor.execute(f'''UPDATE admins 
@@ -354,18 +379,18 @@ def new_pass(pas, Admin):
                 cursor.close
                 pg.close
                 logging.info("Соединение с PostgreSQL закрыто")
-                return return_data
+            return return_data
     
     else:
         try: 
+            
             pg = psycopg2.connect(f"""
-                host=localhost
-                dbname=postgres
-                user={USER_PG}
-                password={PASSWORD_PG}               
-                port={os.getenv('PORT_PG')}
-            """)
-
+            host={HOST_PG}
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={PORT_PG}
+        """)
             cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
             cursor.execute(f'''UPDATE admins 
@@ -379,11 +404,7 @@ def new_pass(pas, Admin):
             return_data = f"Ошибка обращения к базе данных: {error}" 
 
         finally:
-            if pg:
-                cursor.close
-                pg.close
-                logging.info("Соединение с PostgreSQL закрыто")
-                return return_data
+            return return_data
 
 
 # ФИЛЬТРЫ
@@ -403,14 +424,14 @@ def filtration(filters):
                         filtr += f' AND {i}=$${filters[i]}$$'
     else: return show_all()
     try:
+        
         pg = psycopg2.connect(f"""
-            host=localhost
+            host={HOST_PG}
             dbname=postgres
             user={USER_PG}
             password={PASSWORD_PG}
-            port={os.getenv('PORT_PG')}
+            port={PORT_PG}
         """)
-
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
 
@@ -427,36 +448,42 @@ def filtration(filters):
         return_data = 'Error'
 
     finally:
-        if pg:
-            cursor.close
-            pg.close
-            logging.info("Соединение с PostgreSQL закрыто")
-            return return_data
+        return return_data
 
 # Добовление файла в папку
 def add_img(key, base, fio, name, isId, id):
-    logging.info(isId, key, name)
-    if isId == False:
-        base=base[base.find(',')+1:]
-        decoded_bytes = base64.b64decode(base)
-        name = name[name.find('.'):]
-        name=key+'_'+id+name
-        logging.info(name)
+    print(id, key, name)
+    if base!='':
+        if isId == False:
+            base=base[base.find(',')+1:]
+            decoded_bytes = base64.b64decode(base)
 
-        with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
-            file.write(decoded_bytes)
+            name = name[name.find('.'):]
+            
+            name=key+'_'+id+name
+            logging.info(name)
 
-        return 'http://127.0.0.1:5000/media/'+name
-    else:
-        d = show_one(isId)
-        base=base[base.find(',')+1:]
-        d = d[0]
-        logging.info(d)
-        name = d[key][d[key].find('m'):]
-        decoded_bytes = base64.b64decode(base)
-        with open(os.path.join(name), "wb") as file:
-            file.write(decoded_bytes)
-        return d[key]
+            with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
+                file.write(decoded_bytes)
+
+            return 'https://api.ar-vmgh.ru/media/'+name
+        else:
+            d = show_one(id)
+            base=base[base.find(',')+1:]
+            logging.info(d)
+            d = d[0][key]
+            logging.info(d)
+            # name = d[key][d[key].find('m'):]
+            if d == '' or d == '-':
+                return add_img(key, base, fio, name, False, id)
+            name = d[d.find('media')+6:]
+            logging.info(name)
+
+            decoded_bytes = base64.b64decode(base)
+            with open(os.path.join(MEDIA_FOLDER, name), "wb") as file:
+                file.write(decoded_bytes)
+            return d
+    else: return '-'
 
 
 def trim_to_first_dot(s):
@@ -466,17 +493,15 @@ def trim_to_first_dot(s):
 # Показ всего
 def show_all():
     try:
+        
         pg = psycopg2.connect(f"""
-            host=localhost
+            host={HOST_PG}
             dbname=postgres
             user={USER_PG}
             password={PASSWORD_PG}
-            port={os.getenv('PORT_PG')}
+            port={PORT_PG}
         """)
-
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        
-
 
         cursor.execute(f"SELECT * FROM vr")
         result = cursor.fetchall()
@@ -491,23 +516,20 @@ def show_all():
         return_data = 'Error'
 
     finally:
-        if pg:
-            cursor.close
-            pg.close
-            logging.info("Соединение с PostgreSQL закрыто")
-            return return_data
-        
+        return return_data
+    
 # показ одной строки
 def show_one(id):
-    try:
+    try:        
+        logging.info(id)
+        
         pg = psycopg2.connect(f"""
-            host=localhost
+            host={HOST_PG}
             dbname=postgres
             user={USER_PG}
             password={PASSWORD_PG}
-            port={os.getenv('PORT_PG')}
+            port={PORT_PG}
         """)
-        logging.info(id)
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
         pg.commit()
@@ -518,7 +540,7 @@ def show_one(id):
 
         return_data = []
         for row in result:
-            # logging.info(dict(row))
+            logging.info(dict(row))
             return_data.append(form_dict(dict(row)))
 
     except (Exception, Error) as error:
@@ -526,12 +548,8 @@ def show_one(id):
         return_data = 'Error'
 
     finally:
-        if pg:
-            cursor.close
-            pg.close
-            logging.info("Соединение с PostgreSQL закрыто")
-            return return_data
-        
+        return return_data
+    
 def form_dict(slovar):
     form = {
         'id': slovar['id'],
@@ -565,6 +583,359 @@ def form_dict(slovar):
     
     return form
 
+def mini(id):
+    return id
+# ========================================================================================
+
+
+# Декоратор для логина
+@app.route('/login', methods=['POST'])
+def login():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    response_object = {'status': 'success'}
+    if request.method == 'POST':
+        post_data = request.get_json()
+        response_object['isAdmin'] = login_user(post_data.get('Login'))
+        return jsonify(response_object)
+    
+
+# Декоратор для создания нововй строки
+@app.route('/new-string', methods=['POST'])
+def new_string():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+
+    add_string(post_data.get('form'))
+
+    return jsonify(response_object)
+
+
+# Декоратор для обновления строки
+@app.route('/update-string', methods=['PUT'])
+def update_stringaaaaaaaaaaaaaaaaa():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+    post_data = post_data.get('body')
+    form = post_data.get('form')
+    xyi = post_data.get('xyi')
+    # logging.info(form)
+    response_object['res'] = update_string(form, xyi, form['id'])
+
+    return jsonify(response_object)
+
+
+# Декоратор для удаления строки
+@app.route('/delete-string', methods = ['DELETE'])
+def del_srt():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    responce_object = {'status' : 'success'}
+    post_data = request.get_json()
+    logging.info(post_data)
+    responce_object['res'] = delete_string(post_data.get('id'))
+
+    return jsonify(responce_object)
+
+
+# Декоратор для семены пароля
+@app.route('/change-pass', methods=['POST'])
+def change():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    responce_object = {'status' : 'success'}
+    post_data = request.get_json()
+
+    # Проверка на то, админ ли это и проходит лит он проверку (pass_check возращает True/False в зависимости от совпадаемости паролей)
+    if post_data.get('Admin') and pass_check(post_data.get('Login').get('passwordOld'), True):
+        responce_object['res'] = new_pass(post_data.get('Login').get('Newpassword1'), True)
+    
+    # Проверка на то проходит ли он проверку (pass_check возращает True/False в зависимости от совпадаемости паролей)
+    elif not post_data.get('Admin') and pass_check(post_data.get('Login').get('passwordOld'), True):
+        responce_object['res'] = new_pass(post_data.get('Login').get('Newpassword1'), False)
+    
+    # Иначе возращаем, что пароль неверный
+    else: responce_object['res'] = 'Неверный пороль'
+    
+    logging.info(responce_object['res'])
+
+    return jsonify(responce_object)
+
+
+# Декоратор для проверки юзера
+@app.route('/check', methods=['GET'])
+def checking():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    responce_object = {'status': 'success'}
+    logging.info(session.get('isAdmin'))
+    if session.get('isAdmin') == 'True':
+        responce_object['isAdmin'] = 'True'
+    elif session.get('isAdmin') == 'False':
+        responce_object['isAdmin'] = 'False'
+    else: 
+        responce_object['isAdmin'] = 'Он никто'
+    logging.info(responce_object)
+    return jsonify(responce_object)
+
+@app.route('/filtre', methods=['POST'])
+def filtre_():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    responce_object = {'status': 'success'}
+    post_data = request.get_json()
+    filtre_data = post_data.get('body').get('filters')
+
+    responce_object['all'] = filtration(filtre_data)
+
+    return jsonify(responce_object)
+
+@app.route('/show-all', methods=['GET'])
+def shows():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    responce_object = {'status': 'success'}
+    if session.get('isAdmin') == 'True':
+        responce_object['all'] = show_all()
+    else: responce_object["all"] = "Отазано в доступе"
+    return jsonify(responce_object)
+
+@app.route('/media/<path:filename>')
+def serve_file(filename):
+    # if request.origin != 'https://ar-vmgh.ru':
+    #     return jsonify({"message": "Forbidden"}), 403
+    path = filename
+    logging.info(MEDIA_FOLDER+path)
+    if not os.path.exists('{}/{}'.format(MEDIA_FOLDER, '/'+filename)):
+        return jsonify({'error': 'File not found'}), 404
+
+    return send_from_directory(directory=MEDIA_FOLDER, path=path)
+
+@app.route('/show-one', methods=['GET'])
+def one():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    responce_object = {'status': 'success'}
+    id = request.args.get('id')
+
+    responce_object['all'] = show_one(id)
+
+    return jsonify(responce_object)
+
+@app.route('/test', methods=['POST'])
+def test_():
+    logging.info("1")
+    res = []
+    lst = ["1", "2"]
+    for i in lst:
+        if i not in request.files:
+            # return 'No file part', 400
+            continue
+        logging.info(2)
+        file = request.files[i]
+        if file.filename == '':
+            return 'No selected file', 400
+        res.append(add_img_f(file, file.filename))
+        logging.info(3)
+
+    response_object = {'status': 'success'} #БаZа
+    logging.info(4)
+    
+    # post_data = request.get_json()
+    # logging.info(request)
+    response_object["res"] = res
+    # response_object["res"] = post_data
+
+
+    return jsonify(response_object)
+    
+    # return jsonify({"err": request.content_type}), 400
+
+def add_img_f(file, name, id):
+
+    # name = file.filename
+    try:
+        logging.info(type(name))
+        res = id+name
+        logging.info(file)
+        file.save(os.path.join(MEDIA_FOLDER, res))
+        return_data = 'https://api.ar-vmgh.ru/media/'+res
+    except (Exception, Error) as error:
+        logging.error(f'DB: ', error)
+        return_data = error 
+    finally:
+        return return_data
+    print("ну накрутил до 2 часов, ну имею права, идте нахуй бляди, я всю ночь с эим еблюсь блять и ура, я могу поспать нахуй, питухон язык долбаебов, я так вам скажу, все, я спать, перфекционист мой в норме, 2 часа в проекте, 04.07.2024 2:34, заебанный всем Костя")
+
+def new_string_text(form):
+    info_for_db = ""
+    columns='id'
+    for key in form:
+        columns+=f', {key}'
+        info_for_db+=f", '{form[key]}'"
+        
+    try:
+        id = uuid.uuid4().hex
+        
+        pg = psycopg2.connect(f"""
+            host={HOST_PG}
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={PORT_PG}
+        """)
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute(f"INSERT INTO vr ({columns}) VALUES ('{id}' {info_for_db})")
+        session["string"] = id
+        session.modified = True
+        return_data = "success"
+        pg.commit()
+    except (Exception, Error) as error:
+        logging.info(f"""Ошибка добовления данных: {error}""")
+        return_data = 'Error'
+
+    finally:
+        return return_data  
+    
+def new_string_file(id):
+    info_for_db = ""
+    keys = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'Protocol']
+    for i in keys:
+        if i not in request.files: continue
+        if i == 'GistolConclusion':
+            info_for_db += f", gistolСonclusion = $${add_img_f(request.files[i], i + request.files[i].filename, id)}$$"
+            continue
+        if info_for_db == "":
+            info_for_db += f"{i} = $${add_img_f(request.files[i], i + request.files[i].filename, id)}$$"
+            continue
+        info_for_db += f", {i} = $${add_img_f(request.files[i], i +request.files[i].filename, id)}$$"
+    try:
+        
+        pg = psycopg2.connect(f"""
+            host={HOST_PG}
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={PORT_PG}
+        """)
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        logging.info(f"""UPDATE vr SET {info_for_db} WHERE id = $${id}$$""")
+
+        cursor.execute(f"""UPDATE vr SET {info_for_db} WHERE id = $${id}$$""")
+        pg.commit()
+        # cursor.execute(f"""SELECT * FROM vr WHERE id = $${id}$$""")
+        # return_data = cursor.fetchall()
+        return_data = "Ok"
+    except (Exception, Error) as error:
+        logging.info(f"""Ошибка добовления данных: {error}""")
+        return_data = 'Error'
+    finally:
+        return return_data  
+
+def upd_string_text(form, id):
+    info_for_db = ""
+    dang_keys = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'Protocol']
+
+    for key in form:
+        if key in dang_keys: continue
+        if info_for_db != "":
+            info_for_db+=f", {key} = $${form[key]}$$"
+            continue
+        info_for_db+=f" {key} = $${form[key]}$$"
+        
+        
+    try:
+        
+        pg = psycopg2.connect(f"""
+            host={HOST_PG}
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={PORT_PG}
+        """)
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute(f"""UPDATE vr SET {info_for_db} WHERE id = $${id}$$""")
+        session["upd_string"] = id
+        session.modified = True
+        return_data = "success"
+        pg.commit()
+    except (Exception, Error) as error:
+        logging.info(f"""Ошибка добовления данных: {error}""")
+        return_data = 'Error'
+
+    finally:
+        return return_data  
+
+def upd_string_file(id):
+    info_for_db = ""
+    keys = ['Fgds', 'Fks', 'Ckt', 'Mrt', 'Research', 'DrugVideo', 'GistolConclusion', 'CktDisk', 'MrtDisk', 'CktModel', 'MrtModel', 'OperationVideo', 'Protocol']
+    for i in keys:
+        if i not in request.files: 
+            logging.info(i)
+            continue
+        if i == 'GistolConclusion':
+            info_for_db += f"gistolСonclusion = $${add_img_f(request.files[i], i + request.files[i].filename, id)}$$"
+            continue
+        if info_for_db == "":
+            info_for_db += f"{i} = $${add_img_f(request.files[i], i + request.files[i].filename, id)}$$"
+            continue
+        info_for_db += f", {i} = $${add_img_f(request.files[i], i +request.files[i].filename, id)}$$"
+    try:
+        
+        pg = psycopg2.connect(f"""
+            host={HOST_PG}
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={PORT_PG}
+        """)
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        logging.info(f"""UPDATE vr SET {info_for_db} WHERE id = $${id}$$""")
+        cursor.execute(f"""UPDATE vr SET {info_for_db} WHERE id = $${id}$$""")
+        pg.commit()
+        return_data = "Ok"
+    except (Exception, Error) as error:
+        logging.info(f"""Ошибка добовления данных: {error}""")
+        return_data = 'Error'
+    finally:
+        return return_data
+    
+@app.route('/new-string/text', methods=["POST"])
+def new_string_text_():
+    responce_object = {"status":"success"}
+    form = request.get_json().get("form")
+    responce_object["res"] = new_string_text(form)
+    return jsonify(responce_object)
+
+@app.route('/new-string/file', methods=["POST"])
+def new_string_file_():
+    responce_object = {"status":"success"}
+    
+    responce_object["res"] =  new_string_file(session.get("string"))
+    session.pop("string")
+
+    return jsonify(responce_object)
+     
+@app.route('/update-string/text', methods=["PUT"])
+def upd_string_text_():
+    responce_object = {"status":"success"}
+    post_data = request.get_json()
+    responce_object["res"] = upd_string_text(post_data.get("form"), post_data.get("id"))
+    return jsonify(responce_object)
+
+@app.route('/update-string/file', methods=["PUT"])
+def upd_string_file_():
+    responce_object = {"status":"success"}
+    
+    responce_object["res"] =  upd_string_file(session.get("upd_string"))
+    session.pop("upd_string")
+
+    return jsonify(responce_object)
+
 def SurSearch(query):
     try:
         pg = psycopg2.connect(f"""
@@ -596,130 +967,6 @@ def SurSearch(query):
             logging.info("Соединение с PostgreSQL закрыто")
             return return_data
 
-def mini(id):
-    return id
-# ========================================================================================
-
-
-# Декоратор для логина
-@app.route('/login', methods=['POST'])
-def login():
-    response_object = {'status': 'success'}
-    if request.method == 'POST':
-        post_data = request.get_json()
-        response_object['isAdmin'] = login_user(post_data.get('Login'))
-        return jsonify(response_object)
-    
-
-# Декоратор для создания нововй строки
-@app.route('/new-string', methods=['POST'])
-def new_string():
-    response_object = {'status': 'success'}
-    post_data = request.get_json()
-
-    add_string(post_data.get('form'))
-
-    return jsonify(response_object)
-
-
-# Декоратор для обновления строки
-@app.route('/update-string', methods=['PUT'])
-def update_stringaaaaaaaaaaaaaaaaa():
-    response_object = {'status': 'success'}
-    post_data = request.get_json()
-    post_data = post_data.get('body')
-    form = post_data.get('form')
-    xyi = post_data.get('xyi')
-    logging.info(form)
-    response_object['res'] = update_string(form, xyi, form['id'])
-
-    return jsonify(response_object)
-
-
-# Декоратор для удаления строки
-@app.route('/delete-string', methods = ['DELETE'])
-def del_srt():
-    responce_object = {'status' : 'success'}
-    post_data = request.get_json()
-    logging.info(post_data)
-    responce_object['res'] = delete_string(post_data.get('id'))
-
-    return jsonify(responce_object)
-
-
-# Декоратор для семены пароля
-@app.route('/change-pass', methods=['POST'])
-def change():
-    responce_object = {'status' : 'success'}
-    post_data = request.get_json()
-
-    # Проверка на то, админ ли это и проходит лит он проверку (pass_check возращает True/False в зависимости от совпадаемости паролей)
-    if post_data.get('Admin') and pass_check(post_data.get('Login').get('passwordOld'), True):
-        responce_object['res'] = new_pass(post_data.get('Login').get('Newpassword1'), True)
-    
-    # Проверка на то проходит ли он проверку (pass_check возращает True/False в зависимости от совпадаемости паролей)
-    elif not post_data.get('Admin') and pass_check(post_data.get('Login').get('passwordOld'), True):
-        responce_object['res'] = new_pass(post_data.get('Login').get('Newpassword1'), False)
-    
-    # Иначе возращаем, что пароль неверный
-    else: responce_object['res'] = 'Неверный пороль'
-    
-    logging.info(responce_object['res'])
-
-    return jsonify(responce_object)
-
-
-# Декоратор для проверки юзера
-@app.route('/check', methods=['GET'])
-def checking():
-    responce_object = {'status': 'success'}
-
-    if session.get('isAdmin') == 'True':
-        responce_object['isAdmin'] = 'True'
-    elif session.get('isAdmin') == 'False':
-        responce_object['isAdmin'] = 'False'
-    else: 
-        responce_object['isAdmin'] = 'Он никто'
-    logging.info(responce_object)
-    return jsonify(responce_object)
-
-@app.route('/filtre', methods=['POST'])
-def filtre_():
-    responce_object = {'status': 'success'}
-    post_data = request.get_json()
-    filtre_data = post_data.get('body').get('filters')
-
-    responce_object['all'] = filtration(filtre_data)
-
-    return jsonify(responce_object)
-
-@app.route('/show-all', methods=['GET'])
-def shows():
-    responce_object = {'status': 'success'}
-
-    responce_object['all'] = show_all()
-    # logging.info(responce_object['all'])
-    return jsonify(responce_object)
-
-@app.route('/media/<path:filename>')
-def serve_file(filename):
-    path = filename
-    logging.info(MEDIA_FOLDER+path)
-    if not os.path.exists('{}/{}'.format(MEDIA_FOLDER, '/'+filename)):
-        return jsonify({'error': 'File not found'}), 404
-
-    return send_from_directory(directory=MEDIA_FOLDER, path=path)
-
-@app.route('/show-one', methods=['GET'])
-def one():
-    responce_object = {'status': 'success'}
-    id = request.args.get('id')
-
-    responce_object['all'] = show_one(id)
-
-
-
-    return jsonify(responce_object)
 
 @app.route('/surname-search', methods=['GET'])
 def surname_search():
