@@ -8,8 +8,7 @@ import base64
 import io
 from dotenv import load_dotenv
 import logging
-# mMe3qeQn hfdhjdj
-# .env
+from typing import Tuple, Union
 load_dotenv()
 
 PASSWORD_PG = os.getenv('PASSWORD_PG')
@@ -936,7 +935,7 @@ def upd_string_file_():
 
     return jsonify(responce_object)
 
-def SurSearch(query):
+def SurSearch(query: str) -> Union[str, list]:
     try:
         pg = psycopg2.connect(f"""
             host=localhost
@@ -976,6 +975,92 @@ def surname_search():
 
     return jsonify(responce_object)
 
+@app.route('/new-login', methods=["POST"])
+def new_login():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    response_object = {'status': 'success'}
+    if request.method == 'POST':
+        post_data = request.get_json()  
+        response_object["isA"] = str(login_user(post_data.get('Login')))
+        session["isA"] = response_object["isA"]
+        session.modified = True
+        return jsonify(response_object)
+
+def send_pass_code(email: str) -> str:
+    pass
+# TODO: офрмление отправки и сама отправка
+
+
+@app.route('/send-email', methods=["POST"])
+def send_email():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+    session["surname"], session["email"], session["password"], session["code"] = post_data.get("surname"), post_data.get("email"), post_data.get("password"), send_pass_code(post_data.get("email"))
+    if session.get("code") != "err":
+        return jsonify(response_object)
+    else: 
+        response_object["code"] = "Invalid email"
+        return jsonify(response_object)
+
+def add_user(email: str, password: str, surname: str) -> str:
+    try:
+        pg = psycopg2.connect(f"""
+            host=localhost
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={os.getenv('PORT_PG')}
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        id = uuid.uuid4().hex
+
+        cursor.execute(f"INSERT INTO users VALUES({id}, {email}, {password}, {surname})")
+        result = cursor.fetchall()
+        pg.commit()
+
+        return_data = id
+
+    except (Exception, Error) as error:
+        logging.info(f"Ошибка получения данных: {error}")
+        return_data = 'Error'
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            logging.info("Соединение с PostgreSQL закрыто")
+            return return_data
+
+@app.route("/check-send-code", methods=["POST"])
+def chek_code_():
+    if request.origin != 'https://ar-vmgh.ru':
+        return jsonify({"message": "Forbidden"}), 403
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+
+    if session.get("code") == post_data.get("code"):
+        res = add_user(session.get("email"), session.get("password"), session.get("surname"))
+        session["isAdmin"] = session.get("isA")
+        session.modified = True
+        session.permanent = True
+        session.pop("isA", None)
+        if res == "Error":
+            response_object["res"] = "500"
+        else:
+            session["id"] = res
+            session.modified = True
+            session.permanent = True
+            response_object["res"] = "200"
+        
+    else:
+        response_object["res"] = "Bad Code"
+    
+    return jsonify(response_object)
 #БаZа
 if __name__ == '__main__':
       all_tables()
