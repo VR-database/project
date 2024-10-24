@@ -41,7 +41,7 @@ def all_tables():
         port={os.getenv('PORT_PG')}
     """)
     cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cursor.execute('''CREATE TABLE IF NOT EXIST vr (
+    cursor.execute('''CREATE TABLE IF NOT EXISTS vr (
                         id text,
                         Code text,
                         Fio text,
@@ -77,7 +77,7 @@ def all_tables():
     
     pg.commit()
 
-    cursor.execute('''CREATE TABLE IF NOT EXIST admins (
+    cursor.execute('''CREATE TABLE IF NOT EXISTS admins (
                         admin_pass text,
                         person_pass text
                         )''')
@@ -565,6 +565,37 @@ def form_dict(slovar):
     
     return form
 
+def SurSearch(query):
+    try:
+        pg = psycopg2.connect(f"""
+            host=localhost
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={os.getenv('PORT_PG')}
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cursor.execute(f"SELECT * FROM vr WHERE Fio LIKE '%{query}%'")
+        result = cursor.fetchall()
+        pg.commit()
+
+        return_data = []
+        for row in result:
+            return_data.append(form_dict(dict(row)))
+
+    except (Exception, Error) as error:
+        logging.info(f"Ошибка получения данных: {error}")
+        return_data = 'Error'
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            logging.info("Соединение с PostgreSQL закрыто")
+            return return_data
+
 def mini(id):
     return id
 # ========================================================================================
@@ -687,6 +718,14 @@ def one():
     responce_object['all'] = show_one(id)
 
 
+
+    return jsonify(responce_object)
+
+@app.route('/surname-search', methods=['GET'])
+def surname_search():
+    responce_object = {'status': 'success'}
+
+    responce_object['all'] = SurSearch(request.args.get('query'))
 
     return jsonify(responce_object)
 
