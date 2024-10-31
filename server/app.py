@@ -713,7 +713,7 @@ def shows():
     responce_object = {'status': 'success'}
     if session.get('isAdmin') == 'True':
         responce_object['all'] = show_all()
-    else: responce_object["all"] = "Отазано в доступе"
+    else: responce_object["all"] = "Отказано в доступе"
     return jsonify(responce_object)
 
 @app.route('/media/<path:filename>')
