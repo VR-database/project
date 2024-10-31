@@ -1,14 +1,11 @@
-import os
-import uuid
-import psycopg2
+import os, uuid, psycopg2, base64, io, logging, hashlib, random, smtplib
 from psycopg2 import extras, Error
 from flask import Flask, jsonify, request, session, make_response, send_from_directory
 from flask_cors import CORS
-import base64
-import io
 from dotenv import load_dotenv
-import logging
 from typing import Tuple, Union
+from email.message import EmailMessage
+
 load_dotenv()
 
 PASSWORD_PG = os.getenv('PASSWORD_PG')
@@ -16,7 +13,18 @@ USER_PG = os.getenv('USER_PG')
 SECRET_KEY = os.getenv('SECRET_KEY')
 HOST_PG = os.getenv('HOST_PG')
 PORT_PG = os.getenv('PORT_PG')
+HPST = os.getenv("HOST")
+LOGIN_EMAIL = os.getenv("EMAIL")
+PASSWORD_EMAIL = os.getenv("PASSWORD_EMAIL")
 
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+def verify_password(stored_hash, password):
+    return stored_hash == hash_password(password)
+
+def check_password_hash(stored_hash, input_password):
+    return verify_password(stored_hash, input_password)
 
 # SetUp
 app = Flask(__name__)
@@ -56,9 +64,9 @@ logging.basicConfig(
 
 @app.route('/api', methods=['GET'])
 def api():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden", "origin": request.origin}), 403
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     return jsonify(message="Hello from API!")
 
@@ -118,6 +126,8 @@ def all_tables():
                         admin_pass text,
                         person_pass text
                         )''')
+
+    cursor.execute("CREATE TABLE IF NOT EXISTS users (id uuid, email text, password text, surname text);")
     cursor.execute('''INSERT INTO admins (admin_pass, person_pass)
                         SELECT '1', '2'
                         WHERE NOT EXISTS (SELECT 1 FROM admins);''')
@@ -582,6 +592,38 @@ def form_dict(slovar):
     
     return form
 
+def ByOneUser(id_u: str) -> Union[str, list]:
+    try:
+        pg = psycopg2.connect(f"""
+            host=localhost
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={os.getenv('PORT_PG')}
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cursor.execute(f"SELECT * FROM vr WHERE id_u=$${id_u}$$")
+        result = cursor.fetchall()
+        pg.commit()
+
+        return_data = []
+        for row in result:
+            return_data.append(form_dict(dict(row)))
+
+    except (Exception, Error) as error:
+        logging.info(f"Ошибка получения данных: {error}")
+        return_data = 'Error'
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            logging.info("Соединение с PostgreSQL закрыто")
+            return return_data
+
+
 def mini(id):
     return id
 # ========================================================================================
@@ -590,7 +632,7 @@ def mini(id):
 # Декоратор для логина
 @app.route('/login', methods=['POST'])
 def login():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     if request.method == 'POST':
@@ -602,7 +644,7 @@ def login():
 # Декоратор для создания нововй строки
 @app.route('/new-string', methods=['POST'])
 def new_string():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     post_data = request.get_json()
@@ -615,7 +657,7 @@ def new_string():
 # Декоратор для обновления строки
 @app.route('/update-string', methods=['PUT'])
 def update_stringaaaaaaaaaaaaaaaaa():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     post_data = request.get_json()
@@ -631,7 +673,7 @@ def update_stringaaaaaaaaaaaaaaaaa():
 # Декоратор для удаления строки
 @app.route('/delete-string', methods = ['DELETE'])
 def del_srt():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     responce_object = {'status' : 'success'}
     post_data = request.get_json()
@@ -644,7 +686,7 @@ def del_srt():
 # Декоратор для семены пароля
 @app.route('/change-pass', methods=['POST'])
 def change():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     responce_object = {'status' : 'success'}
     post_data = request.get_json()
@@ -668,7 +710,7 @@ def change():
 # Декоратор для проверки юзера
 @app.route('/check', methods=['GET'])
 def checking():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     responce_object = {'status': 'success'}
     logging.info(session.get('isAdmin'))
@@ -683,7 +725,7 @@ def checking():
 
 @app.route('/filtre', methods=['POST'])
 def filtre_():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     responce_object = {'status': 'success'}
     post_data = request.get_json()
@@ -695,17 +737,17 @@ def filtre_():
 
 @app.route('/show-all', methods=['GET'])
 def shows():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     responce_object = {'status': 'success'}
     if session.get('isAdmin') == 'True':
         responce_object['all'] = show_all()
-    else: responce_object["all"] = "Отазано в доступе"
+    else: responce_object["all"] = "Отказано в доступе"
     return jsonify(responce_object)
 
 @app.route('/media/<path:filename>')
 def serve_file(filename):
-    # if request.origin != 'https://ar-vmgh.ru':
+    # if request.origin != HPST:
     #     return jsonify({"message": "Forbidden"}), 403
     path = filename
     logging.info(MEDIA_FOLDER+path)
@@ -716,7 +758,7 @@ def serve_file(filename):
 
 @app.route('/show-one', methods=['GET'])
 def one():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     responce_object = {'status': 'success'}
     id = request.args.get('id')
@@ -977,7 +1019,7 @@ def surname_search():
 
 @app.route('/new-login', methods=["POST"])
 def new_login():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     if request.method == 'POST':
@@ -987,14 +1029,131 @@ def new_login():
         session.modified = True
         return jsonify(response_object)
 
-def send_pass_code(email: str) -> str:
-    pass
-# TODO: офрмление отправки и сама отправка
+def send_pass_code(email: str, action: str) -> str:
+    item = "регистрации" if action == 'reg' else item = "изменения пароля"
 
+
+    message_1 = """<!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title></title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <style>
+    * {
+        margin: 0;
+        font-family: "Rubik", system-ui;
+    }
+
+    @media (max-width: 500px) {
+        .window {
+        width: 370px;
+        }
+
+        h1 {
+        font-size: 21px;
+        }
+
+        p {
+        font-size: 10px;
+        }
+
+        h2 {
+        font-size: 22px;
+        width: 30px;
+        }
+    }
+    
+    
+    </style>
+    </head>"""
+
+    sender = LOGIN_EMAIL
+    send_password = PASSWORD_EMAIL
+    code_pas = ""
+    
+    a = random.randint(0, 9)
+    b = random.randint(0, 9)
+    c = random.randint(0, 9)
+    d = random.randint(0, 9)
+    code_pas = str(a) + str(b) + str(c) + str(d)
+
+    message_2 = f"""<body style="width: 100%">
+        <div style="width: 100%; height: 450px; text-align: center; font-family: 'Rubik', system-ui;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="center">
+                        <h1 style="color: #3b82f6; border-bottom: 3px solid #3b82f6; padding-bottom: 20px; margin-bottom: 20px; text-align: center; width: 500px;">AR Database</h1>
+                    </td>
+                </tr>
+            </table>
+            <p style="color: #3b82f6; font-weight: 600; font-size: 13px; margin-bottom: 60px;">Здравствуйте!</p>
+            <p style="color: #3b82f6; font-weight: 600; font-size: 13px; margin-bottom: 40px;">Для {"регистрации" if action == 'reg' else "изменения пароля"} введите в поле этот код:</p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom:20px;">
+                <tr>
+                    <td align="center">
+                        <table width="20%" border="0" cellspacing="0" cellpadding="0"" style="border: 2px solid black; border-radius: 8px; padding:16px 10px; background-color: #E2EEFF">
+                            <tr>
+                                <td align="center">
+                                    <td align="center"><h2>{a}</h2></td> <td align="center"><h2>{b}</h2></td> <td align="center"><h2>{c}</h2></td> <td align="center"><h2>{d}</h2></td>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="center">
+                        <p style="border-top: 3px solid #3b82f6; padding-top: 20px; color: #3b82f6; font-weight: 600; font-size: 13px; text-align: center; width: 500px; margin-top: 30px;">
+                            Спасибо, что остаетесь с нами! <br> С заботой о Вас, команда AR.<br> <b>Гойда!</b>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+    </html>"""
+
+    msg = EmailMessage()
+
+    msg["Subject"] = "Ваш код"
+    msg["From"] = sender
+    msg["To"] = email
+    msg.set_content("Код для подтверждения регистрации")
+    msg.add_alternative(message_1 + message_2, subtype="html")
+    
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
+        server.login(sender, send_password)
+        server.send_message(msg)
+        logging.info("Email sent successfully!")
+
+    except smtplib.SMTPRecipientsRefused:
+        logging.info("Error: Recipient's email does not exist.")
+        return 1
+
+    finally:
+        server.quit()
+        # держим пароль в сессии
+        session['code'] = str(code_pas)
+        session.modified = True
+        session['email'] = str(email)
+        session.modified = True
+
+        logging.info(f'Пароль {code_pas} отправлен на почту {email}')
+
+        return 0
 
 @app.route('/send-email', methods=["POST"])
 def send_email():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     post_data = request.get_json()
@@ -1038,7 +1197,7 @@ def add_user(email: str, password: str, surname: str) -> str:
 
 @app.route("/check-send-code", methods=["POST"])
 def chek_code_():
-    if request.origin != 'https://ar-vmgh.ru':
+    if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     post_data = request.get_json()
@@ -1061,6 +1220,15 @@ def chek_code_():
         response_object["res"] = "Bad Code"
     
     return jsonify(response_object)
+
+@app.route('/by-user', methods=['GET'])
+def all_by_user():
+    responce_object = {'status': 'success'}
+
+    responce_object['all'] = ByOneUser(request.args.get('id_u'))
+
+    return jsonify(responce_object)
+
 #БаZа
 if __name__ == '__main__':
       all_tables()
