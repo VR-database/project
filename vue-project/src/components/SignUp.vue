@@ -1,8 +1,13 @@
 <script>
+import axios from "axios";
+axios.defaults.baseURL = "http://127.0.0.1:5000/";
 export default {
   data() {
     return {
+      username: "",
       password: "",
+      email: "",
+
       isShowPassword: false,
       showPassword: "password",
       eyeOpen: true,
@@ -12,6 +17,14 @@ export default {
     };
   },
   methods: {
+    check() {
+      if (this.password === "") {
+        this.error = "Заполните поле ввода!";
+      } else {
+        this.error = "";
+        this.login();
+      }
+    },
     toggleVisibility() {
       this.isShowPassword = !this.isShowPassword;
       this.eyeOpen = !this.eyeOpen;
@@ -24,23 +37,16 @@ export default {
         this.eyeImg = "/src/assets/eye.svg";
       }
     },
-      async login() {
-          try {
-            
-              let response = await axios.post(`/new-login`, {
-                Login: this.password,
-              });
-              this.isAdmin = response.data.isAdmin;
-              if (this.isAdmin == "Неверный пароль!") {
-                this.error = this.isAdmin;
-              } else if (this.isAdmin == false) {
-                  this.$router.push("/Add");
-              } else if (this.isAdmin == true) {
-                this.$router.push("/Table");
-              }
-          } catch (err) {
-            this.error = "Ошибка сервера";
-        }
+    async login() {
+      try {
+        let response = await axios.post(`/send-emai`, {
+          password: this.password,
+          email: this.email,
+          surname: this.username,
+        });
+      } catch (err) {
+        this.error = "Ошибка сервера";
+      }
     },
   },
 };
@@ -48,14 +54,32 @@ export default {
 
 <template>
   <div class="container">
-    <h1>Вход</h1>
+    <h1>Регистрация</h1>
     <form @submit.prevent="login">
+      <div class="username">
+        <input
+          class="form-item"
+          v-model="username"
+          type="text"
+          placeholder="Фамилия"
+          required
+        />
+      </div>
+      <div class="email">
+        <input
+          class="form-item"
+          v-model="email"
+          type="text"
+          placeholder="Почта"
+          required
+        />
+      </div>
       <div class="password">
         <input
           class="form-item"
           v-model="password"
           :type="showPassword"
-          placeholder="Введите ключ доступа"
+          placeholder="Пароль"
           required
         />
         <img
@@ -65,11 +89,12 @@ export default {
           alt=""
         />
         <p class="error" v-if="error">{{ error }}</p>
+
       </div>
-      <div class="error-end-btn">
-          <button class="btn-reg" type="submit">Подтвердить</button>
-        </div>
+      <button class="btn-reg" type="submit">Зарегистрироваться</button>
     </form>
+    <div class="error-end-btn">
+    </div>
   </div>
 </template>
 
@@ -87,6 +112,8 @@ form{
   background: #ffffff;
   padding: 20px;
   max-width: 400px;
+  /* margin-left: auto;
+    margin-right: auto; */
   margin-top: 100px;
   border-radius: 30px;
   -webkit-box-shadow: -1px 0px 8px 4px rgba(34, 60, 80, 0.2);
@@ -118,7 +145,6 @@ form {
   padding-left: 10px;
   padding-right: 10px;
   font-weight: 500;
-
 }
 
 .form-item:focus {
@@ -145,6 +171,8 @@ form {
 .btn-reg:hover {
   background-color: #2d00aa;
   border-radius: 25px 5px;
+  transition: all .3s;
+
 }
 
 .btn-reg:active {

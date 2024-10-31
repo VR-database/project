@@ -8,7 +8,7 @@ export default createRouter({
     },
     {
       path: "/",
-      component: () => import("../components/LoginComp.vue"),
+      component: () => import("../components/Enter.vue"),
     },
     {
       path: "/Table",
@@ -50,6 +50,25 @@ export default createRouter({
       path: "/UserPassword",
       component: () => import("../components/UserPassword.vue"),
     },
-
+    {
+      path: "/SignUp",
+      component: () => import("../components/SignUp.vue"),
+    },
+    {
+      path: "/CodeEmail",
+      component: () => import("../components/EmailCode.vue"),
+    },
+    {
+      path: "/Enter",
+      component: () => import("../components/Enter.vue"),
+    },
+    {
+      path: "/Profile",
+      component: () => import("../components/Profile.vue"),
+    },
+    {
+      path: "/Table/:id",
+      component: () => import("../components/MyTable.vue"),
+    },
   ],
 });

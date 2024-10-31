@@ -1,8 +1,10 @@
 <script>
+import axios from "axios";
+axios.defaults.baseURL = "http://127.0.0.1:5000/";
 export default {
   data() {
     return {
-      password: "",
+      code: "",
       isShowPassword: false,
       showPassword: "password",
       eyeOpen: true,
@@ -24,23 +26,20 @@ export default {
         this.eyeImg = "/src/assets/eye.svg";
       }
     },
-      async login() {
-          try {
-            
-              let response = await axios.post(`/new-login`, {
-                Login: this.password,
-              });
-              this.isAdmin = response.data.isAdmin;
-              if (this.isAdmin == "Неверный пароль!") {
-                this.error = this.isAdmin;
-              } else if (this.isAdmin == false) {
-                  this.$router.push("/Add");
-              } else if (this.isAdmin == true) {
-                this.$router.push("/Table");
-              }
-          } catch (err) {
-            this.error = "Ошибка сервера";
+    async login() {
+      try {
+        let response = await axios.post(`/check-send-code`, {
+          code: this.code,
+        });
+        const answer = response.data;
+        if (answer == "True") {
+          this.$router.push("/Login");
+        } else if (answer == "False") {
+          this.error = "Неверный код";
         }
+      } catch (err) {
+        this.error = "Ошибка сервера";
+      }
     },
   },
 };
@@ -48,31 +47,24 @@ export default {
 
 <template>
   <div class="container">
-    <h1>Вход</h1>
-    <form @submit.prevent="login">
-      <div class="password">
+    <h1>Код подтверждения</h1>
+    <form @submit.prevent="login" >
+      <div class="username">
         <input
           class="form-item"
-          v-model="password"
-          :type="showPassword"
-          placeholder="Введите ключ доступа"
+          v-model="username"
+          type="text"
+          placeholder="Код"
           required
         />
-        <img
-          @click="toggleVisibility"
-          class="password-show"
-          :src="eyeImg"
-          alt=""
-        />
         <p class="error" v-if="error">{{ error }}</p>
+
       </div>
-      <div class="error-end-btn">
-          <button class="btn-reg" type="submit">Подтвердить</button>
-        </div>
+      <button class="btn-reg" type="submit">Подтвердить</button>
     </form>
+     
   </div>
 </template>
-
 <style scoped>
 form{
     display: flex;
@@ -80,15 +72,18 @@ form{
   justify-content: center;
   flex-direction: column;
 }
-.tt {
-  color: white;
+.p {
+  color: rgb(39, 18, 18);
 }
 .container {
   background: #ffffff;
   padding: 20px;
   max-width: 400px;
+  /* margin-left: auto;
+    margin-right: auto; */
   margin-top: 100px;
   border-radius: 30px;
+  /* border: solid 3px #2a2a2a; */
   -webkit-box-shadow: -1px 0px 8px 4px rgba(34, 60, 80, 0.2);
   -moz-box-shadow: -1px 0px 8px 4px rgba(34, 60, 80, 0.2);
   box-shadow: -1px 0px 8px 4px rgba(34, 60, 80, 0.2);
@@ -99,7 +94,7 @@ form{
 }
 
 h1 {
-  font-size: 45px;
+  font-size: 35px;
   margin-bottom: 50px;
   user-select: none;
 }
@@ -114,11 +109,11 @@ form {
   border-radius: 10px;
   width: 320px;
   height: 50px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   padding-left: 10px;
   padding-right: 10px;
   font-weight: 500;
-
+  
 }
 
 .form-item:focus {

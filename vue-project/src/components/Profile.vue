@@ -3,6 +3,9 @@ export default {
   data() {
     return {
       password: "",
+      email: "",
+      code: "",
+      id: null,
       isShowPassword: false,
       showPassword: "password",
       eyeOpen: true,
@@ -12,70 +15,39 @@ export default {
     };
   },
   methods: {
-    toggleVisibility() {
-      this.isShowPassword = !this.isShowPassword;
-      this.eyeOpen = !this.eyeOpen;
-
-      if (this.isShowPassword) {
-        this.showPassword = "text";
-        this.eyeImg = "/src/assets/svg-editor-image2.svg";
-      } else {
-        this.showPassword = "password";
-        this.eyeImg = "/src/assets/eye.svg";
+    async getId() {
+      try {
+        let response = await axios.get(`/get-id`);
+        this.id = response.data.res;
+      } catch (err) {
+        this.error = "Ошибка сервера";
       }
     },
-      async login() {
-          try {
-            
-              let response = await axios.post(`/new-login`, {
-                Login: this.password,
-              });
-              this.isAdmin = response.data.isAdmin;
-              if (this.isAdmin == "Неверный пароль!") {
-                this.error = this.isAdmin;
-              } else if (this.isAdmin == false) {
-                  this.$router.push("/Add");
-              } else if (this.isAdmin == true) {
-                this.$router.push("/Table");
-              }
-          } catch (err) {
-            this.error = "Ошибка сервера";
-        }
+    gotable() {
+      const id = this.id;
+      this.$router.push(`/Table/${id}`);
     },
+  },
+  mounted() {
+    this.getId();
   },
 };
 </script>
 
 <template>
   <div class="container">
-    <h1>Вход</h1>
-    <form @submit.prevent="login">
-      <div class="password">
-        <input
-          class="form-item"
-          v-model="password"
-          :type="showPassword"
-          placeholder="Введите ключ доступа"
-          required
-        />
-        <img
-          @click="toggleVisibility"
-          class="password-show"
-          :src="eyeImg"
-          alt=""
-        />
-        <p class="error" v-if="error">{{ error }}</p>
-      </div>
-      <div class="error-end-btn">
-          <button class="btn-reg" type="submit">Подтвердить</button>
-        </div>
-    </form>
+    <h1>Кабинет</h1>
+    <button class="btn-reg" type="submit" @click="gotable">
+      Сменить пароль
+    </button>
+    <button class="btn-reg" type="submit" @click="gotable">Моя таблица</button>
+    <div class="error-end-btn"></div>
   </div>
 </template>
 
 <style scoped>
-form{
-    display: flex;
+form {
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -87,6 +59,8 @@ form{
   background: #ffffff;
   padding: 20px;
   max-width: 400px;
+  /* margin-left: auto;
+    margin-right: auto; */
   margin-top: 100px;
   border-radius: 30px;
   -webkit-box-shadow: -1px 0px 8px 4px rgba(34, 60, 80, 0.2);
@@ -100,7 +74,7 @@ form{
 
 h1 {
   font-size: 45px;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   user-select: none;
 }
 
@@ -118,7 +92,6 @@ form {
   padding-left: 10px;
   padding-right: 10px;
   font-weight: 500;
-
 }
 
 .form-item:focus {
@@ -139,12 +112,13 @@ form {
   cursor: pointer;
   font-weight: 600;
   font-size: 20px;
-  transition: all .3s;
+  transition: all 0.3s;
 }
 
 .btn-reg:hover {
   background-color: #2d00aa;
   border-radius: 25px 5px;
+  transition: all 0.3s;
 }
 
 .btn-reg:active {

@@ -3,6 +3,10 @@ import ErrorComp from "./ErrorComp.vue";
 import ModalComp from "./ModalComp.vue";
 import EditComp from "./EditComp.vue";
 import axios from 'axios'
+axios.defaults.baseURL = 'https://api.ar-vmgh.ru/'
+
+
+
 export default {
   data() {
     return {
@@ -12,93 +16,7 @@ export default {
       isAdmin: false,
       editShow: false,
       edit: null,
-      items: [{
-        id: '3',
-        Code: '2', 
-        Fio: 'Абдулбек Максим Петрович',
-        Floor: 'М',
-        Age: '32',
-        NumberHistory: '432423',
-        Date1: '20.02.23',
-        Date2: '20.02.23',
-        Result: '1',
-        Diagnosis: 'Дебилизм, тупой, ахахахахахахахаххха, прикол',
-        Date3: '20.02.23',
-        NameOperation: 'ШГылрпвлрув куцкуеукц укецукеукцецу ',
-        CktDisk: '',
-        MrtDisk: '',
-        CktModel: '',
-        MrtModel: '',
-        DrugVideo: 'jpg',
-        EffectOfUse1: '1',
-        Notes: 'цукецукецук',
-        Fgds: '',
-        Fks: '',
-        Ckt: '',
-        Mrt: '',
-        Research: '',
-        Protocol: '',
-        OperationVideo: '.jpg',
-        GistolСonclusion: '',
-      },
-        {
-        id: '6',
-        Code: '2', 
-        Fio: 'Абдулбек Максим Петрович',
-        Floor: 'М',
-        Age: '32',
-        NumberHistory: '432423',
-        Date1: '20.02.23',
-        Date2: '20.02.23',
-        Result: '1',
-        Diagnosis: 'Дебилизм, тупой, ахахахахахахахаххха, прикол',
-        Date3: '20.02.23',
-        NameOperation: 'ШГылрпвлрув куцкуеукц укецукеукцецу ',
-        CktDisk: '',
-        MrtDisk: '',
-        CktModel: '',
-        MrtModel: '',
-        DrugVideo: '',
-        EffectOfUse1: '1',
-        Notes: 'цукецукецук',
-        Fgds: '../assets/edit.png',
-        Fks: '',
-        Ckt: '',
-        Mrt: '',
-        Research: '',
-        Protocol: '',
-        OperationVideo: '.jpg',
-        GistolСonclusion: '',
-        },
-        {
-        id: '7',
-        Code: '2', 
-        Fio: 'Абдулбек Максим Петрович',
-        Floor: 'М',
-        Age: '32',
-        NumberHistory: '432423',
-        Date1: '20.02.23',
-        Date2: '20.02.23',
-        Result: '1',
-        Diagnosis: 'Дебилизм, тупой, ахахахахахахахаххха, прикол',
-        Date3: '20.02.23',
-        NameOperation: 'ШГылрпвлрув куцкуеукц укецукеукцецу ',
-        CktDisk: '',
-        MrtDisk: '',
-        CktModel: '',
-        MrtModel: '',
-        DrugVideo: '',
-        EffectOfUse1: '1',
-        Notes: 'цукецукецук',
-        Fgds: '',
-        Fks: '',
-        Ckt: '',
-        Mrt: '',
-        Research: '',
-        Protocol: '',
-        OperationVideo: '.jpg',
-        GistolСonclusion: '',
-      },],
+      items: [],
   fil: {
     code: 'false',
     gender: 'false',
@@ -174,7 +92,7 @@ this.Content()
         this.textbool = false;
         this.itemPhoto = false;
         this.itemVideo = true;
-      }
+      } 
       
     },
     ShowModal3(Notes) {
@@ -223,6 +141,11 @@ this.Content()
         this.itemPhoto = false;
         this.itemVideo = true;
       }
+    },
+    ShowModal7(NameOperation){
+      this.ShowMod = !this.ShowMod
+      this.Item = NameOperation
+      this.textbool = true;
     },
     async filtre(){
       
@@ -288,7 +211,7 @@ this.Content()
         <option value="6">6</option>
         <option value="7">7</option>
         <option value="8">9</option>
-        <option value="fasle" >Отмена выбора</option>
+        <option value="false" >Отмена выбора</option>
 
 
       </select>
@@ -306,7 +229,7 @@ this.Content()
         <option value="false">Выберите пол</option>
 
         
-        <option selected value="M">Мужчина</option>
+        <option selected value="М">Мужчина</option>
         <option value="Ж" >Женщина</option>
         <option value="false" >Отмена выбора</option>
 
@@ -349,11 +272,13 @@ this.Content()
             <th>Гистологическое заключение</th>
             <th>Диск СКТ</th>
             <th>Диск МРТ</th>
-            <th>Построенная модель СТК</th>
+            <th>Построенная модель СКТ</th>
             <th>Построенная модель МРТ</th>
             <th>Эффект предоперационного применения ДР(0/1)</th>
             <th>Видео(фото) операции с ДР</th>
             <th>Примечания</th>
+            <th>Фамилия создателя</th>
+
           </tr>
         </thead>
         <tbody>
@@ -376,21 +301,21 @@ this.Content()
             <td><a :href="item.Mrt"><img src="../assets/folder.png" :alt="item.Mrt" class="folder"/></a></td>
             <td><a :href="item.Research"><img src="../assets/folder.png" :alt="item.Research" class="folder"/></a></td>
             <td>{{ item.Date3 }}</td>
-           <td @click="ShowModal2(item.NameOperation)"><img src="../assets/share.png" class="share" :alt="item.NameOperation"></td>
+            <td @click="ShowModal1(item.NameOperation)"><img src="../assets/share.png" class="share" :alt="item.NameOperation"></td>
             <td><a :href="item.Protocol"><img src="../assets/folder.png" :alt="item.Protocol" class="folder"/></a></td>
             <td @click="ShowModal4(item.DrugVideo)"><img src="../assets/share.png" class="share" :alt="item.DrugVideo"></td>
             <td><a :href="item.GistolСonclusion"><img src="../assets/folder.png" :alt="item.GistolСonclusion" class="folder"/></a></td>
-            <td @click="ShowModal5(item.CtkModel)"><img src="../assets/share.png" class="share" :alt="item.CtkModel"></td>
-            <td @click="ShowModal6(item.MrtDisk)"><img src="../assets/share.png" class="share" :alt="item.MrtDisk"></td>
+            <td><a :href="item.CktDisk"><img src="../assets/Link.png" :alt="item.CktDisk" class="folder"></a></td>
+            <td><a :href="item.MrtDisk"><img src="../assets/Link.png" :alt="item.MrtDisk" class="folder"></a></td>
             <td><a :href="item.CktModel"><img src="../assets/Link.png" :alt="item.CktModel" class="folder"/></a></td>
             <td><a :href="item.MrtModel"><img src="../assets/Link.png" :alt="item.MrtModel" class="folder"/></a></td>
             <td>{{ item.EffectOfUse1 }}</td>
             <td><img src="../assets/share.png" :alt="item.OperationVideo" class="share"  @click="ShowModal2(item.OperationVideo)"/></td>
             <td @click="ShowModal3(item.Notes)"><img src="../assets/share.png" class="share" :alt="item.Notes"></td>
-            </tr>
+            <td>{{ item.EffectOfUse1 }}</td>
+            <td>{{ item.creator }}</td>
 
-            
-            
+            </tr>
           </tbody>
         </table>
       </div>
@@ -423,10 +348,10 @@ table thead {
   top: 0;
   z-index: 1000;
   margin-top: 0px;
-  border: 0.5px solid #fe00bf;
+  border: 0.5px solid #000000;
 }
 table th {
-  border: 1px solid #fe00bf;
+  border: 1px solid #000;
   padding: 15px 15px;
   text-align: center;
   max-width: 500px; /* Максимальная ширина ячейки */
@@ -490,7 +415,7 @@ table th {
   cursor: pointer;
 }
 table td {
-  border: 1px solid #fe00bf;
+  border: 1px solid #000000;
   padding: 15px 15px;
   text-align: center;
   max-width: 600px; /* Максимальная ширина ячейки */
