@@ -1286,7 +1286,7 @@ def all_by_user():
 
     return jsonify(responce_object)
 
-def change_pass_email(email: str) -> Union[str, list]:
+def isEmail(email: str) -> Union[bool, str]:
     try:
         pg = psycopg2.connect(f"""
             host=localhost
@@ -1297,14 +1297,11 @@ def change_pass_email(email: str) -> Union[str, list]:
         """)
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        
-        cursor.execute(f"SELECT * FROM vr WHERE id_u=$${id_u}$$")
-        result = cursor.fetchall()
-        pg.commit()
 
-        return_data = []
-        for row in result:
-            return_data.append(form_dict(dict(row)))
+        cursor.execute(f"SELECT COUNT(*) FROM users WHERE email=$${email}$$")
+        cnt = cursor.fetchall()[0][0]
+
+        return_data = False if cnt != 0 else True
 
     except (Exception, Error) as error:
         logging.info(f"Ошибка получения данных: {error}")
@@ -1312,8 +1309,8 @@ def change_pass_email(email: str) -> Union[str, list]:
 
     finally:
         if pg:
-            cursor.close
-            pg.close
+            cursor.close()
+            pg.close()
             logging.info("Соединение с PostgreSQL закрыто")
             return return_data
 
@@ -1325,17 +1322,67 @@ def change_pass_email_():
     response_object = {'status': 'success'}
     post_data = request.get_json()
 
-    res = send_pass_code(post_data.get("email"), "no reg")
+    if is_email(post_data.get("email")) is True:
+        res = send_pass_code(post_data.get("email"), "no reg")
 
-    match res:
-        case 1:
-            response_object["res"] = "Ok"
-        case 0:
-            response_object["res"] = "Bad email"
-        case _:
-            response_object["res"] = "Err"
+        match res:
+            case 1:
+                response_object["res"] = "Ok"
+            case 0:
+                response_object["res"] = "Bad email"
+            case _:
+                response_object["res"] = "Err"
+    else: response_object["res"] = "0 email"
+    return jsonify(response_object)
+
+def new_pass(email: str, password: str, expassword: str) -> str:
+    try:
+        pg = psycopg2.connect(f"""
+            host=localhost
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={os.getenv('PORT_PG')}
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        if password != expassword:
+            return_data = 'Pass'
+        else:
+            cursor.execute(f"UPDATE users SET password=$${password}$$ WHERE email=$${email}$$")
+            pg.commit()
+            return_data = 'Ok'
+
+
+
+    except (Exception, Error) as error:
+        logging.info(f"Ошибка получения данных: {error}")
+        return_data = 'Error'
+
+    finally:
+        if pg:
+            cursor.close()
+            pg.close()
+            logging.info("Соединение с PostgreSQL закрыто")
+            return return_data
+
+@app.route("/new-pass", methods=["POST"])
+def new_pass_():
+    if request.origin != HPST:
+        return jsonify({"message": "Forbidden"}), 403
+
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+
+    if session.get("isVerif"):
+        response_object["res"] = new_pass(post_data.get("email"), post_data.get("password"), post_data.get("expassword"))
+    else:
+        response_object["res"] = "not veref"
 
     return jsonify(response_object)
+
+
 
 #БаZа
 if __name__ == '__main__':
