@@ -982,7 +982,7 @@ def SurSearch(query: str) -> Union[str, list]:
 def surname_search():
     responce_object = {'status': 'success'}
 
-    responce_object['all'] = SurSearch(request.args.get('query'))
+    responce_object['res'] = SurSearch(request.args.get('surname'))
 
     return jsonify(responce_object)
 
