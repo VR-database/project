@@ -5,6 +5,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 from typing import Tuple, Union
 from email.message import EmailMessage
+import hashlib
 
 load_dotenv()
 
@@ -592,38 +593,6 @@ def form_dict(slovar):
     
     return form
 
-def ByOneUser(id_u: str) -> Union[str, list]:
-    try:
-        pg = psycopg2.connect(f"""
-            host=localhost
-            dbname=postgres
-            user={USER_PG}
-            password={PASSWORD_PG}
-            port={os.getenv('PORT_PG')}
-        """)
-
-        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        
-        cursor.execute(f"SELECT * FROM vr WHERE id_u=$${id_u}$$")
-        result = cursor.fetchall()
-        pg.commit()
-
-        return_data = []
-        for row in result:
-            return_data.append(form_dict(dict(row)))
-
-    except (Exception, Error) as error:
-        logging.info(f"Ошибка получения данных: {error}")
-        return_data = 'Error'
-
-    finally:
-        if pg:
-            cursor.close
-            pg.close
-            logging.info("Соединение с PostgreSQL закрыто")
-            return return_data
-
-
 def mini(id):
     return id
 # ========================================================================================
@@ -742,7 +711,7 @@ def shows():
     responce_object = {'status': 'success'}
     if session.get('isAdmin') == 'True':
         responce_object['all'] = show_all()
-    else: responce_object["all"] = "Отказано в доступе"
+    else: responce_object["all"] = "Отазано в доступе"
     return jsonify(responce_object)
 
 @app.route('/media/<path:filename>')
@@ -1029,8 +998,113 @@ def new_login():
         session.modified = True
         return jsonify(response_object)
 
+# def send_pass_code(email: str) -> str:
+#     pass
+
+
+@app.route('/send-email', methods=["POST"])
+def send_email():
+    if request.origin != HPST:
+        return jsonify({"message": "Forbidden"}), 403
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+    session["surname"], session["email"], session["password"], session["code"] = post_data.get("surname"), post_data.get("email"), post_data.get("password"), send_pass_code(post_data.get("email"))
+    if session.get("code") != "err":
+        return jsonify(response_object)
+    else: 
+        response_object["code"] = "Invalid email"
+        return jsonify(response_object)
+
+def add_user(email: str, password: str, surname: str) -> str:
+    try:
+        pg = psycopg2.connect(f"""
+            host=localhost
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={os.getenv('PORT_PG')}
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        id = uuid.uuid4().hex
+
+        # TODO: UNIQUE для email
+
+        cursor.execute(f"INSERT INTO users VALUES({id}, {email}, {password}, {surname})")
+        result = cursor.fetchall()
+        pg.commit()
+
+        return_data = id
+
+    except (Exception, Error) as error:
+        logging.info(f"Ошибка получения данных: {error}")
+        return_data = 'Error'
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            logging.info("Соединение с PostgreSQL закрыто")
+            return return_data
+
+@app.route("/check-send-code", methods=["POST"])
+def chek_code_():
+    if request.origin != HPST:
+        return jsonify({"message": "Forbidden"}), 403
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+
+    if session.get("code") == post_data.get("code"):
+        res = add_user(session.get("email"), session.get("password"), session.get("surname"))
+        session["isAdmin"] = session.get("isA")
+        session.modified = True
+        session.permanent = True
+        session.pop("isA", None)
+        if res == "Error":
+            response_object["res"] = "500"
+        else:
+            session["id"] = res
+            session.modified = True
+            session.permanent = True
+            response_object["res"] = "200"
+        
+    else:
+        response_object["res"] = "Bad Code"
+    
+    return jsonify(response_object)
+
+def sign_in(email: str, password: str, code: str) -> Union[str, list]:
+    try:
+        pg = psycopg2.connect(f"""
+            host=localhost
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={os.getenv('PORT_PG')}
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cursor.execute(f"select password, id from usesr WHERE email=%%{email}%%")
+        
+        pas = cursor.fetchall()
+
+        return_data = check_password_hash(password, pas[0]), pas[1]
+
+    except (Exception, Error) as error:
+        logging.info(f"Ошибка получения данных: {error}")
+        return_data = 'Error'
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            logging.info("Соединение с PostgreSQL закрыто")
+            return return_data 
+
 def send_pass_code(email: str, action: str) -> str:
-    item = "регистрации" if action == 'reg' else item = "изменения пароля"
+    item = "регистрации" if action == 'reg' else "изменения пароля"
 
 
     message_1 = """<!DOCTYPE html>
@@ -1151,20 +1225,29 @@ def send_pass_code(email: str, action: str) -> str:
 
         return 0
 
-@app.route('/send-email', methods=["POST"])
-def send_email():
+
+@app.route("/sign-in", methods=["POST"])
+def sign_in_():
     if request.origin != HPST:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     post_data = request.get_json()
-    session["surname"], session["email"], session["password"], session["code"] = post_data.get("surname"), post_data.get("email"), post_data.get("password"), send_pass_code(post_data.get("email"))
-    if session.get("code") != "err":
-        return jsonify(response_object)
-    else: 
-        response_object["code"] = "Invalid email"
-        return jsonify(response_object)
 
-def add_user(email: str, password: str, surname: str) -> str:
+    response_object["res"], id = sign_in(post_data.get("email"), post_data.get("password"), post_data.get("code"))
+
+    if isinstance(response_object["res"], bool):
+        session["id"] = id
+        session['isAdmin'] = str(response_object["res"])
+        session.modified = True
+        session.permanent = True
+
+    return jsonify(response_object)
+
+@app.route("/get-id", methods=["GET"])
+def get_id():
+    return jsonify({'status': 'success', "res": session.get("id")})
+
+def ByOneUser(id_u: str) -> Union[str, list]:
     try:
         pg = psycopg2.connect(f"""
             host=localhost
@@ -1176,13 +1259,13 @@ def add_user(email: str, password: str, surname: str) -> str:
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
-        id = uuid.uuid4().hex
-
-        cursor.execute(f"INSERT INTO users VALUES({id}, {email}, {password}, {surname})")
+        cursor.execute(f"SELECT * FROM vr WHERE id_u=$${id_u}$$")
         result = cursor.fetchall()
         pg.commit()
 
-        return_data = id
+        return_data = []
+        for row in result:
+            return_data.append(form_dict(dict(row)))
 
     except (Exception, Error) as error:
         logging.info(f"Ошибка получения данных: {error}")
@@ -1195,32 +1278,6 @@ def add_user(email: str, password: str, surname: str) -> str:
             logging.info("Соединение с PostgreSQL закрыто")
             return return_data
 
-@app.route("/check-send-code", methods=["POST"])
-def chek_code_():
-    if request.origin != HPST:
-        return jsonify({"message": "Forbidden"}), 403
-    response_object = {'status': 'success'}
-    post_data = request.get_json()
-
-    if session.get("code") == post_data.get("code"):
-        res = add_user(session.get("email"), session.get("password"), session.get("surname"))
-        session["isAdmin"] = session.get("isA")
-        session.modified = True
-        session.permanent = True
-        session.pop("isA", None)
-        if res == "Error":
-            response_object["res"] = "500"
-        else:
-            session["id"] = res
-            session.modified = True
-            session.permanent = True
-            response_object["res"] = "200"
-        
-    else:
-        response_object["res"] = "Bad Code"
-    
-    return jsonify(response_object)
-
 @app.route('/by-user', methods=['GET'])
 def all_by_user():
     responce_object = {'status': 'success'}
@@ -1229,7 +1286,60 @@ def all_by_user():
 
     return jsonify(responce_object)
 
+def change_pass_email(email: str) -> Union[str, list]:
+    try:
+        pg = psycopg2.connect(f"""
+            host=localhost
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={os.getenv('PORT_PG')}
+        """)
+
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cursor.execute(f"SELECT * FROM vr WHERE id_u=$${id_u}$$")
+        result = cursor.fetchall()
+        pg.commit()
+
+        return_data = []
+        for row in result:
+            return_data.append(form_dict(dict(row)))
+
+    except (Exception, Error) as error:
+        logging.info(f"Ошибка получения данных: {error}")
+        return_data = 'Error'
+
+    finally:
+        if pg:
+            cursor.close
+            pg.close
+            logging.info("Соединение с PostgreSQL закрыто")
+            return return_data
+
+@app.route("/change-pass-email", methods=["POST"])
+def change_pass_email_():
+    if request.origin != HPST:
+        return jsonify({"message": "Forbidden"}), 403
+
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+
+    res = send_pass_code(post_data.get("email"), "no reg")
+
+    match res:
+        case 1:
+            response_object["res"] = "Ok"
+        case 0:
+            response_object["res"] = "Bad email"
+        case _:
+            response_object["res"] = "Err"
+
+    return jsonify(response_object)
+
 #БаZа
 if __name__ == '__main__':
       all_tables()
       app.run(host='0.0.0.0', port=80)
+
+
