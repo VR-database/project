@@ -1,130 +1,105 @@
 <script>
 import axios from "axios";
-axios.defaults.baseURL = "https://api.ar-vmgh.ru/";
+axios.defaults.baseURL = "http://127.0.0.1:5000/";
 export default {
   data() {
     return {
+      expassword: "",
       password: "",
       email: "",
-      code: "",
-      id: null,
+
       isShowPassword: false,
       showPassword: "password",
       eyeOpen: true,
       error: "",
       eyeImg: "/src/assets/eye.svg",
       isAdmin: true,
-
-      isShow: false,
     };
   },
   methods: {
-    async getId() {
+    check() {
+      if (this.password === "") {
+        this.error = "Заполните поле ввода!";
+      } else {
+        this.error = "";
+        this.login();
+      }
+    },
+    toggleVisibility() {
+      this.isShowPassword = !this.isShowPassword;
+      this.eyeOpen = !this.eyeOpen;
+
+      if (this.isShowPassword) {
+        this.showPassword = "text";
+        this.eyeImg = "/src/assets/svg-editor-image2.svg";
+      } else {
+        this.showPassword = "password";
+        this.eyeImg = "/src/assets/eye.svg";
+      }
+    },
+    async login() {
       try {
-        let response = await axios.get(`/get-id`);
-        this.id = response.data.res;
+        let response = await axios.post(`/new-pass`, {
+          password: this.password,
+            expassword: this.expassword,
+        });
+          this.error = response.data.res
+
+          if (this.error == "True") {
+              this.$router.push("/")
+          } else{
+            this.error = "Ошибка"
+          }
       } catch (err) {
         this.error = "Ошибка сервера";
       }
     },
-    gotable() {
-      const id = this.id;
-      this.$router.push(`/Table/${id}`);
-    },
-    showModal() {
-      this.isShow = !this.isShow;
-    },
-    async change() {
-      const email = this.email
-      try {
-        let response = await axios.get(`/change-pass-email?email=${email}`);
-        if (response == "Ok") {
-          this.$router.push(`/NewPassCode`);
-        } else if (response == "Bad email") {
-        }
-      } catch (err) {
-        console.error(err);
-        this.error = "Ошибка сервера";
-      }
-    },
-  },
-  mounted() {
-    this.getId();
   },
 };
 </script>
 
 <template>
-  <div class="container" v-if="isShow">
-    <h1>Ваша почта</h1>
+  <div class="container">
+    <h1>Новый пароль</h1>
     <form @submit.prevent="login">
-    
+      <div class="password">
         <input
           class="form-item"
-          v-model="email"
+          v-model="password"
           :type="showPassword"
-          placeholder="Почта"
+          placeholder="Новый пароль"
           required
         />
-        <p>{{ error }}</p>  
-        <button class="btn-reg" type="submit" @click="change">
-          Сбросить пароль
-        </button>
-      
+        <img
+          @click="toggleVisibility"
+          class="password-show"
+          :src="eyeImg"
+          alt=""
+        />
+      </div>
+      <div class="password">
+        <input
+          class="form-item"
+          v-model="expassword"
+          :type="showPassword"
+          placeholder="Повторите пароль"
+          required
+        />
+        <img
+          @click="toggleVisibility"
+          class="password-show"
+          :src="eyeImg"
+          alt=""
+        />
+        <p class="error" v-if="error">{{ error }}</p>
+      </div>
+      <button class="btn-reg" type="submit">Зарегистрироваться</button>
     </form>
-    <div class="error-end-btn"></div>
-  </div>
-
-  <div class="container">
-    <h1>Кабинет</h1>
-    <button class="btn-reg" type="submit" @click="gotable">Моя таблица</button>
-    <button class="btn-reg" type="submit" @click="showModal">
-      Сбросить пароль
-    </button>
     <div class="error-end-btn"></div>
   </div>
 </template>
 
 <style scoped>
-.btn-reg{
-  text-align: center;
-}
-.mod {
-  margin-left: auto;
-  margin-right: auto;
-  background: #ffffff;
-  padding: 20px;
-  max-width: 400px;
-  /* margin-left: auto;
-    margin-right: auto; */
-  margin-top: 20px;
-  border-radius: 30px;
-  -webkit-box-shadow: -1px 0px 8px 4px rgba(34, 60, 80, 0.2);
-  -moz-box-shadow: -1px 0px 8px 4px rgba(34, 60, 80, 0.2);
-  box-shadow: -1px 0px 8px 4px rgba(34, 60, 80, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-.mod h3 {
-  text-align: center;
-}
-.mod .btns {
-  display: flex;
-  gap: 10px;
-}
-.mod .btns button {
-  padding: 10px;
-  border-radius: 12px;
-  border: none;
-  background-color: #4200ff;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 20px;
-  transition: all 0.3s;
-}
 form {
   display: flex;
   align-items: center;
@@ -140,7 +115,7 @@ form {
   max-width: 400px;
   /* margin-left: auto;
     margin-right: auto; */
-  margin-top: 20px;
+  margin-top: 100px;
   border-radius: 30px;
   -webkit-box-shadow: -1px 0px 8px 4px rgba(34, 60, 80, 0.2);
   -moz-box-shadow: -1px 0px 8px 4px rgba(34, 60, 80, 0.2);
@@ -153,7 +128,7 @@ form {
 
 h1 {
   font-size: 45px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   user-select: none;
 }
 

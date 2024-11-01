@@ -29,6 +29,8 @@ export default {
       } catch (err) {
         console.error(err);
         this.error = "Ошибка сервера";
+        this.isSession = false;
+
       }
     },
     async Check() {
@@ -61,15 +63,16 @@ export default {
         />
         <span class="title">VR Database</span>
       </a>
+      <div>
       <a href="/Table" v-if="isAdmin"
         ><img src="../assets/stats.png" alt="" class="table"
       /></a>
       <a :href="`/Table/` + this.id" v-if="isUser"
         ><img src="../assets/stats.png" alt="" class="table"
       /></a>
-
-      <a href="/Profile" class="link" >Кабинет</a>
-      <!-- <a href="/Enter" class="link" >Войти</a> -->
+    </div>
+      <a href="/Profile" class="link" v-if="isSession">Кабинет</a>
+      <a href="/Enter" class="link" v-else>Войти</a>
     </div>
   </nav>
 </template>

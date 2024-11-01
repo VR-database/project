@@ -70,5 +70,13 @@ export default createRouter({
       path: "/Table/:id",
       component: () => import("../components/MyTable.vue"),
     },
+    {
+      path: "/NewPassCode",
+      component: () => import("../components/EnterCodePass.vue"),
+    },
+    {
+      path: "/NewPass",
+      component: () => import("../components/NewPass.vue"),
+    },
   ],
 });
