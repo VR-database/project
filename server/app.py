@@ -1286,7 +1286,7 @@ def all_by_user():
 
     return jsonify(responce_object)
 
-def isEmail(email: str) -> Union[bool, str]:
+def is_email(email: str) -> Union[bool, str]:
     try:
         pg = psycopg2.connect(f"""
             host=localhost
@@ -1375,14 +1375,31 @@ def new_pass_():
     response_object = {'status': 'success'}
     post_data = request.get_json()
 
-    if session.get("isVerif"):
+    if session.get("isVerif") is True:
         response_object["res"] = new_pass(post_data.get("email"), post_data.get("password"), post_data.get("expassword"))
     else:
         response_object["res"] = "not veref"
 
     return jsonify(response_object)
 
+@app.route("/check-pass-email", methods=["POST"])
+def check_pass_email_():
+    if request.origin != HPST:
+        return jsonify({"message": "Forbidden"}), 403
 
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+
+    if session.get("code") == post_data.get("code"):
+        response_object["res"] = "True"
+        session["isVerif"] = True
+        session.modified = True
+        session.pop("code")
+        session.modified = True
+    else:
+        response_object["res"] = "False"
+
+    return jsonify(response_object)
 
 #БаZа
 if __name__ == '__main__':
