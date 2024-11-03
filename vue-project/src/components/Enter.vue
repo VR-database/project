@@ -1,4 +1,6 @@
 <script>
+import axios from "axios";
+axios.defaults.baseURL = "https://api.ar-vmgh.ru/";
 export default {
   data() {
     return {

@@ -38,9 +38,10 @@ export default {
       const email = this.email
       try {
         let response = await axios.get(`/change-pass-email?email=${email}`);
-        if (response == "Ok") {
+        const answer = response.data.res
+        if (answer == "Ok") {
           this.$router.push(`/NewPassCode`);
-        } else if (response == "Bad email") {
+        } else if (answer == "Bad email") {
         }
       } catch (err) {
         console.error(err);
