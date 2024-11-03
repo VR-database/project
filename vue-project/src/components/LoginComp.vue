@@ -1,4 +1,7 @@
 <script>
+import axios from 'axios'
+axios.defaults.baseURL = 'https://api.ar-vmgh.ru/'
+
 export default {
   data() {
     return {
@@ -172,7 +175,7 @@ div a {
 }
 
 .nha_div {
-  margin-bottom: 16px;
+    margin-bottom: 16px;
 }
 
 .password {
@@ -186,4 +189,5 @@ div a {
   right: 12px;
   width: 30px;
 }
+
 </style>

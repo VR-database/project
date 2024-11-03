@@ -1,6 +1,9 @@
 <script>
-import Axios from 'axios'; 
-axios.defaults.baseURL = 'http://127.0.0.1:5000';
+import axios from 'axios'; 
+axios.defaults.baseURL = 'https://api.ar-vmgh.ru/'
+
+
+
 // иди нах с точками и запятимыи так это не импорт
 
 export default {

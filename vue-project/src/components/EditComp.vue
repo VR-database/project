@@ -1,15 +1,17 @@
 <script>
 import axios from 'axios'; 
-axios.defaults.baseURL = 'http://127.0.0.1:5000';
+axios.defaults.baseURL = 'https://api.ar-vmgh.ru/'
+
+
+
 // иди нах с точками и запятимыи так это не импорт
 
+// взаимно
+
 export default {
-
-
-
   data() {
     return {
-      arr:[ {
+      form: {
           Code: '',
           Fio: '',
           Floor: '',
@@ -42,32 +44,70 @@ export default {
 
           Protocol: '',
           DrugVideo: '',
-          GistolСonclusion: '',
+          GistolConclusion: '',
 
-      }],
-      xyi : {
-              xyi1: '',
-              xyi2: '',
-              xyi3: '',
-              xyi4: '',
-              xyi5: '',
-              xyi6: '',
-              xyi7: '',
-              xyi8: '',
-              xyi9: '',
-              xyi10: '',
-              xyi11: '',
-              xyi12: '',
-              xyi13: '',
-              xyi14: '',
-              xyi15: ''
-
-            },
+      },
+      xyi: {
+          xyi1: "",
+          xyi2: "",
+          xyi3: "",
+          xyi4: "",
+          xyi5: "",
+          xyi6: "",
+          xyi7: "",
+          xyi8: "",
+          xyi9: "",
+          xyi10: "",
+          xyi11: "",
+          xyi12: "",
+          xyi13: "",
+          xyi14: "",
+          xyi14: "",
+          xyi15: "",
+        },
         file: '',
         status: '',
         id: '',
+        
+        convertFileFGDStext: "Файл незагружен.",
+      convertFileFKStext: "Файл незагружен.",
+      convertFileCKTtext: "Файл незагружен.",
+      convertFileFKStext: "Файл незагружен.",
+      convertFileFGDStext: "Файл незагружен.",
+      convertFileCKTtext: "Файл незагружен.",
+      convertFileMRTtext: "Файл незагружен.",
+      convertOtherstext: "Файл незагружен.",
+      convertProtokolOperationtext: "Файл незагружен.",
+      convertPhotoVudeotext: "Файл незагружен.",
+      convertGostoltext: "Файл незагружен.",
+      convertDiskCKTtext: "Файл незагружен.",
+      convertDiskMRTtext:"Файл незагружен.",
+      convertModelCKTtext:"Файл незагружен.",
+      convertModelMRTtext: "Файл незагружен.",
+      convertOperationVideotext: "Файл незагружен.",
+      convertPhotoVideotext: "Файл незагружен.",
 
+      classFileFGDStext: "notdownload",
+      classFileFKStext: "notdownload",
+      classFileCKTtext: "notdownload",
+      classFileFKS: "notdownload",
+      classFileFGDS: "notdownload",
+      classFileCKT: "notdownload",
+      classFileMRT: "notdownload",
+      classOthers: "notdownload",
+      classProtokolOperation: "notdownload",
+      classPhotoVudeo: "notdownload",
+      classGostol: "notdownload",
+      classDiskCKT: "notdownload",
+      classDiskMRT: "notdownload",
+      classModelCKT: "notdownload",
+      classModelMRT: "notdownload",
+      classOperationVideo: "notdownload",
+      classPhotoVideo: "notdownload",
 
+      isUploading: true,
+      percentCompleted: 0,
+      isLoading: false,
       }
     
   },
@@ -75,15 +115,9 @@ export default {
     async Check() {
       let response = await axios.get(`/check`);
       this.isAdmin = response.data.isAdmin;
-      if (this.isAdmin == 'True'){
-        this.getData();
-        this.routGet()
-      } else if (this.isAdmin == 'False'){
-        this.getData();
-        this.routGet()
-      }else {
-        this.$router.push('/login');
-      }
+      this.getData();
+      this.routGet()
+
     },
     routGet(){
        this.id = this.$route.query.id 
@@ -91,26 +125,52 @@ export default {
     },
     check() {
       if (
-        this.arr[0].Code == '' || this.arr[0].Fio == '' || this.arr[0].Floor == '' || this.arr[0].Age == '' ||
-        this.arr[0].NumberHistory == '' || this.arr[0].Date1 == '' || this.arr[0].Date2 == '' && this.arr[0].Result == '' ||
-        this.arr[0].Diagnosis == '' ||
-        this.arr[0].Date3 == '' || this.arr[0].NameOperation == '' ||
-        this.arr[0].Notes == ''
+        false
         ) {
         this.status = 'Заполните все поля!'
 
       } else {
-        this.status = 'Данные занесены в таблицу.'
-        this.postData();
-        
+        this.putInfo();
+      }
+    },
+    async putInfo() {
+      // this.form.interestings = this.form.interestings.substr(0, 48);
+      this.isLoading = true;
+      this.isUploading = true; // Включаем индикатор загрузки
+      try {
+        await axios.put(
+          "/update-string",
+          {
+            body: {
+              form: this.form,
+              xyi: this.xyi
+            }
+          },
+          {
+            onUploadProgress: (progressEvent) => {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              this.percentCompleted = percentCompleted;
+            },
+          }
+        );
+        this.isUploading = true; 
+        this.status = "Данные обновлены в таблице.";
+        this.$router.push('/Table');
+      } catch (error) {
+        console.error("Ошибка при отправке данных:", error);
+        this.isUploading = false; // Выключаем индикатор загрузки
+        // Добавьте обработку ошибки
       }
     },
     async postData() {
         let response = await axios.put(`/update-string`, {
         body: {
-          form: this.arr[0],
+          form: this.form,
           xyi: this.xyi
         }});
+        this.$router.push('/Table');
     },
     async getData() {
       this.id = this.$route.query.id 
@@ -119,184 +179,292 @@ export default {
         //   id: this.id
         //   }
       }) 
-      this.arr = response.data.all;
+      this.form = response.data.all[0];
       console.log(this.arr)
     },
 
     convertFileCktDisk(event) {
+      if (this.form.Fgds == 0 || true) {
+      this.convertDiskCKTtext = "Файл загружается...";
+      this.classDiskCKT ="load";
+        
       const file = event.target.files[0];
       const filename = event.target.files[0].name;
       this.xyi.xyi1 = filename;
-      
-      const reader = new FileReader();
-     
-      reader.onload = () => {
-        this.arr[0].CktDisk = reader.result;
-          console.log(this.xyi)
 
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.form.CktDisk = reader.result;
+        ;
+
+        this.convertDiskCKTtext = "Файл загружен";
+        this.classDiskCKT = "download";
       };
 
       reader.readAsDataURL(file);
+      }
     },
     convertFileMrtDisk(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.xyi.xyi2 = filename;
+      if (true) {
+        this.convertDiskMRTtext = "Файл загружается...";
+        this.classDiskMRT = "load";
 
-      reader.onload = () => {
-        this.arr[0].MrtDisk = reader.result;
-        console.log(this.arr[0].MrtDisk);
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        const filename = event.target.files[0].name;
+        this.xyi.xyi2 = filename;
+        
+        reader.onload = () => {
+          this.form.MrtDisk = reader.result;
+          console.log(this.form.MrtDisk);
+          
+          this.convertDiskMRTtext = "Файл загружен";
+          this.classDiskMRT = "download";
+        };
+        reader.readAsDataURL(file);
+      }
 
-      };
-      reader.readAsDataURL(file);
     },
-    convertFileCtkModel(event) {
+    convertFileCktModel(event) {
+      if (this.form.CktModel == 0 || true) {
+      this.convertModelCKTtext = "Файл загружается...";
+      this.classModelCKT = "load";
+
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
       this.xyi.xyi3 = filename;
 
       reader.onload = () => {
-        this.arr[0].CtkModel = reader.result;
-        console.log(this.arr[0].CtkModel);
-
+        this.form.CktModel = reader.result;
+        console.log(this.form.CktModel);
+      
+        this.convertModelCKTtext = "Файл загружен";
+        this.classModelCKT = "download";
       };
       reader.readAsDataURL(file);
+      }
     },
     convertFileMrtModel(event) {
+      if (this.form.MrtModel == 0 || true) {
+      this.convertModelMRTtext = "Файл загружается...";
+      this.classModelMRT = "load";
+
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
       this.xyi.xyi4 = filename;
 
       reader.onload = () => {
-        this.arr[0].MrtModel = reader.result;
+        this.form.MrtModel = reader.result;
         console.log(reader.result);
 
+        this.convertModelMRTtext = "Файл загружен";
+        this.classModelMRT = "download";
       };
       reader.readAsDataURL(file);
+      }
     },
     convertFileOperationVideo(event) {
+      if (this.form.OperationVideo == 0 || true) {
+      this.convertOperationVideotext = "Файл загружается...";
+      this.classOperationVideo = "load";
+
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
       this.xyi.xyi5 = filename;
 
       reader.onload = () => {
-        this.arr[0].OperationVideo = reader.result;
+        this.form.OperationVideo = reader.result;
         console.log(reader.result);
 
+        this.convertOperationVideotext = "Файл загружен";
+        this.classOperationVideo = "download";
       };
       reader.readAsDataURL(file);
+      }
     },
 
     convertFileEffectOfUse1(event) {
+      if (this.form.EffectOfUse1 == 0 || true) {
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
       this.xyi.xyi6 = filename;
 
       reader.onload = () => {
-        this.arr[0].EffectOfUse1 = reader.result;
+        this.form.EffectOfUse1 = reader.result;
         console.log(reader.result);
-
       };
       reader.readAsDataURL(file);
+      }
     },
-    convertFileGistolСonclusion(event) {
+    convertFileGistolConclusion(event) {
+      if (this.form.GistolConclusion == 0 || true) {
+      this.convertGostoltext = "Файл загружается..."
+      this.classGostol = "load"
+
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
       this.xyi.xyi15 = filename;
 
       reader.onload = () => {
-        this.arr[0].GistolСonclusion = reader.result;
+        this.form.GistolConclusion = reader.result;
         console.log(reader.result);
 
+        this.convertGostoltext = "Файл загружен"
+        this.classGostol = "download"
       };
       reader.readAsDataURL(file);
+      }
     },
-     convertFileFGDS(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.xyi.xyi8 = filename;
+    convertFileFGDS(event) {
+      if (this.form.Fgds == 0 || true) {
+        this.convertFileFGDStext = "Файл загружается...";
+        this.classFileFGDStext = "load";
 
-      reader.onload = () => {
-        this.arr[0].Fgds = reader.result;
-        console.log(reader.result);
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        const filename = file.name;
+        this.xyi.xyi8 = filename;
 
-      };
-      reader.readAsDataURL(file);
+        reader.onload = () => {
+          this.form.Fgds = reader.result;
+          console.log(reader.result);
+
+          // Обновляем текст и класс после завершения загрузки файла
+          this.convertFileFGDStext = "Файл загружен.";
+          this.classFileFGDStext = "download";
+        };
+
+        reader.readAsDataURL(file);
+        }
     },
-     convertFileFKS(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.xyi.xyi9 = filename;
+    convertFileFKS(event) {
+      if (this.form.Fks == 0 || true) {
+        this.convertFileFKStext = "Файл загружается...";
+        this.classFileFKStext = "load";
 
-      reader.onload = () => {
-        this.arr[0].Fks = reader.result;
-        console.log(reader.result);
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        const filename = event.target.files[0].name;
+        this.xyi.xyi9 = filename;
 
-      };
-      reader.readAsDataURL(file);
+        reader.onload = () => {
+          this.form.Fks = reader.result;
+          console.log(reader.result);
+
+          this.convertFileFKStext = "Файл загружен.";
+          this.classFileFKStext = "download";
+        };
+        reader.readAsDataURL(file);
+        }
     },
-    convertFileResearch(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.xyi.xyi12 = filename;
+    convertFileCKT(event) {
+      if (this.form.Ckt == 0 || true) {
+        this.convertFileCKTtext = "Файл загружается...";
+        this.classFileCKTtext = "load";
 
-      reader.onload = () => {
-        this.arr[0].Ckt = reader.result;
-        console.log(reader.result);
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        const filename = event.target.files[0].name;
+        this.xyi.xyi10 = filename;
+        console.log(this.xyi.xyi10);
 
-      };
-      reader.readAsDataURL(file);
+        reader.onload = () => {
+          this.form.Ckt = reader.result;
+          console.log(reader.result);
+
+          this.convertFileCKTtext = "Файл загружен.";
+          this.classFileCKTtext = "download";
+        };
+        reader.readAsDataURL(file);
+        }
     },
-    convertFileMRT(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.xyi.xyi11 = filename;
+  convertFileMRT(event) {
+    if (this.form.Mrt == 0 || true) {
+    this.convertFileMRTtext = "Файл загружается...";
+    this.classFileMRT = "load";
 
-      reader.onload = () => {
-        this.arr[0].Mrt = reader.result;
-        console.log(reader.result);
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const filename = event.target.files[0].name;
+    this.xyi.xyi11 = filename;
 
-      };
-      reader.readAsDataURL(file);
-    },
-    convertFileProtocol(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.xyi.xyi13 = filename;
+    reader.onload = () => {
+      this.form.Mrt = reader.result;
+      console.log(reader.result);
 
-      reader.onload = () => {
-        this.arr[0].Protocol = reader.result;
-        console.log(reader.result);
+      this.convertFileMRTtext = "Файл загружен";
+      this.classFileMRT = "download";
+    };
+    reader.readAsDataURL(file);
+    }
+  },
+  convertFileProtocol(event) {
+    if (this.form.Protocol == 0 || true) {
+    this.convertProtokolOperationtext = "Файл загружается...";
+    this.classProtokolOperation = "load";
 
-      };
-      reader.readAsDataURL(file);
-    },
-    convertFileDrugVideo(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const filename = event.target.files[0].name;
+    this.xyi.xyi13 = filename;
+
+    reader.onload = () => {
+      this.form.Protocol = reader.result;
+      console.log(reader.result);
+
+      this.convertProtokolOperationtext = "Файл загружен";
+      this.classProtokolOperation = "download";
+    };
+    reader.readAsDataURL(file);
+    }
+  },
+  convertFileDrugVideo(event) {
+    if (this.form.DrugVideo == 0 || true) {
+      this.convertPhotoVideotext= "Файл заугружается"
+      this.classPhotoVideo = "load"
+
       const file = event.target.files[0];
       const reader = new FileReader();
       const filename = event.target.files[0].name;
       this.xyi.xyi14 = filename;
 
       reader.onload = () => {
-        this.arr[0].DrugVideo = reader.result;
+        this.form.DrugVideo = reader.result;
         console.log(reader.result);
 
+        this.convertPhotoVideotext = "Файл заугружен"
+        this.classPhotoVideo = "download"
       };
       reader.readAsDataURL(file);
-    },
-
+    }
   },
+  convertFileResearch(event) {
+    if (this.form.Research == 0 || true) {
+    this.convertOtherstext = "Файл загружается..."
+    this.classOthers = "load";
+
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const filename = event.target.files[0].name;
+    this.xyi.xyi14 = filename;
+
+    reader.onload = () => {
+      this.form.Research = reader.result;
+      console.log(reader.result);
+
+      this.convertOtherstext = "Файл Загружен"
+      this.classOthers = "download";
+    };
+    reader.readAsDataURL(file);
+    }
+  },
+},
   mounted() {
     this.Check()
   },
@@ -316,139 +484,179 @@ export default {
       <form>
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Код диагноза</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="1/2/3/4/5/6/7/8/9" v-model="arr[0].Code">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="1/2/3/4/5/6/7/8/9" v-model="form.Code">
   <p></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">ФИО</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ФИО" v-model="arr[0].Fio">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ФИО" v-model="form.Fio">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Пол</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="М/Ж" v-model="arr[0].Floor">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="М/Ж" v-model="form.Floor">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Возраст</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Возраст" v-model="arr[0].Age">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Возраст" v-model="form.Age">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Номер истории болезни</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Номер истории болезни" v-model="arr[0].NumberHistory">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Номер истории болезни" v-model="form.NumberHistory">
     </div>
-<!-- {{arr[0].Date1}} -->
+<!-- {{form.Date1}} -->
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Дата госпитализации</label>
-  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" v-model="arr[0].Date1">
+  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" v-model="form.Date1">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Дата выписки (смерти)</label>
-  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата выписки (смерти)" v-model="arr[0].Date2">
+  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата выписки (смерти)" v-model="form.Date2">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Исход (1 - выписан / 0 - умер)</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Исход" v-model="arr[0].Result">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Исход" v-model="form.Result">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Диагноз окончательный</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Диагноз" v-model="arr[0].Diagnosis">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Диагноз" v-model="form.Diagnosis">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">ФГДС</label>
   <input type="file" class="form-control"  placeholder="ФГДС"  @change="convertFileFGDS">
-  <p class="mt-2"><a :href="arr[0].Fgds">Скачать</a></p>
+  <div>
+            <p :class="this.classFileFGDStext">{{ this.convertFileFGDStext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.Fgds">Скачать исходный файл</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">ФКС</label>
   <input type="file" class="form-control"  placeholder="ФКС" @change="convertFileFKS">
-  <p class="mt-2"><a :href="arr[0].Fks">Скачать</a></p>
+  <div>
+            <p :class="this.classFileFKStext">{{ this.convertFileFKStext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.Fks">Скачать исходный файл</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Протокол СКТ</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" @change="convertFileCKT">
-  <p class="mt-2"><a :href="arr[0].Ckt">Скачать</a></p>
+  <div>
+            <p :class="this.classFileCKTtext">{{ this.convertFileCKTtext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.Ckt">Скачать исходный файл</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Протокол МРТ</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" @change="convertFileMRT">
-  <p class="mt-2"><a :href="arr[0].Mrt">Скачать</a></p>
+  <div>
+            <p :class="this.classFileMRT">{{ this.convertFileMRTtext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.Mrt">Скачать исходный файл</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Прочие исследования</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Исследования" @change="convertFileResearch">
-  <p class="mt-2"><a :href="arr[0].Research">Скачать</a></p>
+  <div>
+            <p :class="this.classOthers">{{ this.convertOtherstext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.Research">Скачать исходный файл</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Дата операции</label>
-  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата операции" v-model="arr[0].Date3">
+  <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Дата операции" v-model="form.Date3">
     </div>
 
 
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Название операции</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Название" v-model="arr[0].NameOperation">
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Название" v-model="form.NameOperation">
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Протокол операции</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Протокол" @change="convertFileProtocol">
-  <p class="mt-2"><a :href="arr[0].Protocol">Скачать</a></p>
+  
+          <div>
+            <p :class="this.classProtokolOperation">{{ this.convertProtokolOperationtext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.Protocol">Скачать исходный файл</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Фото (видео) препарата</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Фото, видео" @change="convertFileDrugVideo">
-  <p class="mt-2"><a :href="arr[0].DrugVideo">Скачать</a></p>
+  <div>
+            <p :class="this.classPhotoVideo">{{ this.convertPhotoVideotext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.DrugVideo">Скачать исходный файл</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Гистологическое заключение</label>
-  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Заключение" @change="convertFileGistolСonclusion">
-  <p class="mt-2"><a :href="arr[0].GistolСonclusion">Скачать</a></p>
+  <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Заключение" @change="convertFileGistolConclusion">
+  <div>
+            <p :class="this.classGostol">{{ this.convertGostoltext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.GistolConclusion">Скачать исходный файл</a></p>
     </div>
 
     <h4 class="mt-5 mb-3">Ссылки </h4>
     <div class="mb-3 mt-4">
   <label for="exampleFormControlInput1" class="form-label">Диск СКТ</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" @change="convertFileCktDisk">
-  <p class="mt-2"><a :href="arr[0].CktDisk">Скачать</a></p>
+  <div>
+            <p :class="this.classDiskCKT">{{ this.convertDiskCKTtext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.CktDisk">Скачать исходный файл</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Диск МРТ</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileMrtDisk">
-  <p class="mt-2"><a :href="arr[0].MrtDisk">Скачать</a></p>
+  <div>
+            <p :class="this.classDiskMRT">{{ this.convertDiskMRTtext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.MrtDisk">Скачать исходный файл</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Построенная модель СТК</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileCtkModel">
-  <p class="mt-2"><a :href="arr[0].CtkModel">Скачать</a></p>
+  <div>
+            <p :class="this.classModelCKT">{{ this.convertModelCKTtext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.CtkModel">Скачать исходный файл</a></p>
     </div>
 
     <div class="mb-3">
   <label for="eleFormControlInput1" class="form-label">Построенная модель МРТ</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка" @change="convertFileMrtModel">
-  <p class="mt-2"><a :href="arr[0].MrtModel">Скачать</a></p>
+  <div>
+            <p :class="this.classModelMRT">{{ this.convertModelMRTtext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.MrtModel">Скачать исходный файл</a></p>
     </div>
 
     <div class="mb-3">
   <label for="exampleFormControlInput1" class="form-label">Видео(фото) операции с ДР</label>
   <input type="file" class="form-control" id="exampleFormControlInput1" placeholder="Ссылка"  @change="convertFileOperationVideo">
-  <p class="mt-2"><a :href="arr[0].OperationVideo">Скачать</a></p>
+  <div>
+            <p :class="this.classOperationVideo">{{ this.convertOperationVideotext }}</p>
+          </div>
+  <p class="mt-2"><a :href="form.OperationVideo">Скачать исходный файл</a></p>
     </div>
 
     <div class="mb-3">
@@ -458,7 +666,7 @@ export default {
 
     <div class="mb-3">
   <label for="exampleFormControlTextarea1" class="form-label">Примечания.</label>
-  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="arr[0].Notes"></textarea>
+  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="form.Notes"></textarea>
     </div>
 </form>
    <p class="p">{{ status }}</p> 
@@ -466,11 +674,35 @@ export default {
 
 </div>
 <div class="btn">
-<button class="btn-reg btn" @click="check">Добавить</button>
-</div>
+  <div class="mb-3" v-if="isLoading">
+              <label for="exampleFormControlInput1" class="form-label mt-3"
+                ><h5>Загрузка данных на сервер...</h5></label
+              >
+              <br>
+              <progress
+                max="100"
+                :value="this.percentCompleted"
+                v-if="this.isUploading"
+              ></progress>
+              <p>{{ this.percentCompleted }} %</p>
+      </div>
+      <button class="btn-reg btn" @click="check">Обновить</button>
+  </div>
 </template>
 
 <style scoped>
+.load {
+  color: orange;
+  margin-top: 10px;
+}
+.notdownload {
+  color: red;
+  margin-top: 10px;
+}
+.download {
+  color: green;
+  margin-top: 10px;
+}
 .btn-back{
 background: none;
 border: none;

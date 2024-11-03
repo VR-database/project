@@ -1,11 +1,12 @@
 <script>
+    
 </script>
 
 <template>
     <div class="background">
         <h1>Ошибка</h1>
         
-        <a href="/Profile"><button>На главную</button></a>
+        <a href="/Login"><button>На главную</button></a>
     </div>
 </template>
 
