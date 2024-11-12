@@ -1,6 +1,6 @@
 <script>
 import axios from "axios";
-axios.defaults.baseURL = "http://127.0.0.1:5000/";
+axios.defaults.baseURL = "https://api.ar-vmgh.ru/";
 export default {
   data() {
     return {
@@ -45,10 +45,10 @@ export default {
         });
           this.error = response.data.res
 
-          if (this.error == "True") {
-              this.$router.push("/")
+          if (this.error == "Ok") {
+              this.$router.push("/Profile")
           } else{
-            this.error = "Ошибка"
+            this.error = "Вы не ввели код"
           }
       } catch (err) {
         this.error = "Ошибка сервера";

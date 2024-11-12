@@ -31,7 +31,7 @@ export default {
         let response = await axios.post(`/check-pass-email`, {
           code: this.code,
         });
-        const answer = response.data;
+        let answer = response.data.res;
         if (answer == "True") {
           this.$router.push("/NewPass");
         } else if (answer == "False") {
@@ -52,7 +52,7 @@ export default {
       <div class="username">
         <input
           class="form-item"
-          v-model="username"
+          v-model="this.code"
           type="text"
           placeholder="Код"
           required

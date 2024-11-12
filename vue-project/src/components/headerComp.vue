@@ -21,7 +21,7 @@ export default {
       try {
         let response = await axios.get(`/get-id`);
         this.id = response.data.res;
-        if (response === null) {
+        if (this.id === null) {
           this.isSession = false;
         } else {
           this.isSession = true;

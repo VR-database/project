@@ -38,13 +38,13 @@ export default {
     async Check() {
       let response = await axios.get(`/check`);
       this.isAdmin = response.data.isAdmin;
-      if (this.isAdmin == "True") {
-        this.Content();
-      } else if (this.isAdmin == "False") {
-        this.$router.push("/Add");
-      } else {
-        this.$router.push("/login");
-      }
+      if (true) {
+        this.Content();}
+      // } else if (this.isAdmin == "False") {
+      //   this.$router.push("/Add");
+      // } else {
+      //   this.$router.push("/login");
+      // }
     },
     async Content() {
       const id = this.$route.params.id;

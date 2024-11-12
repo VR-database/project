@@ -32,10 +32,11 @@ export default {
         let response = await axios.post(`/check-send-code`, {
           code: this.code,
         });
-        const answer = response.data;
-        if (answer == "True") {
-          this.$router.push("/Login");
-        } else if (answer == "False") {
+        let answer = response.data.res;
+        console.log(answer)
+        if (answer == "200") {
+          this.$router.push("/");
+        } else if (answer == "Bad Code") {
           this.error = "Неверный код";
         }
       } catch (err) {
@@ -53,7 +54,7 @@ export default {
       <div class="username">
         <input
           class="form-item"
-          v-model="username"
+          v-model="this.code"
           type="text"
           placeholder="Код"
           required

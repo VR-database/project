@@ -36,10 +36,8 @@ export default {
               this.isAdmin = response.data.isAdmin;
               if (this.isAdmin == "Неверный пароль!") {
                 this.error = this.isAdmin;
-              } else if (this.isAdmin == false) {
-                  this.$router.push("/Add");
-              } else if (this.isAdmin == true) {
-                this.$router.push("/Table");
+              } else {
+                this.$router.push("/SignUp");
               }
           } catch (err) {
             this.error = "Ошибка сервера";

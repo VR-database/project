@@ -9,7 +9,7 @@ export default {
       code: "",
       id: null,
       isShowPassword: false,
-      showPassword: "password",
+      showPassword: "text",
       eyeOpen: true,
       error: "",
       eyeImg: "/src/assets/eye.svg",
@@ -35,9 +35,9 @@ export default {
       this.isShow = !this.isShow;
     },
     async change() {
-      const email = this.email
+      let email = this.email
       try {
-        let response = await axios.get(`/change-pass-email?email=${email}`);
+        let response = await axios.post(`/change-pass-email`, {email: email});
         const answer = response.data.res
         if (answer == "Ok") {
           this.$router.push(`/NewPassCode`);
@@ -66,6 +66,7 @@ export default {
           :type="showPassword"
           placeholder="Почта"
           required
+          type="text"
         />
         <p>{{ error }}</p>  
         <button class="btn-reg" type="submit" @click="change">

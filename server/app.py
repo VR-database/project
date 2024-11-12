@@ -65,10 +65,11 @@ logging.basicConfig(
 
 @app.route('/api', methods=['GET'])
 def api():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden", "origin": request.origin}), 403
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
+    # logging.info(get_surname(session.get("id")))
     return jsonify(message="Hello from API!")
 
 def all_tables():
@@ -161,15 +162,15 @@ def login_user(pas):
         pg.commit()
         logging.info(passwords)
         if pas==passwords[0]['admin_pass']: 
-            return_data = True
-            session['isAdmin'] = 'True'
-            session.modified = True
-            session.permanent = True
+            return_data = 'True'
+            # session['isAdmin'] = 'True'
+            # session.modified = True
+            # session.permanent = True
         elif pas==passwords[0]['person_pass']: 
-            return_data = False
-            session['isAdmin'] = 'False'
-            session.permanent = True
-            session.modified = True
+            return_data = 'False'
+            # session['isAdmin'] = 'False'
+            # session.permanent = True
+            # session.modified = True
 
         else: 
             return_data = "Неверный пароль!"
@@ -601,7 +602,7 @@ def mini(id):
 # Декоратор для логина
 @app.route('/login', methods=['POST'])
 def login():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     if request.method == 'POST':
@@ -613,7 +614,7 @@ def login():
 # Декоратор для создания нововй строки
 @app.route('/new-string', methods=['POST'])
 def new_string():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     post_data = request.get_json()
@@ -626,7 +627,7 @@ def new_string():
 # Декоратор для обновления строки
 @app.route('/update-string', methods=['PUT'])
 def update_stringaaaaaaaaaaaaaaaaa():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     post_data = request.get_json()
@@ -642,7 +643,7 @@ def update_stringaaaaaaaaaaaaaaaaa():
 # Декоратор для удаления строки
 @app.route('/delete-string', methods = ['DELETE'])
 def del_srt():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     responce_object = {'status' : 'success'}
     post_data = request.get_json()
@@ -655,7 +656,7 @@ def del_srt():
 # Декоратор для семены пароля
 @app.route('/change-pass', methods=['POST'])
 def change():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     responce_object = {'status' : 'success'}
     post_data = request.get_json()
@@ -679,7 +680,7 @@ def change():
 # Декоратор для проверки юзера
 @app.route('/check', methods=['GET'])
 def checking():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     responce_object = {'status': 'success'}
     logging.info(session.get('isAdmin'))
@@ -694,7 +695,7 @@ def checking():
 
 @app.route('/filtre', methods=['POST'])
 def filtre_():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     responce_object = {'status': 'success'}
     post_data = request.get_json()
@@ -706,7 +707,7 @@ def filtre_():
 
 @app.route('/show-all', methods=['GET'])
 def shows():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     responce_object = {'status': 'success'}
     if session.get('isAdmin') == 'True':
@@ -716,7 +717,7 @@ def shows():
 
 @app.route('/media/<path:filename>')
 def serve_file(filename):
-    # if request.origin != HPST:
+    # if False:
     #     return jsonify({"message": "Forbidden"}), 403
     path = filename
     logging.info(MEDIA_FOLDER+path)
@@ -727,7 +728,7 @@ def serve_file(filename):
 
 @app.route('/show-one', methods=['GET'])
 def one():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     responce_object = {'status': 'success'}
     id = request.args.get('id')
@@ -781,7 +782,35 @@ def add_img_f(file, name, id):
         return return_data
     print("ну накрутил до 2 часов, ну имею права, идте нахуй бляди, я всю ночь с эим еблюсь блять и ура, я могу поспать нахуй, питухон язык долбаебов, я так вам скажу, все, я спать, перфекционист мой в норме, 2 часа в проекте, 04.07.2024 2:34, заебанный всем Костя")
 
+
+
+def get_surname(id: str) -> str:
+    try:    
+        pg = psycopg2.connect(f"""
+            host={HOST_PG}
+            dbname=postgres
+            user={USER_PG}
+            password={PASSWORD_PG}
+            port={PORT_PG}
+        """)
+        cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        cursor.execute(f"SELECT surname FROM users where id=$${id}$$")
+        result = cursor.fetchall()[0][0]
+
+        return_data = result
+
+    except (Exception, Error) as error:
+        logging.info(f"Ошибка получения данных: {error}")
+        return_data = 'Error'
+
+    finally:
+        return return_data
+    
+
 def new_string_text(form):
+    form["id_u"] = session.get('id')
+    form["surname"] = get_surname(form["id_u"])
     info_for_db = ""
     columns='id'
     for key in form:
@@ -949,7 +978,7 @@ def upd_string_file_():
 def SurSearch(query: str) -> Union[str, list]:
     try:
         pg = psycopg2.connect(f"""
-            host=localhost
+            host={HOST_PG}
             dbname=postgres
             user={USER_PG}
             password={PASSWORD_PG}
@@ -978,7 +1007,7 @@ def SurSearch(query: str) -> Union[str, list]:
             return return_data
 
 
-@app.route('/surname-search', methods=['GET'])
+@app.route('/search-surname', methods=['GET'])
 def surname_search():
     responce_object = {'status': 'success'}
 
@@ -988,7 +1017,7 @@ def surname_search():
 
 @app.route('/new-login', methods=["POST"])
 def new_login():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     if request.method == 'POST':
@@ -1004,11 +1033,14 @@ def new_login():
 
 @app.route('/send-email', methods=["POST"])
 def send_email():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     post_data = request.get_json()
-    session["surname"], session["email"], session["password"], session["code"] = post_data.get("surname"), post_data.get("email"), post_data.get("password"), send_pass_code(post_data.get("email"))
+    session["surname"], session["email"], session["password"], session["code"] = post_data.get("surname"), post_data.get("email"), post_data.get("password"), send_pass_code(post_data.get("email"), 'reg')
+    session.modified = True
+    
+    logging.info(session.get("code"))
     if session.get("code") != "err":
         return jsonify(response_object)
     else: 
@@ -1018,7 +1050,7 @@ def send_email():
 def add_user(email: str, password: str, surname: str) -> str:
     try:
         pg = psycopg2.connect(f"""
-            host=localhost
+            host={HOST_PG}
             dbname=postgres
             user={USER_PG}
             password={PASSWORD_PG}
@@ -1031,8 +1063,8 @@ def add_user(email: str, password: str, surname: str) -> str:
 
         # TODO: UNIQUE для email
 
-        cursor.execute(f"INSERT INTO users VALUES({id}, {email}, {password}, {surname})")
-        result = cursor.fetchall()
+        cursor.execute(f"INSERT INTO users VALUES('{id}', '{email}', '{password}', '{surname}')")
+        # result = cursor.fetchall()
         pg.commit()
 
         return_data = id
@@ -1050,13 +1082,15 @@ def add_user(email: str, password: str, surname: str) -> str:
 
 @app.route("/check-send-code", methods=["POST"])
 def chek_code_():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     post_data = request.get_json()
 
+    logging.info(session.get("code"))
+
     if session.get("code") == post_data.get("code"):
-        res = add_user(session.get("email"), session.get("password"), session.get("surname"))
+        res = add_user(session.get("email"), hash_password(session.get("password")), session.get("surname"))
         session["isAdmin"] = session.get("isA")
         session.modified = True
         session.permanent = True
@@ -1064,9 +1098,9 @@ def chek_code_():
         if res == "Error":
             response_object["res"] = "500"
         else:
-            session["id"] = res
-            session.modified = True
-            session.permanent = True
+            # session["id"] = res
+            # session.modified = True
+            # session.permanent = True
             response_object["res"] = "200"
         
     else:
@@ -1074,10 +1108,10 @@ def chek_code_():
     
     return jsonify(response_object)
 
-def sign_in(email: str, password: str, code: str) -> Union[str, list]:
+def sign_in(email: str, password: str, code: str) -> Tuple[str, str, str]:
     try:
         pg = psycopg2.connect(f"""
-            host=localhost
+            host={HOST_PG}
             dbname=postgres
             user={USER_PG}
             password={PASSWORD_PG}
@@ -1086,15 +1120,22 @@ def sign_in(email: str, password: str, code: str) -> Union[str, list]:
 
         cursor = pg.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
-        cursor.execute(f"select password, id from usesr WHERE email=%%{email}%%")
+        cursor.execute(f"select password, id from users WHERE email=$${email}$$;")
         
-        pas = cursor.fetchall()
+        res = cursor.fetchall()
+        if len(res) == 0:
+            logging.info(1)
+            return_data = "unreg", "", ""
+        else:
+            pas = res[0]
 
-        return_data = check_password_hash(password, pas[0]), pas[1]
+            logging.info(pas)
+
+            return_data = str(check_password_hash(pas[0], password)), pas[1], login_user(code)
 
     except (Exception, Error) as error:
         logging.info(f"Ошибка получения данных: {error}")
-        return_data = 'Error'
+        return_data = 'Error', ""
 
     finally:
         if pg:
@@ -1211,33 +1252,31 @@ def send_pass_code(email: str, action: str) -> str:
 
     except smtplib.SMTPRecipientsRefused:
         logging.info("Error: Recipient's email does not exist.")
-        return 1
+        return "err"
 
     finally:
         server.quit()
         # держим пароль в сессии
         session['code'] = str(code_pas)
         session.modified = True
-        session['email'] = str(email)
-        session.modified = True
 
         logging.info(f'Пароль {code_pas} отправлен на почту {email}')
 
-        return 0
+        return str(code_pas)
 
 
 @app.route("/sign-in", methods=["POST"])
 def sign_in_():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
     response_object = {'status': 'success'}
     post_data = request.get_json()
 
-    response_object["res"], id = sign_in(post_data.get("email"), post_data.get("password"), post_data.get("code"))
+    response_object["res"], id, response_object["isAdmin"] = sign_in(post_data.get("email"), post_data.get("password"), post_data.get("code"))
 
-    if isinstance(response_object["res"], bool):
+    if response_object["res"]!="unreg":
         session["id"] = id
-        session['isAdmin'] = str(response_object["res"])
+        session['isAdmin'] = response_object["isAdmin"]
         session.modified = True
         session.permanent = True
 
@@ -1250,7 +1289,7 @@ def get_id():
 def ByOneUser(id_u: str) -> Union[str, list]:
     try:
         pg = psycopg2.connect(f"""
-            host=localhost
+            host={HOST_PG}
             dbname=postgres
             user={USER_PG}
             password={PASSWORD_PG}
@@ -1278,18 +1317,18 @@ def ByOneUser(id_u: str) -> Union[str, list]:
             logging.info("Соединение с PostgreSQL закрыто")
             return return_data
 
-@app.route('/by-user', methods=['GET'])
+@app.route('/show-by-id', methods=['GET'])
 def all_by_user():
     responce_object = {'status': 'success'}
 
-    responce_object['all'] = ByOneUser(request.args.get('id_u'))
+    responce_object['all'] = ByOneUser(session.get("id"))
 
     return jsonify(responce_object)
 
 def is_email(email: str) -> Union[bool, str]:
     try:
         pg = psycopg2.connect(f"""
-            host=localhost
+            host={HOST_PG}
             dbname=postgres
             user={USER_PG}
             password={PASSWORD_PG}
@@ -1300,8 +1339,8 @@ def is_email(email: str) -> Union[bool, str]:
 
         cursor.execute(f"SELECT COUNT(*) FROM users WHERE email=$${email}$$")
         cnt = cursor.fetchall()[0][0]
-
-        return_data = False if cnt != 0 else True
+        logging.info(cnt)
+        return_data = True if cnt != 0 else False
 
     except (Exception, Error) as error:
         logging.info(f"Ошибка получения данных: {error}")
@@ -1316,29 +1355,27 @@ def is_email(email: str) -> Union[bool, str]:
 
 @app.route("/change-pass-email", methods=["POST"])
 def change_pass_email_():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
 
     response_object = {'status': 'success'}
     post_data = request.get_json()
-
+    logging.info(post_data.get("email"))
     if is_email(post_data.get("email")) is True:
         res = send_pass_code(post_data.get("email"), "no reg")
 
         match res:
-            case 1:
-                response_object["res"] = "Ok"
-            case 0:
+            case "err":
                 response_object["res"] = "Bad email"
             case _:
-                response_object["res"] = "Err"
+                response_object["res"] = "Ok"
     else: response_object["res"] = "0 email"
     return jsonify(response_object)
 
 def new_pass(email: str, password: str, expassword: str) -> str:
     try:
         pg = psycopg2.connect(f"""
-            host=localhost
+            host={HOST_PG}
             dbname=postgres
             user={USER_PG}
             password={PASSWORD_PG}
@@ -1369,7 +1406,7 @@ def new_pass(email: str, password: str, expassword: str) -> str:
 
 @app.route("/new-pass", methods=["POST"])
 def new_pass_():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
 
     response_object = {'status': 'success'}
@@ -1384,13 +1421,14 @@ def new_pass_():
 
 @app.route("/check-pass-email", methods=["POST"])
 def check_pass_email_():
-    if request.origin != HPST:
+    if False:
         return jsonify({"message": "Forbidden"}), 403
 
     response_object = {'status': 'success'}
     post_data = request.get_json()
 
-    if session.get("code") == post_data.get("code"):
+    logging.info(session.get("code"))
+    if session.get("code") == str(post_data.get("code")):
         response_object["res"] = "True"
         session["isVerif"] = True
         session.modified = True

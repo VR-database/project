@@ -7,7 +7,10 @@ axios.defaults.baseURL = "https://api.ar-vmgh.ru/";
 export default {
   data() {
     return {
+      formdata: new FormData(),
       form: {
+        // текстовые input
+
         Code: "",
         Fio: "",
         Floor: "",
@@ -19,43 +22,22 @@ export default {
         Diagnosis: "",
         Date3: "",
         NameOperation: "",
-
-        CktDisk: "", //
-        MrtDisk: "", //
-        CktModel: "", //
-        MrtModel: "", //
-        OperationVideo: "", //
         EffectOfUse1: "",
         Notes: "",
-
-        Fgds: "", //
-        Fks: "", //
-        Ckt: "", //
-        Mrt: "", //
-
-        Research: "", //
-
-        Protocol: "", //
-        DrugVideo: "", //
-        GistolConclusion: "", //
-        xyi: {
-          xyi1: "",
-          xyi2: "",
-          xyi3: "",
-          xyi4: "",
-          xyi5: "",
-          xyi6: "",
-          xyi7: "",
-          xyi8: "",
-          xyi9: "",
-          xyi10: "",
-          xyi11: "",
-          xyi12: "",
-          xyi13: "",
-          xyi14: "",
-          xyi14: "",
-          xyi15: "",
-        },
+        // файловые input
+        // CktDisk: "",
+        // MrtDisk: "",
+        // CktModel: "", //
+        // MrtModel: "", //
+        // OperationVideo: "", //
+        // Fgds: "", //
+        // Fks: "", //
+        // Ckt: "", //
+        // Mrt: "", //
+        // Research: "", //
+        // Protocol: "", //
+        // DrugVideo: "", //
+        // GistolConclusion: "", //
       },
 
       file: "",
@@ -76,8 +58,8 @@ export default {
       convertPhotoVudeotext: "Файл незагружен.",
       convertGostoltext: "Файл незагружен.",
       convertDiskCKTtext: "Файл незагружен.",
-      convertDiskMRTtext:"Файл незагружен.",
-      convertModelCKTtext:"Файл незагружен.",
+      convertDiskMRTtext: "Файл незагружен.",
+      convertModelCKTtext: "Файл незагружен.",
       convertModelMRTtext: "Файл незагружен.",
       convertOperationVideotext: "Файл незагружен.",
       convertPhotoVideotext: "Файл незагружен.",
@@ -99,15 +81,164 @@ export default {
       classModelMRT: "notdownload",
       classOperationVideo: "notdownload",
       classPhotoVideo: "notdownload",
-      
+
       isUploading: true,
       percentCompleted: 0,
       isLoading: false,
 
+      load: {
+        "Fgds": {
+          status: "Файл незагружен.",
+          class: "notdownloadFgds",
+          classRedownload: "redownloadFgds",
+          classDownload: "downloadFgds",
+          classNotdownload: "notdownloadFgds",
+          p: "Файл незагружен.",
+          Fgds: "Fgds",
+          isLoaded: false,
+        },
+        "Fks": {
+          status: "Файл незагружен.",
+          class: "notdownloadFks",
+          classRedownload: "redownloadFks",
+          classDownload: "downloadFks",
+          classNotdownload: "notdownloadFks",
+          Fks: "Fks",
+          p: "Файл незагружен.",
+          isLoaded: false,
+        },
+        "Ckt": {
+          status: "Файл незагружен.",
+          class: "notdownloadCkt",
+          classRedownload: "redownloadCkt",
+          classDownload: "downloadCkt",
+          classNotdownload: "notdownloadCkt",
+          Ckt: "Ckt",
+          p: "Файл незагружен.",
+          isLoaded: false,
+        },
+        "Mrt": {
+          status: "Файл незагружен.",
+          class: "notdownloadMrt",
+          classRedownload: "redownloadMrt",
+          classDownload: "downloadMrt",
+          classNotdownload: "notdownloadMrt",
+          Mrt: "Mrt",
+          p: "Файл незагружен.",
+          isLoaded: false,
+        },
+        "Research": {
+          status: "Файл незагружен.",
+          class: "notdownloadResearch",
+          classRedownload: "redownloadResearch",
+          classDownload: "downloadResearch",
+          classNotdownload: "notdownloadResearch",
+          Research: "Research",
+          p: "Файл незагружен.",
+          isLoaded: false,
+        },
+        "Protocol": {
+          status: "Файл незагружен.",
+          class: "notdownloadProtocol",
+          classRedownload: "redownloadProtocol",
+          classDownload: "downloadProtocol",
+          classNotdownload: "notdownloadProtocol",
+          p: "Файл незагружен.",
+          Protocol: "Protocol",
+          isLoaded: false,
+        },
+        "DrugVideo": {
+          status: "Файл незагружен.",
+          class: "notdownloadDrugVideo",
+          classRedownload: "redownloadDrugVideo",
+          classDownload: "downloadDrugVideo",
+          classNotdownload: "notdownloadDrugVideo",
+          DrugVideo: "DrugVideo",
+          isLoaded: false,
+
+          p: "Файл незагружен.",
+        },
+        "GistolConclusion": {
+          status: "Файл незагружен.",
+          class: "notdownloadGistolConclusion",
+          classRedownload: "redownloadGistolConclusion",
+          classDownload: "downloadGistolConclusion",
+          classNotdownload: "notdownloadGistolConclusion",
+          GistolConclusion: "GistolConclusion",
+          isLoaded: false,
+
+          p: "Файл незагружен.",
+        },
+        "CktDisk": {
+          status: "Файл незагружен.",
+          class: "notdownloadCktDisk",
+          classRedownload: "redownloadCktDisk",
+          classDownload: "downloadCktDisk",
+          classNotdownload: "notdownloadCktDisk",
+          CktDisk: "CktDisk",
+          p: "Файл незагружен.",
+          isLoaded: false,
+        },
+        "MrtDisk": {
+          status: "Файл незагружен.",
+          class: "notdownloadMrtDisk",
+          classRedownload: "redownloadMrtDisk",
+          classDownload: "downloadMrtDisk",
+          classNotdownload: "notdownloadMrtDisk",
+          MrtDisk: "MrtDisk",
+          p: "Файл незагружен.",
+          isLoaded: false,
+        },
+        "CktModel": {
+          status: "Файл незагружен.",
+          class: "notdownloadCktModel",
+          classRedownload: "redownloadCktModel",
+          classDownload: "downloadCktModel",
+          classNotdownload: "notdownloadCktModel",
+          CktModel: "CktModel",
+          p: "Файл незагружен.",
+          isLoaded: false,
+        },
+        "MrtModel": {
+          status: "Файл незагружен.",
+          class: "notdownloadMrtModel",
+          classRedownload: "redownloadMrtModel",
+          classDownload: "downloadMrtModel",
+          classNotdownload: "notdownloadMrtModel",
+          p: "Файл незагружен.",
+          MrtModel: "MrtModel",
+          isLoaded: false,
+        },
+        "OperationVideo": {
+          status: "Файл незагружен.",
+          class: "notdownloadOperationVideo",
+          classRedownload: "redownloadOperationVideo",
+          classDownload: "downloadOperationVideo",
+          classNotdownload: "notdownloadOperationVideo",
+          p: "Файл незагружен.",
+          OperationVideo: "OperationVideo",
+          isLoaded: false,
+        },
+
+        // Fgds: "Fgds",
+        // Fks: "Fks",
+        // Ckt: "Ckt",
+        // Mrt: "Mrt",
+        // Research: "Research",
+        // Protocol: "Protocol",
+        // DrugVideo: "DrugVideo",
+        // GistolConclusion: "GistolConclusion",
+        // CktDisk: "CktDisk",
+        // MrtDisk: "MrtDisk",
+        // CktModel: "CktModel",
+        // MrtModel: "MrtModel",
+        // OperationVideo: "OperationVideo",
+      },
     };
   },
   methods: {
     async Check() {
+      // this.formdata = new FormData();
       let response = await axios.get(`/check`);
       this.isAdmin = response.data.isAdmin;
       if (this.isAdmin == "True") {
@@ -129,350 +260,74 @@ export default {
       }
     },
     async postInfo() {
+      this.isLoading = true;
+      this.isUploading = true;
 
-  this.isLoading = true;
-  this.isUploading = true;
+      try {
+        await axios.post("/new-string/text", {
+          form: this.form,
+        });
+      } catch (error) {
+        this.status = "Ошибка отправки.";
+        this.isLoading = false;
+      }
 
-
-    try {
-      await axios.post(
-        "/new-string",
-        {
-          chunk: chunk,
-          index: i,
-          totalChunks: totalChunks
-        },
-        {
-          onUploadProgress: (progressEvent) => {
-            const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            );
-            this.percentCompleted = percentCompleted;
+      try {
+        let res = await axios.post(
+          "/new-string/file", this.formdata,
+          {
+            headers: {
+              "Content-Type": "enctype=multipart/form-data",
+            },
+            onUploadProgress: (progressEvent) => {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              this.percentCompleted = percentCompleted;
+            },
           }
-        }
-      );
-    } catch (error) {
-      console.error("Ошибка при отправке данных:", error);
+        );
+      } catch (error) {
+        console.error("Ошибка при отправке данных:", error);
+        this.isUploading = false;
+        this.isLoading = false;
+        this.status = "Ошибка отправки.";
+        return;
+      }
+    
       this.isUploading = false;
-      // Добавьте обработку ошибки
-      return;
-    }
-
-
-  this.isUploading = false;
-  this.isLoading = false;
-  this.status = "Данные занесены в таблицу.";
-  this.$router.push('/Table');
-},
+      this.isLoading = false;
+      this.status = "Данные занесены в таблицу.";
+      this.$router.push("/Table");
+    },
     async postData() {
       let response = await axios.post(`/new-string`, {
         form: this.form,
       });
-      this.$router.push('/Table');
+      this.$router.push("/Table");
     },
-    convertFileCktDisk(event) {
-      if (this.form.Fgds == 0 || true) {
-      this.convertDiskCKTtext = "Файл загружается...";
-      this.classDiskCKT ="load";
-        
-      const file = event.target.files[0];
-      const filename = event.target.files[0].name;
-      this.form.xyi.xyi1 = filename;
-
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        this.form.CktDisk = reader.result;
-        ;
-
-        this.convertDiskCKTtext = "Файл загружен";
-        this.classDiskCKT = "download";
-      };
-
-      reader.readAsDataURL(file);
-      }
-    },
-    convertFileMrtDisk(event) {
-      if (true) {
-        this.convertDiskMRTtext = "Файл загружается...";
-        this.classDiskMRT = "load";
-
+    async convertFile(event, name) {
+      console.log(this.load);
+      if (event && name) {
+        this.load[name].class = this.load[name].classRedownload;
+        this.load[name].p = "Файл загружается...";
         const file = event.target.files[0];
+        // this.form.avatar = file;
+        // this.formdata = new FormData();
+        this.formdata.append(name, file);
         const reader = new FileReader();
-        const filename = event.target.files[0].name;
-        this.form.xyi.xyi2 = filename;
-        
-        reader.onload = () => {
-          this.form.MrtDisk = reader.result;
-          console.log(this.form.MrtDisk);
-          
-          this.convertDiskMRTtext = "Файл загружен";
-          this.classDiskMRT = "download";
+        reader.onload = (e) => {
+          if (reader.result) {
+            this.load[name].class = this.load[name].classDownload;
+            this.load[name].p = "Файл загружен.";
+          }
         };
         reader.readAsDataURL(file);
       }
-
     },
-    convertFileCktModel(event) {
-      if (this.form.CktModel == 0 || true) {
-      this.convertModelCKTtext = "Файл загружается...";
-      this.classModelCKT = "load";
-
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.form.xyi.xyi3 = filename;
-
-      reader.onload = () => {
-        this.form.CktModel = reader.result;
-        console.log(this.form.CktModel);
-      
-        this.convertModelCKTtext = "Файл загружен";
-        this.classModelCKT = "download";
-      };
-      reader.readAsDataURL(file);
-      }
+    mounted() {
+      this.Check();
     },
-    convertFileMrtModel(event) {
-      if (this.form.MrtModel == 0 || true) {
-      this.convertModelMRTtext = "Файл загружается...";
-      this.classModelMRT = "load";
-
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.form.xyi.xyi4 = filename;
-
-      reader.onload = () => {
-        this.form.MrtModel = reader.result;
-        console.log(reader.result);
-
-        this.convertModelMRTtext = "Файл загружен";
-        this.classModelMRT = "download";
-      };
-      reader.readAsDataURL(file);
-      }
-    },
-    convertFileOperationVideo(event) {
-      if (this.form.OperationVideo == 0 || true) {
-      this.convertOperationVideotext = "Файл загружается...";
-      this.classOperationVideo = "load";
-
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.form.xyi.xyi5 = filename;
-
-      reader.onload = () => {
-        this.form.OperationVideo = reader.result;
-        console.log(reader.result);
-
-        this.convertOperationVideotext = "Файл загружен";
-        this.classOperationVideo = "download";
-      };
-      reader.readAsDataURL(file);
-      }
-    },
-
-    convertFileEffectOfUse1(event) {
-      if (this.form.EffectOfUse1 == 0 || true) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.form.xyi.xyi6 = filename;
-
-      reader.onload = () => {
-        this.form.EffectOfUse1 = reader.result;
-        console.log(reader.result);
-      };
-      reader.readAsDataURL(file);
-      }
-    },
-    convertFileGistolConclusion(event) {
-      if (this.form.GistolConclusion == 0 || true) {
-      this.convertGostoltext = "Файл загружается..."
-      this.classGostol = "load"
-
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.form.xyi.xyi15 = filename;
-
-      reader.onload = () => {
-        this.form.GistolConclusion = reader.result;
-        console.log(reader.result);
-
-        this.convertGostoltext = "Файл загружен"
-        this.classGostol = "download"
-      };
-      reader.readAsDataURL(file);
-      }
-    },
-    convertFileFGDS(event) {
-      if (this.form.Fgds == 0 || true) {
-        this.convertFileFGDStext = "Файл загружается...";
-        this.classFileFGDS = "load";
-
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        const filename = file.name;
-        this.form.xyi.xyi8 = filename;
-
-        reader.onload = () => {
-          this.form.Fgds = reader.result;
-          console.log(reader.result);
-
-          // Обновляем текст и класс после завершения загрузки файла
-          this.convertFileFGDStext = "Файл загружен.";
-          this.classFileFGDS = "download";
-        };
-
-        reader.readAsDataURL(file);
-        }
-    },
-    convertFileFKS(event) {
-      if (this.form.Fks == 0 || true) {
-        this.convertFileFKStext = "Файл загружается...";
-        this.classFileFKS = "load";
-
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        const filename = event.target.files[0].name;
-        this.form.xyi.xyi9 = filename;
-
-        reader.onload = () => {
-          this.form.Fks = reader.result;
-          console.log(reader.result);
-
-          this.convertFileFKStext = "Файл загружен.";
-          this.classFileFKS = "download";
-        };
-        reader.readAsDataURL(file);
-        }
-    },
-    convertFileCKT(event) {
-      if (this.form.Ckt == 0 || true) {
-        this.convertFileCKTtext = "Файл загружается...";
-        this.classFileCKT = "load";
-
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        const filename = event.target.files[0].name;
-        this.form.xyi.xyi10 = filename;
-        console.log(this.form.xyi.xyi10);
-
-        reader.onload = () => {
-          this.form.Ckt = reader.result;
-          console.log(reader.result);
-
-          this.convertFileCKTtext = "Файл загружен.";
-          this.classFileCKT = "download";
-        };
-        reader.readAsDataURL(file);
-        }
-    },
-  convertFileMRT(event) {
-    if (this.form.Mrt == 0 || true) {
-    this.convertFileMRTtext = "Файл загружается...";
-    this.classFileMRT = "load";
-
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    const filename = event.target.files[0].name;
-    this.form.xyi.xyi11 = filename;
-
-    reader.onload = () => {
-      this.form.Mrt = reader.result;
-      console.log(reader.result);
-
-      this.convertFileMRTtext = "Файл загружен";
-      this.classFileMRT = "download";
-    };
-    reader.readAsDataURL(file);
-    }
-  },
-  convertFileProtocol(event) {
-    if (this.form.Protocol == 0 || true) {
-    this.convertProtokolOperationtext = "Файл загружается...";
-    this.classProtokolOperation = "load";
-
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    const filename = event.target.files[0].name;
-    this.form.xyi.xyi13 = filename;
-
-    reader.onload = () => {
-      this.form.Protocol = reader.result;
-      console.log(reader.result);
-
-      this.convertProtokolOperationtext = "Файл загружен";
-      this.classProtokolOperation = "download";
-    };
-    reader.readAsDataURL(file);
-    }
-  },
-  convertFileDrugVideo(event) {
-    if (this.form.DrugVideo == 0 || true) {
-      this.convertPhotoVideotext= "Файл заугружается"
-      this.classPhotoVideo = "load"
-
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      const filename = event.target.files[0].name;
-      this.form.xyi.xyi14 = filename;
-
-      reader.onload = () => {
-        this.form.DrugVideo = reader.result;
-        console.log(reader.result);
-
-        this.convertPhotoVideotext = "Файл заугружен"
-        this.classPhotoVideo = "download"
-      };
-      reader.readAsDataURL(file);
-    }
-  },
-  convertFileResearch(event) {
-    if (this.form.Research == 0 || true) {
-    this.convertOtherstext = "Файл загружается..."
-    this.classOthers = "load";
-
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    const filename = event.target.files[0].name;
-    this.form.xyi.xyi14 = filename;
-
-    reader.onload = () => {
-      this.form.Research = reader.result;
-      console.log(reader.result);
-
-      this.convertOtherstext = "Файл Загружен"
-      this.classOthers = "download";
-    };
-    reader.readAsDataURL(file);
-    }
-  },
-},
-  // ниже заготовки под лоудер
-
-  // simulateUpload(file) {
-  //     this.isLoading = true;
-  //     this.uploadProgress = 0;
-
-  //     const updateProgress = () => {
-  //       if (this.uploadProgress < 100) {
-  //         this.uploadProgress += 10; // Увеличиваем прогресс на 10% каждую итерацию
-  //         setTimeout(updateProgress, 200); // Обновляем каждые 200 мс
-  //       } else {
-  //         this.isLoading = false;
-  //         console.log('Файл успешно загружен:', file.name);
-  //       }
-  //     };
-
-  //   updateProgress();
-  //   console.log(this.isLoading)
-  //   },
-  mounted() {
-    this.Check();
   },
 };
 </script>
@@ -602,10 +457,10 @@ export default {
             type="file"
             class="form-control"
             placeholder="ФГДС"
-            @change="convertFileFGDS"
+            @change="convertFile($event, 'Fgds')"
           />
           <div>
-            <p :class="this.classFileFGDS">{{ this.convertFileFGDStext }}</p>
+            <p :class="this.load[`Fgds`].class">{{ this.load["Fgds"].p }}</p>
           </div>
         </div>
 
@@ -615,10 +470,10 @@ export default {
             type="file"
             class="form-control"
             placeholder="ФКС"
-            @change="convertFileFKS"
+            @change="convertFile($event, 'Fks')"
           />
           <div>
-            <p :class="this.classFileFKS">{{ this.convertFileFKStext }}</p>
+            <p :class="this.load[`Fks`].class">{{ this.load["Fks"].p }}</p>
           </div>
         </div>
 
@@ -631,10 +486,10 @@ export default {
             class="form-control"
             id="exampleFormControlInput1"
             placeholder="Протокол"
-            @change="convertFileCKT"
+            @change="convertFile($event, 'Ckt')"
           />
           <div>
-            <p :class="this.classFileCKT">{{ this.convertFileCKTtext }}</p>
+            <p :class="this.load[`Ckt`].class">{{ this.load["Ckt"].p }}</p>
           </div>
         </div>
 
@@ -647,10 +502,10 @@ export default {
             class="form-control"
             id="exampleFormControlInput1"
             placeholder="Протокол"
-            @change="convertFileMRT"
+            @change="convertFile($event, 'Mrt')"
           />
           <div>
-            <p :class="this.classFileMRT">{{ this.convertFileMRTtext }}</p>
+            <p :class="this.load[`Mrt`].class">{{ this.load["Mrt"].p }}</p>
           </div>
         </div>
 
@@ -663,10 +518,12 @@ export default {
             class="form-control"
             id="exampleFormControlInput1"
             placeholder="Исследования"
-            @change="convertFileResearch"
+            @change="convertFile($event, 'Research')"
           />
           <div>
-            <p :class="this.classOthers">{{ this.convertOtherstext }}</p>
+            <p :class="this.load[`Research`].class">
+              {{ this.load["Research"].p }}
+            </p>
           </div>
         </div>
 
@@ -705,10 +562,12 @@ export default {
             class="form-control"
             id="exampleFormControlInput1"
             placeholder="Протокол"
-            @change="convertFileProtocol"
+            @change="convertFile($event, 'Protocol')"
           />
           <div>
-            <p :class="this.classProtokolOperation">{{ this.convertProtokolOperationtext }}</p>
+            <p :class="this.load[`Protocol`].class">
+              {{ this.load["Protocol"].p }}
+            </p>
           </div>
         </div>
 
@@ -721,10 +580,12 @@ export default {
             class="form-control"
             id="exampleFormControlInput1"
             placeholder="Фото, видео"
-            @change="convertFileDrugVideo"
+            @change="convertFile($event, 'DrugVideo')"
           />
           <div>
-            <p :class="this.classPhotoVideo">{{ this.convertPhotoVideotext }}</p>
+            <p :class="this.load[`DrugVideo`].class">
+              {{ this.load["DrugVideo"].p }}
+            </p>
           </div>
         </div>
 
@@ -737,10 +598,12 @@ export default {
             class="form-control"
             id="exampleFormControlInput1"
             placeholder="Заключение"
-            @change="convertFileGistolConclusion"
+            @change="convertFile($event, 'GistolConclusion')"
           />
           <div>
-            <p :class="this.classGostol">{{ this.convertGostoltext }}</p>
+            <p :class="this.load[`GistolConclusion`].class">
+              {{ this.load["GistolConclusion"].p }}
+            </p>
           </div>
         </div>
 
@@ -748,16 +611,18 @@ export default {
         <div class="mb-3 mt-4">
           <label for="exampleFormControlInput1" class="form-label"
             >Диск СКТ</label
-          > 
+          >
           <input
             type="file"
             class="form-control"
             id="exampleFormControlInput1"
             placeholder="Ссылка"
-            @change="convertFileCktDisk"
+            @change="convertFile($event, 'CktDisk')"
           />
           <div>
-            <p :class="this.classDiskCKT">{{ this.convertDiskCKTtext }}</p>
+            <p :class="this.load[`CktDisk`].class">
+              {{ this.load["CktDisk"].p }}
+            </p>
           </div>
         </div>
 
@@ -770,10 +635,12 @@ export default {
             class="form-control"
             id="exampleFormControlInput1"
             placeholder="Ссылка"
-            @change="convertFileMrtDisk"
+            @change="convertFile($event, 'MrtDisk')"
           />
           <div>
-            <p :class="this.classDiskMRT">{{ this.convertDiskMRTtext }}</p>
+            <p :class="this.load[`MrtDisk`].class">
+              {{ this.load["MrtDisk"].p }}
+            </p>
           </div>
         </div>
 
@@ -786,10 +653,12 @@ export default {
             class="form-control"
             id="exampleFormControlInput1"
             placeholder="Ссылка"
-            @change="convertFileCktModel"
+            @change="convertFile($event, 'CktModel')"
           />
           <div>
-            <p :class="this.classModelCKT">{{ this.convertModelCKTtext }}</p>
+            <p :class="this.load[`CktModel`].class">
+              {{ this.load["CktModel"].p }}
+            </p>
           </div>
         </div>
 
@@ -802,10 +671,12 @@ export default {
             class="form-control"
             id="exampleFormControlInput1"
             placeholder="Ссылка"
-            @change="convertFileMrtModel"
+            @change="convertFile($event, 'MrtModel')"
           />
           <div>
-            <p :class="this.classModelMRT">{{ this.convertModelMRTtext }}</p>
+            <p :class="this.load[`MrtModel`].class">
+              {{ this.load["MrtModel"].p }}
+            </p>
           </div>
         </div>
 
@@ -818,10 +689,12 @@ export default {
             class="form-control"
             id="exampleFormControlInput1"
             placeholder="Ссылка"
-            @change="convertFileOperationVideo"
+            @change="convertFile($event, 'OperationVideo')"
           />
           <div>
-            <p :class="this.classOperationVideo">{{ this.convertOperationVideotext }}</p>
+            <p :class="this.load[`OperationVideo`].class">
+              {{ this.load["OperationVideo"].p }}
+            </p>
           </div>
         </div>
 
@@ -855,25 +728,25 @@ export default {
   </div>
   <div class="btn">
     <!-- <a href="/Table"> -->
-      <div class="mb-3" v-if="isLoading">
-              <label for="exampleFormControlInput1" class="form-label mt-3"
-                ><h5>Загрузка данных на сервер...</h5></label
-              >
-              <br>
-              <progress
-                max="100"
-                :value="this.percentCompleted"
-                v-if="this.isUploading"
-              ></progress>
-              <p>{{ this.percentCompleted }} %</p>
-      </div>
-      <button class="btn-reg btn" @click="check">Добавить</button>
+    <div class="mb-3" v-if="isLoading">
+      <label for="exampleFormControlInput1" class="form-label mt-3"
+        ><h5>Загрузка данных на сервер...</h5></label
+      >
+      <br />
+      <progress
+        max="100"
+        :value="this.percentCompleted"
+        v-if="this.isUploading"
+      ></progress>
+      <p>{{ this.percentCompleted }} %</p>
+    </div>
+    <button class="btn-reg btn" @click="check">Добавить</button>
     <!-- </a> -->
   </div>
 </template>
 
 <style scoped>
-.load {
+.redownload {
   color: orange;
   margin-top: 10px;
 }
@@ -940,5 +813,164 @@ label {
 .btn-reg:active {
   background-color: #240088;
   transition: all 500ms;
+}
+
+.notdownloadFgds {
+  color: red;
+  margin-top: 10px;
+}
+.notdownloadFks {
+  color: red;
+  margin-top: 10px;
+}
+.notdownloadCkt {
+  color: red;
+  margin-top: 10px;
+}
+.notdownloadMrt {
+  color: red;
+  margin-top: 10px;
+}
+.notdownloadResearch {
+  color: red;
+  margin-top: 10px;
+}
+.notdownloadProtocol {
+  color: red;
+  margin-top: 10px;
+}
+.notdownloadDrugVideo {
+  color: red;
+  margin-top: 10px;
+}
+.notdownloadGistolConclusion {
+  color: red;
+  margin-top: 10px;
+}
+.notdownloadCktDisk {
+  color: red;
+  margin-top: 10px;
+}
+.notdownloadMrtDisk {
+  color: red;
+  margin-top: 10px;
+}
+.notdownloadCktModel {
+  color: red;
+  margin-top: 10px;
+}
+.notdownloadMrtModel {
+  color: red;
+  margin-top: 10px;
+}
+.notdownloadOperationVideo {
+  color: red;
+  margin-top: 10px;
+}
+
+.downloadFgds {
+  color: green;
+  margin-top: 10px;
+}
+.downloadFks {
+  color: green;
+  margin-top: 10px;
+}
+.downloadCkt {
+  color: green;
+  margin-top: 10px;
+}
+.downloadMrt {
+  color: green;
+  margin-top: 10px;
+}
+.downloadResearch {
+  color: green;
+  margin-top: 10px;
+}
+.downloadProtocol {
+  color: green;
+  margin-top: 10px;
+}
+.downloadDrugVideo {
+  color: green;
+  margin-top: 10px;
+}
+.downloadGistolConclusion {
+  color: green;
+  margin-top: 10px;
+}
+.downloadCktDisk {
+  color: green;
+  margin-top: 10px;
+}
+.downloadMrtDisk {
+  color: green;
+  margin-top: 10px;
+}
+.downloadCktModel {
+  color: green;
+  margin-top: 10px;
+}
+.downloadMrtModel {
+  color: green;
+  margin-top: 10px;
+}
+.downloadOperationVideo {
+  color: green;
+  margin-top: 10px;
+}
+
+.redownloadFgds {
+  color: orange;
+  margin-top: 10px;
+}
+.redownloadFks {
+  color: orange;
+  margin-top: 10px;
+}
+.redownloadCkt {
+  color: orange;
+  margin-top: 10px;
+}
+.redownloadMrt {
+  color: orange;
+  margin-top: 10px;
+}
+.redownloadResearch {
+  color: orange;
+  margin-top: 10px;
+}
+.redownloadProtoorange {
+  color: orange;
+  margin-top: 10px;
+}
+.redownloadDrugVideo {
+  color: orange;
+  margin-top: 10px;
+}
+.redownloadGistolConclusion {
+  color: orange;
+  margin-top: 10px;
+}
+.redownloadCktDisk {
+  color: orange;
+  margin-top: 10px;
+}
+.renotdownloadMrtDisk {
+  color: orange;
+  margin-top: 10px;
+}
+.redownloadCktModel {
+  color: orange;
+  margin-top: 10px;
+}
+.redownloadMrtModel {
+  color: orange;
+  margin-top: 10px;
+}
+.redownloadOperationVideo {
+  color: orange;
+  margin-top: 10px;
 }
 </style>

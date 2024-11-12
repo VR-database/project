@@ -35,13 +35,16 @@ export default {
           password: this.password,
           code: this.code,
         });
-        this.isAdmin = response.data.isAdmin;
-        if (this.isAdmin == "Неверный пароль!") {
-          this.error = this.isAdmin;
-        } else if (this.isAdmin == "False") {
-          this.$router.push("/Add");
-        } else if (this.isAdmin == "True") {
-          this.$router.push("/Table");
+        let res = response.data.res;
+        if (res == "False") {
+          this.error = "Auth failed"
+        } else if (res == "True") {
+          this.isAdmin = response.data.isAdmin
+          if (this.isAdmin == "True") {
+            this.$router.push("/Table")
+          } else {
+            this.$router.push("/Profile")
+          }
         };
       } catch (err) {
         this.error = "Ошибка сервера";
