@@ -31,9 +31,12 @@ export default {
       textbool: false,
       itemPhoto: false,
       itemVideo: false,
-
-
-      surname: null
+      itm: "",
+      surname: null,
+      isFile4: false,
+      isVideo4: true,
+      isFile2: false,
+      isVideo2: true
     };
   },
 
@@ -82,18 +85,31 @@ export default {
       this.textbool = true;
     },
     ShowModal2(OperationVideo) {
-      this.ShowMod = !this.ShowMod;
+      this.itm = OperationVideo.toUpperCase()
       this.item = OperationVideo;
-      console.log(this.item);
+      console.log(this.itm)
+      if (this.itm.includes(".ZIP") ||
+      this.itm.includes(".RAR") ||
+      this.itm.includes(".ARJ") ||
+      this.itm.includes(".CAB") ||
+      this.itm.includes(".TAR") ||
+      this.itm.includes(".LZH") 
+    ) {
+      this.isVideo = false
+      this.isFile = true
+      return;
+    }
       if (
-        this.item.includes(".jpg") ||
+        this.item.includes(".jpg") || 
         this.item.includes(".png") ||
         this.item.includes(".jpeg")
       ) {
+        this.ShowMod = !this.ShowMod;
         this.textbool = false;
         this.itemPhoto = true;
         this.itemVideo = false;
       } else if (this.item.includes(".mkv") || this.item.includes(".mp4")) {
+        this.ShowMod = !this.ShowMod;
         this.textbool = false;
         this.itemPhoto = false;
         this.itemVideo = true;
@@ -105,17 +121,30 @@ export default {
       this.textbool = true;
     },
     ShowModal4(DrugVideo) {
-      this.ShowMod = !this.ShowMod;
+      this.itm = DrugVideo.toUpperCase()
       this.item = DrugVideo;
+      if (this.itm.includes(".ZIP") ||
+      this.itm.includes(".RAR") ||
+      this.itm.includes(".ARJ") ||
+      this.itm.includes(".CAB") ||
+      this.itm.includes(".TAR") ||
+      this.itm.includes(".LZH") 
+    ) {
+      this.isVideo4 = false
+      this.isFile4 = true
+      return;
+    }
       if (
-        this.item.includes(".jpg") ||
+        this.item.includes(".jpg") || 
         this.item.includes(".png") ||
         this.item.includes(".jpeg")
       ) {
+        this.ShowMod = !this.ShowMod;
         this.textbool = false;
         this.itemPhoto = true;
         this.itemVideo = false;
       } else if (this.item.includes(".mkv") || this.item.includes(".mp4")) {
+        this.ShowMod = !this.ShowMod;
         this.textbool = false;
         this.itemPhoto = false;
         this.itemVideo = true;
@@ -342,7 +371,7 @@ export default {
               />
             </td>
             <td>
-              <a :href="item.Fgds" download="fgds"
+              <a :href="item.Fgds" download="fgds" target="_blank"
                 ><img
                   src="../assets/folder.png"
                   :alt="item.Fgds"
@@ -350,22 +379,22 @@ export default {
               /></a>
             </td>
             <td>
-              <a :href="item.Fks"
+              <a :href="item.Fks" target="_blank"
                 ><img src="../assets/folder.png" :alt="item.Fks" class="folder"
               /></a>
             </td>
             <td>
-              <a :href="item.Ckt"
+              <a :href="item.Ckt" target="_blank"
                 ><img src="../assets/folder.png" :alt="item.Ckt" class="folder"
               /></a>
             </td>
             <td>
-              <a :href="item.Mrt"
+              <a :href="item.Mrt" target="_blank"
                 ><img src="../assets/folder.png" :alt="item.Mrt" class="folder"
               /></a>
             </td>
             <td>
-              <a :href="item.Research"
+              <a :href="item.Research" target="_blank"
                 ><img
                   src="../assets/folder.png"
                   :alt="item.Research"
@@ -381,22 +410,23 @@ export default {
               />
             </td>
             <td>
-              <a :href="item.Protocol"
+              <a :href="item.Protocol" target="_blank"
                 ><img
                   src="../assets/folder.png"
                   :alt="item.Protocol"
                   class="folder"
               /></a>
             </td>
-            <td @click="ShowModal4(item.DrugVideo)">
-              <img
-                src="../assets/share.png"
-                class="share"
-                :alt="item.DrugVideo"
-              />
+            <td >
+              <a :href="item.GistolСonclusion" target="_blank" v-if="this.isFile4"
+                ><img
+                  src="../assets/folder.png"
+                  :alt="item.DrugVideo"
+                  class="folder"
+              /></a>
             </td>
             <td>
-              <a :href="item.GistolСonclusion"
+              <a :href="item.GistolСonclusion" target="_blank"
                 ><img
                   src="../assets/folder.png"
                   :alt="item.GistolСonclusion"
@@ -404,7 +434,7 @@ export default {
               /></a>
             </td>
             <td>
-              <a :href="item.CktDisk"
+              <a :href="item.CktDisk" target="_blank"
                 ><img
                   src="../assets/Link.png"
                   :alt="item.CktDisk"
@@ -412,15 +442,15 @@ export default {
               /></a>
             </td>
             <td>
-              <a :href="item.MrtDisk"
+              <a :href="item.MrtDisk" target="_blank"
                 ><img
                   src="../assets/Link.png"
                   :alt="item.MrtDisk"
                   class="folder"
               /></a>
             </td>
-            <td>
-              <a :href="item.CktModel"
+            <td> 
+              <a :href="item.CktModel" target="_blank"
                 ><img
                   src="../assets/Link.png"
                   :alt="item.CktModel"
@@ -428,7 +458,7 @@ export default {
               /></a>
             </td>
             <td>
-              <a :href="item.MrtModel"
+              <a :href="item.MrtModel" target="_blank"
                 ><img
                   src="../assets/Link.png"
                   :alt="item.MrtModel"
@@ -437,12 +467,12 @@ export default {
             </td>
             <td>{{ item.EffectOfUse1 }}</td>
             <td>
-              <img
-                src="../assets/share.png"
-                :alt="item.OperationVideo"
-                class="share"
-                @click="ShowModal2(item.OperationVideo)"
-              />
+              <a :href="item.OperationVideo" target="_blank" 
+                ><img
+                  src="../assets/folder.png"
+                  :alt="item.OperationVideo"
+                  class="folder"
+              /></a>
             </td>
             <td @click="ShowModal3(item.Notes)">
               <img src="../assets/share.png" class="share" :alt="item.Notes" />
@@ -480,8 +510,6 @@ export default {
   padding-right: 10px;
   font-weight: 500;
 
-}
-.search-sur button {
 }
 .form-select {
   width: 200px;

@@ -65,6 +65,7 @@ export default {
           classDownload: "downloadFgds",
           classNotdownload: "notdownloadFgds",
           p: "Файл незагружен.",
+          pp: "Файл загружен",
           Fgds: "Fgds",
           isLoaded: false,
         },
@@ -76,6 +77,7 @@ export default {
           classNotdownload: "notdownloadFks",
           Fks: "Fks",
           p: "Файл незагружен.",
+          pp: "Файл загружен",
           isLoaded: false,
         },
         Ckt: {
@@ -86,6 +88,8 @@ export default {
           classNotdownload: "notdownloadCkt",
           Ckt: "Ckt",
           p: "Файл незагружен.",
+          pp: "Файл загружен",
+
           isLoaded: false,
         },
         Mrt: {
@@ -96,6 +100,8 @@ export default {
           classNotdownload: "notdownloadMrt",
           Mrt: "Mrt",
           p: "Файл незагружен.",
+          pp: "Файл загружен",
+
           isLoaded: false,
         },
         Research: {
@@ -106,6 +112,8 @@ export default {
           classNotdownload: "notdownloadResearch",
           Research: "Research",
           p: "Файл незагружен.",
+          pp: "Файл загружен",
+
           isLoaded: false,
         },
         Protocol: {
@@ -115,6 +123,8 @@ export default {
           classDownload: "downloadProtocol",
           classNotdownload: "notdownloadProtocol",
           p: "Файл незагружен.",
+          pp: "Файл загружен",
+
           Protocol: "Protocol",
           isLoaded: false,
         },
@@ -126,6 +136,7 @@ export default {
           classNotdownload: "notdownloadDrugVideo",
           DrugVideo: "DrugVideo",
           isLoaded: false,
+          pp: "Файл загружен",
 
           p: "Файл незагружен.",
         },
@@ -137,6 +148,7 @@ export default {
           classNotdownload: "notdownloadGistolConclusion",
           GistolConclusion: "GistolConclusion",
           isLoaded: false,
+          pp: "Файл загружен",
 
           p: "Файл незагружен.",
         },
@@ -149,6 +161,8 @@ export default {
           CktDisk: "CktDisk",
           p: "Файл незагружен.",
           isLoaded: false,
+          pp: "Файл загружен",
+
         },
         MrtDisk: {
           status: "Файл незагружен.",
@@ -158,6 +172,8 @@ export default {
           classNotdownload: "notdownloadMrtDisk",
           MrtDisk: "MrtDisk",
           p: "Файл незагружен.",
+          pp: "Файл загружен",
+
           isLoaded: false,
         },
         CktModel: {
@@ -168,6 +184,8 @@ export default {
           classNotdownload: "notdownloadCktModel",
           CktModel: "CktModel",
           p: "Файл незагружен.",
+          pp: "Файл загружен",
+
           isLoaded: false,
         },
         MrtModel: {
@@ -178,6 +196,8 @@ export default {
           classNotdownload: "notdownloadMrtModel",
           p: "Файл незагружен.",
           MrtModel: "MrtModel",
+          pp: "Файл загружен",
+
           isLoaded: false,
         },
         OperationVideo: {
@@ -189,6 +209,8 @@ export default {
           p: "Файл незагружен.",
           OperationVideo: "OperationVideo",
           isLoaded: false,
+          pp: "Файл загружен",
+
         },
 
         // Fgds: "Fgds",
@@ -431,7 +453,8 @@ export default {
             @change="convertFile($event, 'Fgds')"
           />
           <div>
-            <p :class="this.load[`Fgds`].class">{{ this.load["Fgds"].p }}</p>
+            <p :class="this.load[`Fgds`].classDownload" v-if="this.form.Fgds">{{ this.load["Fgds"].pp }}</p>
+            <p :class="this.load[`Fgds`].class" v-else>{{ this.load["Fgds"].p }}</p>
             <a
               :href="this.form.Fgds"
               class="download-link"
@@ -450,7 +473,8 @@ export default {
             @change="convertFile($event, 'Fks')"
           />
           <div>
-            <p :class="this.load[`Fks`].class">{{ this.load["Fks"].p }}</p>
+            <p :class="this.load[`Fks`].classDownload" v-if="this.form.Fks">{{ this.load["Fks"].pp }}</p>
+            <p :class="this.load[`Fks`].class" v-else>{{ this.load["Fks"].p }}</p>
             <a :href="this.form.Fks" class="download-link" v-if="this.form.Fks"
               >Скачать</a
             >
@@ -469,7 +493,8 @@ export default {
             @change="convertFile($event, 'Ckt')"
           />
           <div>
-            <p :class="this.load[`Ckt`].class">{{ this.load["Ckt"].p }}</p>
+            <p :class="this.load[`Ckt`].classDownload" v-if="this.form.Ckt">{{ this.load["Ckt"].pp }}</p>
+            <p :class="this.load[`Ckt`].class" v-else>{{ this.load["Ckt"].p }}</p>
             <a :href="this.form.Ckt" class="download-link" v-if="this.form.Ckt"
               >Скачать</a
             >
@@ -488,7 +513,8 @@ export default {
             @change="convertFile($event, 'Mrt')"
           />
           <div>
-            <p :class="this.load[`Mrt`].class">{{ this.load["Mrt"].p }}</p>
+            <p :class="this.load[`Mrt`].classDownload" v-if="this.form.Mrt">{{ this.load["Mrt"].pp }}</p>
+            <p :class="this.load[`Mrt`].class" v-else>{{ this.load["Mrt"].p }}</p>
             <a :href="this.form.Mrt" class="download-link" v-if="this.form.Mrt"
               >Скачать</a
             >
@@ -507,7 +533,10 @@ export default {
             @change="convertFile($event, 'Research')"
           />
           <div>
-            <p :class="this.load[`Research`].class">
+            <p :class="this.load[`Research`].classDownload" v-if="this.form.Research">
+              {{ this.load["Research"].pp }}
+            </p>
+            <p :class="this.load[`Research`].class" v-else>
               {{ this.load["Research"].p }}
             </p>
             <a
@@ -557,9 +586,18 @@ export default {
             @change="convertFile($event, 'Protocol')"
           />
           <div>
+            <p :class="this.load[`Protocol`].classDownload" v-if="this.form.Protocol">
+              {{ this.load["Protocol"].pp }}
+            </p>
             <p :class="this.load[`Protocol`].class">
               {{ this.load["Protocol"].p }}
             </p>
+            <a
+                :href="this.form.Protocol"
+                class="download-link"
+                v-if="this.form.Protocol"
+                >Скачать</a
+              >
           </div>
         </div>
 
@@ -575,7 +613,10 @@ export default {
             @change="convertFile($event, 'DrugVideo')"
           />
           <div>
-            <p :class="this.load[`DrugVideo`].class">
+            <p :class="this.load[`DrugVideo`].classDownload" v-if="this.form.DrugVideo">
+              {{ this.load["DrugVideo"].pp }}
+            </p>
+            <p :class="this.load[`DrugVideo`].class" v-else>
               {{ this.load["DrugVideo"].p }}
             </p>
             <a
@@ -599,7 +640,10 @@ export default {
             @change="convertFile($event, 'GistolConclusion')"
           />
           <div>
-            <p :class="this.load[`GistolConclusion`].class">
+            <p :class="this.load[`GistolConclusion`].classDownload" v-if="this.form.GistolConclusion">
+              {{ this.load["GistolConclusion"].pp }}
+            </p>
+            <p :class="this.load[`GistolConclusion`].class" v-else>
               {{ this.load["GistolConclusion"].p }}
             </p>
             <a
@@ -624,10 +668,19 @@ export default {
             @change="convertFile($event, 'CktDisk')"
           />
           <div>
-            <p :class="this.load[`CktDisk`].class">
+            <p :class="this.load[`CktDisk`].classDownload" v-if="this.form.CktDisk">
+              {{ this.load["CktDisk"].pp }}
+            </p>
+            <p :class="this.load[`CktDisk`].class" v-else>
               {{ this.load["CktDisk"].p }}
             </p>
           </div>
+          <a
+              :href="this.form.CktDisk"
+              class="download-link"
+              v-if="this.form.CktDisk"
+              >Скачать</a
+            >
         </div>
 
         <div class="mb-3">
@@ -642,7 +695,10 @@ export default {
             @change="convertFile($event, 'MrtDisk')"
           />
           <div>
-            <p :class="this.load[`MrtDisk`].class">
+            <p :class="this.load[`MrtDisk`].classDownload" v-if="this.form.MrtDisk">
+              {{ this.load["MrtDisk"].pp }}
+            </p>
+            <p :class="this.load[`MrtDisk`].class" v-else>
               {{ this.load["MrtDisk"].p }}
             </p>
             <a
@@ -666,7 +722,10 @@ export default {
             @change="convertFile($event, 'CktModel')"
           />
           <div>
-            <p :class="this.load[`CktModel`].class">
+            <p :class="this.load[`CktModel`].classDownload" v-if="this.form.CktModel">
+              {{ this.load["CktModel"].pp }}
+            </p>
+            <p :class="this.load[`CktModel`].class" v-else>
               {{ this.load["CktModel"].p }}
             </p>
             <a
@@ -690,7 +749,10 @@ export default {
             @change="convertFile($event, 'MrtModel')"
           />
           <div>
-            <p :class="this.load[`MrtModel`].class">
+            <p :class="this.load[`MrtModel`].classDownload" v-if="this.form.MrtModel">
+              {{ this.load["MrtModel"].pp }}
+            </p>
+            <p :class="this.load[`MrtModel`].class" v-else>
               {{ this.load["MrtModel"].p }}
             </p>
             <a
@@ -714,7 +776,10 @@ export default {
             @change="convertFile($event, 'OperationVideo')"
           />
           <div>
-            <p :class="this.load[`OperationVideo`].class">
+            <p :class="this.load[`OperationVideo`].classDownload" v-if="this.form.OperationVideo">
+              {{ this.load["OperationVideo"].pp }}
+            </p>
+            <p :class="this.load[`OperationVideo`].class" v-else>
               {{ this.load["OperationVideo"].p }}
             </p>
             <a

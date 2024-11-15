@@ -70,6 +70,9 @@ export default {
       <a :href="`/Table/` + this.id" v-if="isUser"
         ><img src="../assets/stats.png" alt="" class="table"
       /></a>
+      <a href="/" v-else
+        ><img src="../assets/stats.png" alt="" class="table"
+      /></a>
     </div>
       <a href="/Profile" class="link" v-if="isSession">Кабинет</a>
       <a href="/Enter" class="link" v-else>Войти</a>
